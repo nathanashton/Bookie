@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2CA261A-F166-44E2-8131-F910FCEAC75A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bookie.Reporting</RootNamespace>
+    <AssemblyName>Bookie.Reporting</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AssemblyVersion>15185.18.0.0</AssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bookie.Common\Bookie.Common.csproj">
+      <Project>{e2e98231-07da-47d4-b41f-60f6c4b87dd6}</Project>
+      <Name>Bookie.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\Bookie.Common.Model.Author.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.Book.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.BookFile.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.BookHistory.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.BookMark.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.CoverImage.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.IEntity.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.ITrackableEntity.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.LogEntity.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.Note.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.Publisher.datasource" />
+    <None Include="Properties\DataSources\Bookie.Common.Model.SourceDirectory.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Report1.rdlc" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

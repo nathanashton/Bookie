@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="Bookie.UserControls.BookDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:userControls="clr-namespace:Bookie.UserControls"
+             xmlns:global="clr-namespace:"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="1200"
+             BorderThickness="0"
+             Width="Auto" Height="Auto">
+
+    <UserControl.Resources>
+    </UserControl.Resources>
+
+    <Grid Name="MainGrid">
+        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
+         
+            <DataGrid RowHeaderWidth="0"
+        RowHeight="22" IsReadOnly="True" HorizontalAlignment="Stretch" GridLinesVisibility="None"
+                      AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single"
+                      SelectedItem="{Binding SelectedBook}" ItemsSource="{Binding Books}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image RenderOptions.BitmapScalingMode="HighQuality"  Stretch="Fill" StretchDirection="Both" Height="16" Width="16" Source="pack://application:,,,/Resources/Icons/pdf.gif" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="Auto" Header="Title" Binding="{Binding Title}" />
+                    <DataGridTextColumn Width="*" Header="Abstract" Binding="{Binding Abstract}" />
+                    <DataGridTextColumn Width="Auto" Header="Pages" Binding="{Binding Pages}" />
+                    <DataGridTextColumn Width="Auto" Header="Published" Binding="{Binding YearPublished}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</UserControl>

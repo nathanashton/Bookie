@@ -1,0 +1,25 @@
+﻿<Controls:MetroWindow x:Class="Bookie.Views.SettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Height="300" Width="300"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="1"
+                      EnableDWMDropShadow="True"
+                      WindowTransitionsEnabled="False" ShowMinButton="False" ShowMaxRestoreButton="False"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <!--<StackPanel Orientation="Vertical">
+        <Label Content="Cover render quality"/>
+        <Label Content="Cover folder"/>
+        <Label Content="Theme"/>
+            <Label Content="Reset db on restart"/>
+            <Label Content="Default tiles of details view"/>
+        </StackPanel>-->
+        <TabControl>
+            <TabItem Header="General"/>
+            <TabItem Header="Appearance"/>
+            <TabItem Header="Advanced"/>
+
+        </TabControl>
+    </Grid>
+</Controls:MetroWindow>

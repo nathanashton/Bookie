@@ -1,0 +1,11 @@
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\Core.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\Core.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\Data.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\EntityFramework.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\Data.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\bin\Debug\EntityFramework.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\obj\Debug\Core.csprojResolveAssemblyReference.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\obj\Debug\Core.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Business\obj\Debug\Core.pdb

@@ -1,0 +1,10 @@
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\EmptyDatabase\Log4Net.config
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\EmptyDatabase\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\EmptyDatabase\Bookie.Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\EmptyDatabase\log4net.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\EmptyDatabase\log4net.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\EmptyDatabase\Bookie.Common.Resources.Strings.Resources.resources
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\EmptyDatabase\Bookie.Common.csproj.GenerateResource.Cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\EmptyDatabase\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\EmptyDatabase\Bookie.Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\EmptyDatabase\Bookie.Common.csprojResolveAssemblyReference.cache

@@ -1,0 +1,12 @@
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\Log4Net.config
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\Bookie.Reporting.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\Bookie.Reporting.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\log4net.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\Bookie.Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\bin\Release\log4net.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\obj\Release\Bookie.Reporting.csprojResolveAssemblyReference.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\obj\Release\RdlCompile.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\obj\Release\RdlCompile.compiled
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\obj\Release\Bookie.Reporting.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Reporting\obj\Release\Bookie.Reporting.pdb

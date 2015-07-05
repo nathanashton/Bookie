@@ -1,0 +1,12 @@
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\obj\Debug\Data.csprojResolveAssemblyReference.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\Data.dll.config
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\Data.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\Data.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\EntityFramework.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\EntityFramework.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\obj\Debug\Data.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Data\obj\Debug\Data.pdb

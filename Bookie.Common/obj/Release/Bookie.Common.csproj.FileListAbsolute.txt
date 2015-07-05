@@ -1,0 +1,9 @@
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\Release\Log4Net.config
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\Release\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\Release\Bookie.Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\Release\log4net.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\bin\Release\log4net.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Release\Bookie.Common.Resources.Strings.Resources.resources
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Release\Bookie.Common.csproj.GenerateResource.Cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Release\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Release\Bookie.Common.pdb

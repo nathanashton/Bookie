@@ -1,0 +1,5 @@
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Common\bin\Debug\Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Common\bin\Debug\Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Common\obj\Debug\Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Common\obj\Debug\Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
