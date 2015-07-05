@@ -49,3 +49,5 @@ C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\MoonPdfLib\
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\MoonPdfLib\obj\Debug\MoonPdfLib.dll
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\MoonPdfLib\obj\Debug\MoonPdfLib.pdb
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\MoonPdfLib\obj\Debug\MoonPdfLib.csprojResolveAssemblyReference.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\MoonPdfLib\bin\Debug\log4net.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\MoonPdfLib\bin\Debug\log4net.xml
