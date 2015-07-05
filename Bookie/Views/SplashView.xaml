@@ -13,7 +13,7 @@
                 <Label FontSize="28" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Content="Bookie" />
                 <DockPanel  Background="Transparent"  Margin="0,-5,0,0" >
                     <Label  HorizontalAlignment="Left" Name="Message" Foreground="White" />
-                    <Label  HorizontalAlignment="Right" Content="v1.0.0.1" Foreground="White" />
+                    <Label  HorizontalAlignment="Right" Name="VersionNumber" Foreground="White" />
                 </DockPanel>
                 <controls:MetroProgressBar Foreground="White" IsIndeterminate="True"/>
             </StackPanel>

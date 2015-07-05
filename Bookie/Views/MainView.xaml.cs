@@ -24,6 +24,7 @@
         {
             Load();
             InitializeComponent();
+            VersionNumber.Content = Globals.VersionNumber;
         }
 
         private void Load()

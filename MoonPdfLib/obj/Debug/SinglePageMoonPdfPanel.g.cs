@@ -56,7 +56,7 @@ namespace MoonPdfLib {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/MoonPdfLib;V15185.165.1.0;component/singlepagemoonpdfpanel.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MoonPdfLib;V15186.167.1.0;component/singlepagemoonpdfpanel.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\SinglePageMoonPdfPanel.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -12,3 +12,13 @@ C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Comm
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Debug\Bookie.Common.dll
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Debug\Bookie.Common.pdb
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\Bookie.Common\obj\Debug\Bookie.Common.csprojResolveAssemblyReference.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\bin\Debug\Log4Net.config
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\bin\Debug\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\bin\Debug\Bookie.Common.pdb
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\bin\Debug\log4net.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\bin\Debug\log4net.xml
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\obj\Debug\Bookie.Common.csprojResolveAssemblyReference.cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\obj\Debug\Bookie.Common.Resources.Strings.Resources.resources
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\obj\Debug\Bookie.Common.csproj.GenerateResource.Cache
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\obj\Debug\Bookie.Common.dll
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Common\obj\Debug\Bookie.Common.pdb

@@ -1,10 +1,10 @@
 ﻿MoonPdfLib
-15185.165.1.0
+15186.167.1.0
 
 library
 C#
 .cs
-C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\EFTest\MoonPdfLib\obj\Debug\
+C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\MoonPdfLib\obj\Debug\
 MoonPdfLib
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 3-711935476
 1-1668382449
 23-1745225016
-161214838032
+16-1858166073
 ContinuousMoonPdfPanel.xaml;MoonPdfPanel.xaml;SinglePageMoonPdfPanel.xaml;
 
 False

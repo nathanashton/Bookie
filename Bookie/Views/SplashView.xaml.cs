@@ -9,14 +9,15 @@
         public SplashView()
         {
             InitializeComponent();
-         }
+            VersionNumber.Content = Globals.VersionNumber;
+        }
 
         public void AddMessage(string message)
         {
-            Dispatcher.Invoke((Action)delegate()
-            {
-                this.Message.Content = message;
-            });
+            Dispatcher.Invoke(delegate()
+                {
+                    this.Message.Content = message;
+                });
         }
 
         public void LoadComplete()

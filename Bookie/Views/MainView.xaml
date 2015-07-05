@@ -18,7 +18,7 @@
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
                 <StackPanel Orientation="Horizontal">
-                   <Label Foreground="White" Content="Version 1.0.0.1"/>
+                   <Label Name="VersionNumber" Foreground="White"/>
                 </StackPanel>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
