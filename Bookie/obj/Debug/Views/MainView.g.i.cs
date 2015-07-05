@@ -145,7 +145,7 @@ namespace Bookie.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Bookie;V15186.1409.0.0;component/views/mainview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Bookie;V15186.1410.0.0;component/views/mainview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Views\MainView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

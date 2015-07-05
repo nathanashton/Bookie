@@ -69,7 +69,7 @@ namespace Bookie.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Bookie;V15186.1409.0.0;component/views/splashview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Bookie;V15186.1410.0.0;component/views/splashview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Views\SplashView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

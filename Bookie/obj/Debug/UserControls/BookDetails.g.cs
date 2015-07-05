@@ -64,7 +64,7 @@ namespace Bookie.UserControls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Bookie;V15186.1409.0.0;component/usercontrols/bookdetails.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Bookie;V15186.1410.0.0;component/usercontrols/bookdetails.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\UserControls\BookDetails.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
