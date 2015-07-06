@@ -483,7 +483,7 @@
             get
             {
                 return _listViewCommand
-                       ?? (_listViewCommand = new RelayCommand(p => BookView = BookDetails, p => true));
+                       ?? (_listViewCommand = new RelayCommand(p => SwitchToDetailsView(), p => true));
             }
         }
 
@@ -492,7 +492,7 @@
             get
             {
                 return _tileViewCommand
-                       ?? (_tileViewCommand = new RelayCommand(p => BookView = BookTiles, p => true));
+                       ?? (_tileViewCommand = new RelayCommand(p => SwitchToTilesView(), p => true));
             }
         }
 
@@ -608,15 +608,6 @@
             BookView = PdfViewer;
         }
 
-        public void ChangeToBookView()
-        {
-            BookView = new BookTiles();
-        }
-
-        public void ChangeToListView()
-        {
-            BookView = new BookDetails();
-        }
 
         private void CancelProgress()
         {
@@ -689,6 +680,33 @@
         {
             var book = item as Book;
             return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+
+
+        private void SwitchToTilesView()
+        {
+            if (Equals(BookView, PdfViewer))
+            {
+                LeftPane = Visibility.Visible;
+                RightPane = Visibility.Visible;     
+            }
+            BookView = BookTiles;
+       
+        }
+
+
+
+
+        private void SwitchToDetailsView()
+        {
+            if (Equals(BookView, PdfViewer))
+            {
+                LeftPane = Visibility.Visible;
+                RightPane = Visibility.Visible;
+            }
+            BookView = BookDetails;
+
         }
 
 
