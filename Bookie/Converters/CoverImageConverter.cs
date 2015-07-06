@@ -11,7 +11,15 @@
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string coverPath;
-            var v = value.ToString();
+            string v = "";
+            try
+            {
+                v = value.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                coverPath = "pack://application:,,,/Resources/Images/NoCoverAvailable.png";
+            }
             if (File.Exists(v))
             {
                 coverPath = v;

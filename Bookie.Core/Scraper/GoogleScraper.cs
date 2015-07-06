@@ -38,8 +38,15 @@
             var retrieveUrl = GetUrlForSearch();
 
             var xdcDocument = new XmlDocument();
+            try
+            {
+                xdcDocument.Load(retrieveUrl);
 
-            xdcDocument.Load(retrieveUrl);
+            }
+            catch (WebException ex)
+            {
+                //TODO No internet
+            }
 
             var ns = new XmlNamespaceManager(xdcDocument.NameTable);
             ns.AddNamespace("openSearch", "http://a9.com/-/spec/opensearchrss/1.0/");

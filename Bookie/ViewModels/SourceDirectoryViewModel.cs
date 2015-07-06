@@ -191,7 +191,7 @@
             ProgressReportingActive = true;
 
             scraper.BookChanged += MainViewModel.i_BookChanged;
-            scraper._worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
+            scraper.Worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
 
             scraper.Scrape(SelectedSourceDirectory, MainViewModel.Books.Cast<Book>().ToList());
             scraper.ProgressComplete += delegate { ProgressReportingActive = false; };

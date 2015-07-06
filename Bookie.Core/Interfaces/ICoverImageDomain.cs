@@ -14,5 +14,10 @@
         void UpdateCoverImage(params CoverImage[] coverimage);
 
         void RemoveCoverImage(params CoverImage[] coverimage);
+
+        CoverImage GenerateCoverImageFromPdf(Book book);
+
+        CoverImage EmptyCoverImage();
+
     }
 }

@@ -7,7 +7,7 @@
 
     public class GetPdfImage
     {
-        public static string LoadImage(Book book, int pageNumber)
+        public static string SaveImage(Book book, int pageNumber)
         {
             var inputPdfFile = book.BookFile.FullPathAndFileNameWithExtension;
             //  var outImageName = Path.GetFileNameWithoutExtension(inputPdfFile);
