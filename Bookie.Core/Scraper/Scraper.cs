@@ -58,6 +58,7 @@
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
             _sourceDirectory.DateLastScanned = DateTime.Now;
             _sourceDirectory.EntityState = EntityState.Modified;
             new SourceDirectoryDomain().UpdateSourceDirectory(_sourceDirectory);
@@ -97,7 +98,18 @@
                     continue;
                 }
                 SearchResult b;
-                _results = _scraper.SearchBooks(book.Isbn);
+                try
+                {
+                    _results = _scraper.SearchBooks(book.Isbn);
+
+                }
+                catch (BookieException ex)
+                {
+                    Logger.Log.Error("No internet connection while scraping. Terminated");
+                    e.Cancel = true;
+                    return;
+                }
+
                 if (_results != null && _results.Count > 0)
                 {
                     b = _results.FirstOrDefault(x => x.Book != null);

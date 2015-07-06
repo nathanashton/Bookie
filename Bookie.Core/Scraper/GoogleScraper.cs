@@ -45,7 +45,7 @@
             }
             catch (WebException ex)
             {
-                //TODO No internet
+                throw new BookieException("No inernet connection", ex);
             }
 
             var ns = new XmlNamespaceManager(xdcDocument.NameTable);

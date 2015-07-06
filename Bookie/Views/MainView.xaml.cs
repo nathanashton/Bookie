@@ -27,6 +27,7 @@
             VersionNumber.Content = Globals.VersionNumber;
         }
 
+
         private void Load()
         {
             MessagingService.Register(this, MessagingService_messages);
