@@ -14,3 +14,5 @@ Future releases aim to include:
 * Other scrapers including Amazon etc
 * Exporting of Library to XML
 * UI refinements
+
+PDF Covers are currently generated using GhostScript needs to be installed from http://ghostscript.com/download/gsdnld.html
