@@ -9,8 +9,7 @@ namespace Bookie.UserControls
 
     using Bookie.Common.Model;
     using Bookie.Core.Domains;
-    using System.ComponentModel;
-    using System.Timers;
+
     using System.Linq;
 
     using Bookie.Views;

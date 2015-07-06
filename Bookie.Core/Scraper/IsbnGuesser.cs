@@ -38,7 +38,7 @@ namespace Bookie.Core.Scraper
                 response = (HttpWebResponse)request.GetResponse();
 
             }
-            catch (WebException ex)
+            catch (WebException)
             {
                 Logger.Log.Error("No internet connection while scraping");
                 return String.Empty;

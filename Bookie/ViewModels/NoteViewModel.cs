@@ -28,7 +28,6 @@ namespace Bookie.ViewModels
 
         private ICommand _saveNoteCommand;
 
-        private string _noteDate;
 
         public string NoteDate
         {

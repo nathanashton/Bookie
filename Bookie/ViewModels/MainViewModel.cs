@@ -14,7 +14,6 @@
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
-    using System.Linq;
 
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {

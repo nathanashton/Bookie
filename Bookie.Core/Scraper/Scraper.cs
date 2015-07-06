@@ -103,7 +103,7 @@
                     _results = _scraper.SearchBooks(book.Isbn);
 
                 }
-                catch (BookieException ex)
+                catch (BookieException)
                 {
                     Logger.Log.Error("No internet connection while scraping. Terminated");
                     e.Cancel = true;
