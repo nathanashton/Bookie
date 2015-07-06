@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bookie.ViewModels
 {
-    using System.Windows;
-    using System.Windows.Input;
-
     using Bookie.Common;
     using Bookie.Common.Model;
     using Bookie.Core.Domains;
+    using System.Windows;
+    using System.Windows.Input;
 
     public class NoteViewModel : NotifyBase
     {
         private Note _editing;
 
         public Window Window { get; set; }
+
         private string _noteText;
 
         private Book _book;
@@ -27,7 +23,6 @@ namespace Bookie.ViewModels
         private ICommand _addNoteCommand;
 
         private ICommand _saveNoteCommand;
-
 
         public string NoteDate
         {
@@ -42,6 +37,7 @@ namespace Bookie.ViewModels
         }
 
         private ICommand _removeNoteCommand;
+
         public ICommand SaveNoteCommand
         {
             get
@@ -59,16 +55,16 @@ namespace Bookie.ViewModels
                        ?? (_removeNoteCommand = new RelayCommand(p => RemoveNote(), p => _editing != null));
             }
         }
-        
 
         public ICommand AddNoteCommand
         {
             get
             {
                 return _addNoteCommand
-                       ?? (_addNoteCommand = new RelayCommand(p => AddNote(), p=> _editing == null));
+                       ?? (_addNoteCommand = new RelayCommand(p => AddNote(), p => _editing == null));
             }
         }
+
         public string NoteText
         {
             get
@@ -84,7 +80,7 @@ namespace Bookie.ViewModels
 
         public void SaveNote()
         {
-            _book.SetUnchanged();
+            _book = BookDomain.SetUnchanged(_book);
 
             _editing.NoteText = _noteText;
 
@@ -95,9 +91,7 @@ namespace Bookie.ViewModels
 
         public void RemoveNote()
         {
-            _book.SetUnchanged();
-
-          
+            _book = BookDomain.SetUnchanged(_book);
 
             _editing.EntityState = EntityState.Deleted;
             new BookDomain().UpdateBook(_book);
@@ -120,9 +114,9 @@ namespace Bookie.ViewModels
 
         private void AddNote()
         {
-            _book.SetUnchanged();
+            _book = BookDomain.SetUnchanged(_book);
 
-            Note note = new Note { Book = _book, NoteText = _noteText, CreatedDateTime = DateTime.Now};
+            Note note = new Note { Book = _book, NoteText = _noteText, CreatedDateTime = DateTime.Now };
 
             if (_pageNumber != null)
             {
@@ -134,7 +128,5 @@ namespace Bookie.ViewModels
             new BookDomain().UpdateBook(_book);
             Window.Close();
         }
-
-        
     }
 }

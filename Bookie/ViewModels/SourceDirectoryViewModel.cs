@@ -157,7 +157,8 @@
 
         public void Remove()
         {
-            _domain.RemoveSourceDirectory(SelectedSourceDirectory);
+            SelectedSourceDirectory.EntityState = EntityState.Deleted;
+             _domain.RemoveSourceDirectory(SelectedSourceDirectory);
             Refresh();
         }
 
