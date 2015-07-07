@@ -23,5 +23,7 @@
         IList<Book> GetNested();
 
         Book GetBookById(int id);
+
+        Book SetUnchanged(Book book);
     }
 }

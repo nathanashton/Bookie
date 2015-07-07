@@ -63,25 +63,7 @@
         [NotMapped]
         public EntityState EntityState { get; set; }
 
-        public void SetUnchanged()
-        {
-            foreach (var x in BookMarks)
-            {
-                x.EntityState = EntityState.Unchanged;
-            }
-            foreach (var publisher in Publishers)
-            {
-                publisher.EntityState = EntityState.Unchanged;
-            }
-            foreach (var author in Authors)
-            {
-                author.EntityState = EntityState.Unchanged;
-            }
-            foreach (var n in Notes)
-            {
-                n.EntityState = EntityState.Unchanged;
-            }
-        }
+
 
 
     }

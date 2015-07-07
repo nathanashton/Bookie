@@ -9,6 +9,8 @@
     using System.IO;
     using System.Linq;
 
+    using Bookie.Core.Interfaces;
+
     public class Importer : IProgressPublisher
     {
         private readonly SourceDirectory _source;
@@ -19,6 +21,8 @@
         public ProgressWindowEventArgs ProgressArgs { get; set; }
 
         private bool _generateCovers;
+
+        private ICoverImageDomain coverImageDomain = new CoverImageDomain();
 
         public event EventHandler<BookEventArgs> BookChanged;
 
@@ -107,18 +111,16 @@
                 book.BookHistory.EntityState = EntityState.Added;
                 book.CoverImage = new CoverImage();
 
-                string savedImageUrl = "";
+
                 if (_generateCovers)
                 {
-                    savedImageUrl = GetPdfImage.LoadImage(book, 1);
+                    book.CoverImage = coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
-
-                book.CoverImage.FileNameWithExtension = Path.GetFileName(savedImageUrl);
-                book.CoverImage.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
-                                                                       + Path.GetFileNameWithoutExtension(
-                                                                           savedImageUrl) + ".jpg";
-                book.CoverImage.FileExtension = ".jpg";
-                book.CoverImage.EntityState = EntityState.Added;
+                else
+                {
+                    book.CoverImage = CoverImageDomain.EmptyCoverImage();
+                    book.CoverImage.EntityState = EntityState.Added;
+                }
 
                 var percentage = Utils.CalculatePercentage(index + 1, 1, _foundPdfFiles.Count);
 

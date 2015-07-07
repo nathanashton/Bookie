@@ -68,14 +68,12 @@
 
             //Publishers
             modelBuilder.Entity<Book>().HasMany<Publisher>(s => s.Publishers).WithOptional(c => c.Book).WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<Book>().HasMany<BookMark>(s => s.BookMarks).WithOptional(c => c.Book).WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<Book>().HasMany<Note>(s => s.Notes).WithOptional(c => c.Book).WillCascadeOnDelete(true);
-
-
-
             modelBuilder.Entity<Book>().HasMany<Author>(s => s.Authors).WithOptional(c => c.Book).WillCascadeOnDelete(true);
+
+
+            modelBuilder.Entity<Book>().HasMany<BookMark>(s => s.BookMarks).WithRequired(c => c.Book).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Book>().HasMany<Note>(s => s.Notes).WithRequired(c => c.Book).WillCascadeOnDelete(true);
+
 
             //SourceDirectory
             modelBuilder.Entity<SourceDirectory>().HasMany<Book>(s => s.Books).WithRequired(s => s.SourceDirectory).HasForeignKey(o => o.SourceDirectoryId).WillCascadeOnDelete(true);

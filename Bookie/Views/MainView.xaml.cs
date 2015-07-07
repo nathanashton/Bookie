@@ -27,6 +27,7 @@
             VersionNumber.Content = Globals.VersionNumber;
         }
 
+
         private void Load()
         {
             MessagingService.Register(this, MessagingService_messages);
@@ -41,19 +42,23 @@
 
             ViewModel = new MainViewModel();
             DataContext = ViewModel;
-            var savedTileWidth = AppConfig.LoadSetting("TileWidth");
-            ViewModel.TileWidth = String.IsNullOrEmpty(savedTileWidth) ? 130 : Int32.Parse(savedTileWidth);
+          
+            //var savedTileWidth = AppConfig.LoadSetting("TileWidth");
+           // ViewModel.TileWidth = String.IsNullOrEmpty(savedTileWidth) ? 130 : Int32.Parse(savedTileWidth);
+
+            ViewModel.TileWidth = 130;
 
             App.SplashScreen.LoadComplete();
         }
 
         private void ApplySettings()
         {
-            AppConfig.AddSetting("CoverImageFolder", Globals.ApplicationPath + @"\Covers\");
-            Globals.CoverImageFolder = AppConfig.LoadSetting("CoverImageFolder");
+            //AppConfig.AddSetting("CoverImageFolder", Globals.ApplicationPath + @"\Covers\");
+            //Globals.CoverImageFolder = AppConfig.LoadSetting("CoverImageFolder");
 
             if (!File.Exists(Globals.ApplicationDatabaseFullPath))
             {
+                App.SplashScreen.AddMessage("Creating Database...");
                 Db d = new Db();
                 d.ReCreateDB();
                 Logger.Log.Info("Database doesn't exist so created it");
@@ -89,7 +94,9 @@
                     MoreDetails = e.MoreDetails,
                     Fatal = e.Fatal
                 }
+          
             };
+            Clipboard.SetText(e.MoreDetails);
             exceptionView.ShowDialog();
         }
 

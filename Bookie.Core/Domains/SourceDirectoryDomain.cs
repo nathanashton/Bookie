@@ -55,11 +55,25 @@
 
         public void RemoveSourceDirectory(params SourceDirectory[] sourceDirectory)
         {
-            foreach (var sourece in sourceDirectory)
+            var s = sourceDirectory[0];
+            foreach (var book in s.Books)
             {
-                sourece.EntityState = EntityState.Deleted;
-                _sourceRepository.Remove(sourceDirectory);
+                book.BookFile.EntityState = EntityState.Deleted;
+                book.CoverImage.EntityState = EntityState.Deleted;
+                book.BookHistory.EntityState = EntityState.Deleted;
+                foreach (var p in book.Publishers)
+                {
+                    p.EntityState = EntityState.Deleted;
+                }
+                foreach (var a in book.Authors)
+                {
+                    a.EntityState = EntityState.Deleted;
+                }
+                book.EntityState = EntityState.Deleted;
             }
+
+            sourceDirectory[0].EntityState = EntityState.Deleted;
+            _sourceRepository.Remove(sourceDirectory);
         }
 
         public bool Exists(string sourceUrl)

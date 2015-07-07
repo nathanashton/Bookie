@@ -10,6 +10,8 @@
     using System.IO;
     using System.Linq;
 
+    using Bookie.Core.Interfaces;
+
     public class Scraper : IProgressPublisher
     {
         private readonly IsbnGuesser _guesser = new IsbnGuesser();
@@ -20,7 +22,9 @@
 
         private List<Book> _booksToScrape;
 
-        public readonly BackgroundWorker _worker = new BackgroundWorker();
+        private ICoverImageDomain coverImageDomain = new CoverImageDomain();
+
+        public readonly BackgroundWorker Worker = new BackgroundWorker();
         private readonly IBookScraper _scraper = new GoogleScraper();
 
         public event EventHandler<BookEventArgs> BookChanged;
@@ -44,16 +48,17 @@
         public Scraper()
         {
             ProgressService.RegisterPublisher(this);
-            _worker.WorkerSupportsCancellation = true;
-            _worker.DoWork += Worker_DoWork;
-            _worker.ProgressChanged += Worker_ProgressChanged;
-            _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-            _worker.WorkerReportsProgress = true;
+            Worker.WorkerSupportsCancellation = true;
+            Worker.DoWork += Worker_DoWork;
+            Worker.ProgressChanged += Worker_ProgressChanged;
+            Worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            Worker.WorkerReportsProgress = true;
             ProgressArgs = new ProgressWindowEventArgs();
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
             _sourceDirectory.DateLastScanned = DateTime.Now;
             _sourceDirectory.EntityState = EntityState.Modified;
             new SourceDirectoryDomain().UpdateSourceDirectory(_sourceDirectory);
@@ -75,7 +80,7 @@
         {
             for (var index = 0; index < _booksToScrape.Count; index++)
             {
-                if (_worker.CancellationPending)
+                if (Worker.CancellationPending)
                 {
                     e.Cancel = true;
                     return;
@@ -93,7 +98,18 @@
                     continue;
                 }
                 SearchResult b;
-                _results = _scraper.SearchBooks(book.Isbn);
+                try
+                {
+                    _results = _scraper.SearchBooks(book.Isbn);
+
+                }
+                catch (BookieException)
+                {
+                    Logger.Log.Error("No internet connection while scraping. Terminated");
+                    e.Cancel = true;
+                    return;
+                }
+
                 if (_results != null && _results.Count > 0)
                 {
                     b = _results.FirstOrDefault(x => x.Book != null);
@@ -144,18 +160,11 @@
 
                 if (!File.Exists(book.CoverImage.FullPathAndFileNameWithExtension))
                 {
-                    //  var savedImageUrl = GetPdfImage.LoadImage(book, 1);
-
-                    //CoverImage c = new CoverImage();
-                    //c.Id = book.CoverImage.Id;
-                    //c.FileNameWithExtension = Path.GetFileName(savedImageUrl);
-                    //c.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
-                    //                                                       + Path.GetFileNameWithoutExtension(
-                    //                                                           savedImageUrl);
-                    //c.FileExtension = ".jpg";
-                    //c.FileSizeBytes = new FileInfo(savedImageUrl).Length;
-
-                    //Update Book Cover image in repository
+                    book.CoverImage = coverImageDomain.GenerateCoverImageFromPdf(book);
+                }
+                else
+                {
+                    book.CoverImage.EntityState = EntityState.Unchanged;
                 }
 
                 var publishers = b.Publishers.ToList();
@@ -173,7 +182,6 @@
                     book.Authors.Add(author);
                 }
 
-                book.CoverImage.EntityState = EntityState.Unchanged;
                 book.BookFile.EntityState = EntityState.Unchanged;
                 book.BookHistory.EntityState = EntityState.Unchanged;
                 book.SourceDirectory.EntityState = EntityState.Unchanged;
@@ -182,7 +190,7 @@
                 _bookDomain.UpdateBook(book);
 
                 var percentage = Utils.CalculatePercentage(index + 1, 1, _booksToScrape.Count);
-                _worker.ReportProgress(percentage, book);
+                Worker.ReportProgress(percentage, book);
             }
         }
 
@@ -196,7 +204,7 @@
             }
 
             OnProgressStarted();
-            _worker.RunWorkerAsync();
+            Worker.RunWorkerAsync();
         }
 
         private void OnProgressComplete()
@@ -225,9 +233,9 @@
 
         public void ProgressCancel()
         {
-            if (_worker.IsBusy)
+            if (Worker.IsBusy)
             {
-                _worker.CancelAsync();
+                Worker.CancelAsync();
             }
         }
     }

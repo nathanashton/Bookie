@@ -57,7 +57,7 @@
                     Converter={StaticResource MouseOverToScrollBarVisibility}}" SelectionMode="Extended" ScrollViewer.CanContentScroll="True" BorderThickness="0" Name="Lb" Background="Transparent"
                      VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
                      SelectedItem="{Binding Path=SelectedBook, Mode=TwoWay}"
-
+VirtualizingPanel.ScrollUnit="Pixel"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch"
                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
                      ItemsSource="{Binding Path=Books, Mode=OneWay}" IsSynchronizedWithCurrentItem="True">

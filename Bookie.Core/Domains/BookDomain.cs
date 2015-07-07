@@ -34,6 +34,11 @@
             return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g => g.Notes).Single(x => x.Id.Equals(id));
         }
 
+        Book IBookDomain.SetUnchanged(Book book)
+        {
+            return SetUnchanged(book);
+        }
+
         public void AddBook(params Book[] books)
         {
             if (Exists(books[0].BookFile.FullPathAndFileNameWithExtension))
@@ -77,6 +82,27 @@
         public IList<Book> GetNested()
         {
             return _bookRepository.GetAllNested();
+        }
+
+        public static Book SetUnchanged(Book book)
+        {
+            foreach (var x in book.BookMarks)
+            {
+                x.EntityState = EntityState.Unchanged;
+            }
+            foreach (var publisher in book.Publishers)
+            {
+                publisher.EntityState = EntityState.Unchanged;
+            }
+            foreach (var author in book.Authors)
+            {
+                author.EntityState = EntityState.Unchanged;
+            }
+            foreach (var n in book.Notes)
+            {
+                n.EntityState = EntityState.Unchanged;
+            }
+            return book;
         }
     }
 }

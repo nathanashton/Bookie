@@ -87,20 +87,14 @@
                                     <Image  Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill" Source="pack://application:,,,/Resources/Icons/folder.png" />
                                 </Button>
 
-
-                                <StackPanel Orientation="Horizontal">
-                                    <ToggleButton Margin="5" Content="Favourites" IsChecked="{Binding ToggleFavourite, Mode=TwoWay}"/>
-                                <ToggleButton Margin="5" Content="Scraped" IsChecked="{Binding ToggleScraped, Mode=TwoWay}"/>
-                             
-                                </StackPanel>
-
-
                             </StackPanel>
 
                             <StackPanel Visibility="{Binding FilterBoxVisibility}" Name="FilterBox" Margin="0,0,10,0"  HorizontalAlignment="Right" Orientation="Horizontal">
+                                <ToggleButton Margin="5" Content="Favourites" IsChecked="{Binding ToggleFavourite, Mode=TwoWay}"/>
+                                <ToggleButton Margin="5" Content="Scraped" IsChecked="{Binding ToggleScraped, Mode=TwoWay}"/>
                                 <Label Foreground="White" FontSize="14" Content="Sort" Margin="0,0,5,0" VerticalContentAlignment="Center" />
                                 <ComboBox Margin="0,2,0,2" Height="25" Width="220" ItemsSource="{Binding SortList}" SelectedValue="{Binding SelectedSort}" />
-                                <Label Foreground="White" FontSize="14" Content="Filter" Margin="0,0,5,0" VerticalContentAlignment="Center" />
+                                <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0" VerticalContentAlignment="Center" />
                                 <TextBox FontSize="12" Width="250" Height="20" Name="Filter" Controls:TextBoxHelper.ClearTextButton="True"  Controls:TextBoxHelper.Watermark="Search" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" KeyUp="Filter_KeyUp" />
                             </StackPanel>
                         </Grid>
@@ -109,16 +103,19 @@
 
                             <DockPanel
                         Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}">
-                                <Button Command="{Binding LeftPaneCommand}" />
+
+
+                                <Button Background="{DynamicResource AccentColorBrush}" Visibility="{Binding FilterBoxVisibility}" Margin="10,0,10,0" Width="15" Height="15" DockPanel.Dock="Left" Command="{Binding LeftPaneCommand}" />
 
 
                                 <Label FontSize="12" Foreground="White" Content="{Binding BooksCount}" Margin="10,0,0,0"
                                VerticalContentAlignment="Center" VerticalAlignment="Center" Height="33" />
-                                <Slider HorizontalAlignment="Right" Margin="0,0,20,0" Foreground="DimGray"
+                                <Button Background="{DynamicResource AccentColorBrush}" Visibility="{Binding FilterBoxVisibility}" Margin="10,0,10,0" Width="15" Height="15" DockPanel.Dock="Right" Command="{Binding RightPaneCommand}" />
+                                <Slider DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,20,0" Foreground="DimGray"
                                 VerticalAlignment="Center"
                                 Value="{Binding TileWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 Minimum="100" Maximum="400" Width="200" TickFrequency="50" />
-                                <Button Width="10" Command="{Binding RightPaneCommand}" />
+                              
 
                             </DockPanel>
                         </StatusBar>

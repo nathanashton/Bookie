@@ -14,7 +14,6 @@
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
-    using System.Linq;
 
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {
@@ -394,7 +393,7 @@
                 NotifyPropertyChanged("TileWidth");
                 NotifyPropertyChanged("TileHeight");
                 NotifyPropertyChanged("StarSize");
-                AppConfig.AddSetting("TileWidth", value.ToString());
+              //  AppConfig.AddSetting("TileWidth", value.ToString());
             }
         }
 
@@ -483,7 +482,7 @@
             get
             {
                 return _listViewCommand
-                       ?? (_listViewCommand = new RelayCommand(p => BookView = BookDetails, p => true));
+                       ?? (_listViewCommand = new RelayCommand(p => SwitchToDetailsView(), p => true));
             }
         }
 
@@ -492,7 +491,7 @@
             get
             {
                 return _tileViewCommand
-                       ?? (_tileViewCommand = new RelayCommand(p => BookView = BookTiles, p => true));
+                       ?? (_tileViewCommand = new RelayCommand(p => SwitchToTilesView(), p => true));
             }
         }
 
@@ -527,21 +526,22 @@
             BookDetails = new BookDetails();
             PdfViewer = new PDFViewer();
 
-            var savedView = AppConfig.LoadSetting("SavedView");
-            switch (savedView)
-            {
-                case "Tiles":
-                    BookView = BookTiles;
-                    break;
+          //  var savedView = AppConfig.LoadSetting("SavedView");
+            //switch (savedView)
+            //{
+            //    case "Tiles":
+            //        BookView = BookTiles;
+            //        break;
 
-                case "Details":
-                    BookView = BookDetails;
-                    break;
+            //    case "Details":
+            //        BookView = BookDetails;
+            //        break;
 
-                default:
-                    BookView = new BookTiles();
-                    break;
-            }
+            //    default:
+            //        BookView = new BookTiles();
+            //        break;
+            //}
+            BookView = BookTiles;
             ProgressService.RegisterSubscriber(this);
 
             var sortt = new List<string>
@@ -608,15 +608,6 @@
             BookView = PdfViewer;
         }
 
-        public void ChangeToBookView()
-        {
-            BookView = new BookTiles();
-        }
-
-        public void ChangeToListView()
-        {
-            BookView = new BookDetails();
-        }
 
         private void CancelProgress()
         {
@@ -689,6 +680,33 @@
         {
             var book = item as Book;
             return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+
+
+        private void SwitchToTilesView()
+        {
+            if (Equals(BookView, PdfViewer))
+            {
+                LeftPane = Visibility.Visible;
+                RightPane = Visibility.Visible;     
+            }
+            BookView = BookTiles;
+       
+        }
+
+
+
+
+        private void SwitchToDetailsView()
+        {
+            if (Equals(BookView, PdfViewer))
+            {
+                LeftPane = Visibility.Visible;
+                RightPane = Visibility.Visible;
+            }
+            BookView = BookDetails;
+
         }
 
 

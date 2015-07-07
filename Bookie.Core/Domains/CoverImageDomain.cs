@@ -6,6 +6,9 @@
     using Bookie.Data.Repositories;
     using System;
     using System.Collections.Generic;
+    using System.IO;
+
+    using Bookie.Common;
 
     public class CoverImageDomain : ICoverImageDomain
     {
@@ -45,6 +48,49 @@
         public void RemoveCoverImage(params CoverImage[] coverimage)
         {
             _coverImageRepository.Remove(coverimage);
+        }
+
+        public CoverImage GenerateCoverImageFromPdf(Book book)
+        {
+            var savedImageUrl = GetPdfImage.SaveImage(book, 1);
+            if (book.CoverImage == null)
+            {
+                book.CoverImage = new CoverImage();
+            }
+
+            if (book.Id == 0)
+            {
+                book.CoverImage.EntityState = EntityState.Added;
+            }
+            else
+            {
+                book.CoverImage.Id = book.CoverImage.Id;
+                book.CoverImage.EntityState = EntityState.Modified;
+
+            }
+
+            book.CoverImage.FileNameWithExtension = Path.GetFileName(savedImageUrl);
+            book.CoverImage.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
+                                                                   + Path.GetFileNameWithoutExtension(
+                                                                       savedImageUrl) + ".jpg";
+            book.CoverImage.FileExtension = ".jpg";
+            return book.CoverImage;
+        }
+
+        CoverImage ICoverImageDomain.EmptyCoverImage()
+        {
+            return EmptyCoverImage();
+        }
+
+        public static CoverImage EmptyCoverImage()
+        {
+            var cover = new CoverImage();
+            cover.FileNameWithExtension = Path.GetFileName(String.Empty);
+            cover.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
+                                                                   + Path.GetFileNameWithoutExtension(
+                                                                       String.Empty) + ".jpg";
+            cover.FileExtension = ".jpg";
+            return cover;
         }
     }
 }
