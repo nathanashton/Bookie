@@ -393,7 +393,7 @@
                 NotifyPropertyChanged("TileWidth");
                 NotifyPropertyChanged("TileHeight");
                 NotifyPropertyChanged("StarSize");
-                AppConfig.AddSetting("TileWidth", value.ToString());
+              //  AppConfig.AddSetting("TileWidth", value.ToString());
             }
         }
 
@@ -526,21 +526,22 @@
             BookDetails = new BookDetails();
             PdfViewer = new PDFViewer();
 
-            var savedView = AppConfig.LoadSetting("SavedView");
-            switch (savedView)
-            {
-                case "Tiles":
-                    BookView = BookTiles;
-                    break;
+          //  var savedView = AppConfig.LoadSetting("SavedView");
+            //switch (savedView)
+            //{
+            //    case "Tiles":
+            //        BookView = BookTiles;
+            //        break;
 
-                case "Details":
-                    BookView = BookDetails;
-                    break;
+            //    case "Details":
+            //        BookView = BookDetails;
+            //        break;
 
-                default:
-                    BookView = new BookTiles();
-                    break;
-            }
+            //    default:
+            //        BookView = new BookTiles();
+            //        break;
+            //}
+            BookView = BookTiles;
             ProgressService.RegisterSubscriber(this);
 
             var sortt = new List<string>
