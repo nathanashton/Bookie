@@ -96,7 +96,6 @@
                 }
           
             };
-            Clipboard.SetText(e.MoreDetails);
             exceptionView.ShowDialog();
         }
 
