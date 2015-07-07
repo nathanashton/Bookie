@@ -13,7 +13,7 @@
 
         public static string ApplicationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), ApplicationName);
 
-        public static string ApplicationDatabaseFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), ApplicationName + @"\" + DatabaseName);
+        public static string ApplicationDatabaseFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationName + @"\" + DatabaseName);
 
         public static string BookFolder { get; set; }
 
