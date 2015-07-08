@@ -17,8 +17,7 @@
         <converters1:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
 
         <converters1:CoverImageConverter x:Key="CoverImageConverter" />
-        <converters1:EnumBooleanConverter x:Key="EnumBooleanConverter" TrueValue="Visible" FalseValue="Hidden" />
-        <converters1:EnumBooleanConverter x:Key="InverseEnumBooleanConverter" TrueValue="Hidden" FalseValue="Visible" />
+
 
         <DataTemplate DataType="{x:Type entities:Book}">
             
@@ -26,10 +25,10 @@
                 <DockPanel Margin="10" LastChildFill="True" Background="Transparent">
                     <StackPanel DockPanel.Dock="Bottom">
                         <Label Padding="0" Margin="0,5,0,0" Height="20" HorizontalAlignment="Center">
-                            <TextBlock FontWeight="Bold" TextAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
+                            <TextBlock FontWeight="Bold" TextAlignment="Left" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
                         </Label>
 
-                        <TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Center"
+                        <TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Left"
                                    Foreground="Black" TextTrimming="CharacterEllipsis"
                                    Text="{Binding Path=DatePublished, StringFormat=yyyy}" />
                     </StackPanel>
