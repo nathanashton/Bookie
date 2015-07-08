@@ -38,11 +38,15 @@
 
                         <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
                     </Border>
-                </StackPanel>
-
-                <StackPanel Margin="0,0,0,0" Height="25" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="Open PDF" Command="{Binding OpenPDFCommand}" Width="70" ></Button>
                 </StackPanel>
+
+                <Border Margin="15,0,15,0" Grid.Row="1" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
+                   
+                </Border>
+
+
+
                 <TabControl FontFamily="Calibri" Grid.Row="2" Margin="0,15,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem  Header="General" HorizontalAlignment="Stretch">
                         <ScrollViewer VerticalScrollBarVisibility=

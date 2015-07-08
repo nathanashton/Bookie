@@ -39,14 +39,14 @@
     <Grid>
 
         <DockPanel LastChildFill="True">
-            <Menu IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  DockPanel.Dock="Top" Height="30" VerticalAlignment="Top" Background="{DynamicResource AccentColorBrush2}">
-                <MenuItem Background="Transparent" Foreground="White" Header="{x:Static strings:Resources.TopMenu_File}">
+            <!--<Menu IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  DockPanel.Dock="Top" Height="30" VerticalAlignment="Top" Background="#D0D8DB">
+                <MenuItem Background="Transparent" Foreground="Black" Header="{x:Static strings:Resources.TopMenu_File}">
                     <MenuItem Foreground="Black" Header="{x:Static strings:Resources.TopMenu_Exit}" />
                 </MenuItem>
-                <MenuItem Background="Transparent" Foreground="White" VerticalAlignment="Center"  Header="{x:Static strings:Resources.TopMenu_About}">
+                <MenuItem Background="Transparent" Foreground="Black" VerticalAlignment="Center"  Header="{x:Static strings:Resources.TopMenu_About}">
                     <MenuItem Foreground="Black" Command="{Binding ViewLog}" Header="View Log" />
                 </MenuItem>
-            </Menu>
+            </Menu>-->
 
             <Grid  x:Name="MainGrid" Background="Transparent">
                 <!-- Holder for Panes -->
@@ -59,41 +59,61 @@
 
                     <DockPanel VerticalAlignment="Stretch" LastChildFill="True">
 
-                        <Grid IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush2}" Height="40">
+                        <Grid IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}" Height="60">
 
+                            <Border BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SettingsViewCommand}">
+                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SettingsViewCommand}">
                                     <Image  Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill" Source="pack://application:,,,/Resources/Icons/cog.png" />
                                 </Button>
 
-                                <Button Margin="0,0,0,0" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshCommand}">
+                                <Button Margin="0,0,0,0" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshCommand}">
                                     <Image Margin="10,0,10,0" Width="20" Height="20" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/Icons/refresh.png" />
                                 </Button>
 
-                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding TileViewCommand}">
+                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding TileViewCommand}">
                                     <Image Width="20" Margin="10,0,10,0" Height="20" Source="pack://application:,,,/Resources/Icons/tiles.png" />
                                 </Button>
 
-                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
                                     <Image Width="20" Margin="10,0,10,0" Height="20" Source="pack://application:,,,/Resources/Icons/list.png" />
                                 </Button>
 
-                                <Button Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SourceViewCommand}">
+                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SourceViewCommand}">
                                     <Image  Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill" Source="pack://application:,,,/Resources/Icons/folder.png" />
                                 </Button>
                             </StackPanel>
+                            </Border>
 
                             <StackPanel Visibility="{Binding FilterBoxVisibility}" Name="FilterBox" Margin="0,0,10,0"  HorizontalAlignment="Right" Orientation="Horizontal">
-                                <ToggleButton Margin="5" Content="Favourites" IsChecked="{Binding ToggleFavourite, Mode=TwoWay}" />
-                                <ToggleButton Margin="5" Content="Scraped" IsChecked="{Binding ToggleScraped, Mode=TwoWay}" />
-                                <Label Foreground="White" FontSize="14" Content="Sort" Margin="0,0,5,0" VerticalContentAlignment="Center" />
+
+                                <ToggleButton Width="40" Height="40" Margin="5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
+                                    <Rectangle Width="20" Height="20" Fill="{Binding ScrapedColor}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cloud_download}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </ToggleButton>
+
+                                <ToggleButton Width="40" Height="40" Margin="5,5,30,5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
+                                    <Rectangle Width="20" Height="20" Fill="{Binding StarColor}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </ToggleButton>
+
                                 <ComboBox Margin="0,2,0,2" Height="25" Width="220" ItemsSource="{Binding SortList}" SelectedValue="{Binding SelectedSort}" />
-                                <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0" VerticalContentAlignment="Center" />
-                                <TextBox FontSize="12" Width="250" Height="20" Name="Filter" Controls:TextBoxHelper.ClearTextButton="True"  Controls:TextBoxHelper.Watermark="Search" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" KeyUp="Filter_KeyUp" />
+
+                                    <StackPanel Orientation="Horizontal" >
+                                    <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0" VerticalContentAlignment="Center" />
+                                    <TextBox FontSize="12" Width="241" Height="20" Name="Filter" Controls:TextBoxHelper.ClearTextButton="True"  Controls:TextBoxHelper.Watermark="Search" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" KeyUp="Filter_KeyUp" />
+                                    </StackPanel>
+                                
                             </StackPanel>
                         </Grid>
 
-                        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Height="23" Background="{DynamicResource AccentColorBrush2}">
+                        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Height="23" Background="{DynamicResource AccentColorBrush}">
 
                             <DockPanel
                         Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}">

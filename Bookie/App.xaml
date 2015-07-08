@@ -11,6 +11,7 @@
             	<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
             	<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
             	<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Icons.xaml" />
             	<ResourceDictionary Source="pack://application:,,,/Themes/FlyoutOverride.xaml" />
             	<ResourceDictionary Source="pack://application:,,,/Themes/Fonts.xaml" />
             </ResourceDictionary.MergedDictionaries>

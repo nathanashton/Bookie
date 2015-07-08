@@ -15,12 +15,14 @@
 
         <DockPanel LastChildFill="True">
 
-            <StackPanel Width="80" Visibility="{Binding LeftPane}" DockPanel.Dock="Left"  Orientation="Vertical">
-                <Label FontWeight="Bold" Content="Bookmarks" />
+            <StackPanel Background="#f1f2f4" Width="150" Visibility="{Binding LeftPane}" DockPanel.Dock="Left"  Orientation="Vertical">
+                <Border DockPanel.Dock="Top" Margin="15,10,30,10" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
+                    <Label Foreground="#444444" FontFamily="Calibri" FontSize="18" Content="BOOKMARKS"/>
+                </Border>
 
                 <Grid HorizontalAlignment="Stretch">
 
-                    <ListBox SelectedItem="{Binding SelectedBookMark}" ItemsSource="{Binding PDFUrl.BookMarks}">
+                    <ListBox Background="#f1f2f4" SelectedItem="{Binding SelectedBookMark}" ItemsSource="{Binding PDFUrl.BookMarks}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Label Content="{Binding BookMarkedPage,Mode=TwoWay}" ContentStringFormat="Page {0}" />
@@ -30,11 +32,14 @@
                 </Grid>
             </StackPanel>
 
-            <Grid Width="300" Visibility="{Binding RightPane}" DockPanel.Dock="Right">
+            <Grid   Background="#f1f2f4" Width="300" Visibility="{Binding RightPane}" DockPanel.Dock="Right">
                 <DockPanel LastChildFill="True">
-                    <Label DockPanel.Dock="Top"  FontWeight="Bold" Content="Notes" />
+                    <Border DockPanel.Dock="Top" Margin="15,10,30,10" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
+                        <Label Foreground="#444444" FontFamily="Calibri" FontSize="18" Content="NOTES"/>
+                    </Border>
 
-                    <ListBox SelectedItem="{Binding SelectedNote, Mode=TwoWay}" HorizontalAlignment="Stretch" ItemsSource="{Binding PDFUrl.Notes}">
+
+                    <ListBox FontFamily="Calibri" Background="#f1f2f4" SelectedItem="{Binding SelectedNote, Mode=TwoWay}" HorizontalAlignment="Stretch" ItemsSource="{Binding PDFUrl.Notes}">
                         
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -49,7 +54,9 @@
                                         <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,10,0" HorizontalAlignment="Left" DockPanel.Dock="Top" Content="{Binding PageNumber}" ContentStringFormat="Page {0}" />
                                         <Button Grid.Column="2" Height="15" HorizontalAlignment="Right" Command="{Binding EditNoteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type userControls:PDFViewer}}}" Content="View" CommandParameter="{Binding}" />
                                     </Grid>
+                                    <Border BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
                                     <TextBlock Margin="0,5,0,0" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Text="{Binding NoteText}"></TextBlock>
+                                    </Border>
                                 </DockPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -61,7 +68,7 @@
 
 
 
-                <Grid Background="{DynamicResource AccentColorBrush2}" DockPanel.Dock="Top" VerticalAlignment="Top" Height="35">
+                <Grid Background="White" DockPanel.Dock="Top" VerticalAlignment="Top" Height="35">
                         <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
 

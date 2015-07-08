@@ -139,8 +139,7 @@
                                             <Setter Property="TextElement.Foreground" Value="#454442"/>
     									</Trigger>
     									<Trigger Property="IsSelected" Value="True">
-                       
-
+                     
                                         </Trigger>
     									<Trigger Property="IsEnabled" Value="False">
     										<Setter Property="Foreground" Value="{DynamicResource GrayBrush7}"/>
@@ -172,13 +171,13 @@
 
     </UserControl.Resources>
 
-    <Grid TextOptions.TextFormattingMode="Display"  Visibility="{Binding LeftPane}" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#f1f2f4">
+    <Grid TextOptions.TextRenderingMode="ClearType" TextOptions.TextFormattingMode="Display"  Visibility="{Binding LeftPane}" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#f1f2f4">
 			<ScrollViewer VerticalScrollBarVisibility="{Binding IsMouseOver, Converter={StaticResource MouseOverToScrollBarVisibility}, RelativeSource={RelativeSource Self}}">
 				<StackPanel Background="Transparent"  Orientation="Vertical" HorizontalAlignment="Stretch">
 
 
                 <Border Margin="15,10,30,10" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
-                    <Label Foreground="#444444" FontFamily="Calibri" FontSize="18" Content="PUBLISHERS"/>
+                    <Label Foreground="{DynamicResource AccentColorBrush}" FontWeight="Bold" FontFamily="Calibri" FontSize="18" Content="PUBLISHERS"/>
                 </Border>
 
 
@@ -192,15 +191,20 @@
 									</StackPanel>
 								</HierarchicalDataTemplate>
 								<DataTemplate DataType="{x:Type model:Book}">
-									<StackPanel Margin="10,0,0,0" Orientation="Horizontal">
+									<StackPanel Orientation="Horizontal">
 										<!--<Image Height="14" Width="14" Source="pack://application:,,,/Resources/Icons/person.png" Margin="0,0,5,0" />-->
-                                    <TextBlock Foreground="#595959" FontFamily="Calibri" FontSize="12" Text="{Binding Title}" ToolTip="{Binding Title}" />
+                                <BulletDecorator Margin="0,0,5,0"  VerticalAlignment="Center" >
+                                    <BulletDecorator.Bullet>
+                                        <Ellipse Height="5" Width="5" Fill="{DynamicResource AccentColorBrush}"/>
+                                     </BulletDecorator.Bullet>
+                                     </BulletDecorator>
+                                <TextBlock Foreground="#595959" FontFamily="Calibri" FontSize="12" Text="{Binding Title}" ToolTip="{Binding Title}" />
 									</StackPanel>
 								</DataTemplate>
 							</TreeView.Resources>
 						</TreeView>
                 <Border Margin="15,10,30,10" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
-                    <Label Foreground="#444444" FontFamily="Calibri" FontSize="18" Content="AUTHORS"/>
+                    <Label Foreground="{DynamicResource AccentColorBrush}" FontWeight="Bold" FontFamily="Calibri" FontSize="18" Content="AUTHORS"/>
                 </Border>
                 <TreeView Style="{DynamicResource TreeViewStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="authorTV" ItemsSource="{Binding AuthorsTV}">
 							<TreeView.Resources>
@@ -212,9 +216,13 @@
 									</StackPanel>
 								</HierarchicalDataTemplate>
 								<DataTemplate DataType="{x:Type model:Book}">
-									<StackPanel Margin="10,0,0,0" Orientation="Horizontal">
-										<!--<Image Height="14" Width="14" Source="pack://application:,,,/Resources/Icons/openbook.png" Margin="0,0,5,0" />-->
-                                        <TextBlock Foreground="#595959"  FontFamily="Calibri" FontSize="12" Text="{Binding Title}" ToolTip="{Binding Title}" />
+									<StackPanel Orientation="Horizontal">
+                                <BulletDecorator Margin="0,0,5,0"  VerticalAlignment="Center" >
+                                    <BulletDecorator.Bullet>
+                                        <Ellipse Height="5" Width="5" Fill="{DynamicResource AccentColorBrush}"/>
+                                    </BulletDecorator.Bullet>
+                                </BulletDecorator>
+                                <TextBlock Foreground="#595959"  FontFamily="Calibri" FontSize="12" Text="{Binding Title}" ToolTip="{Binding Title}" />
 									</StackPanel>
 								</DataTemplate>
 							</TreeView.Resources>
