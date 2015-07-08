@@ -789,6 +789,7 @@
             {
                 if (Books != null)
                 {
+                    all.Sort((x, y) => string.Compare(x.Publisher.Name, y.Publisher.Name)); 
                     PublishersTV = new ObservableCollection<PublisherTreeView>(all);
                 }
             }
@@ -799,6 +800,7 @@
             {
                 if (Books != null)
                 {
+                    allAuthors.Sort((x, y) => string.Compare(x.Author.FirstName, y.Author.FirstName));
                     AuthorsTV = new ObservableCollection<AuthorTreeView>(allAuthors);
                 }
             }
