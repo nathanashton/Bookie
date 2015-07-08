@@ -393,7 +393,7 @@
                 NotifyPropertyChanged("TileWidth");
                 NotifyPropertyChanged("TileHeight");
                 NotifyPropertyChanged("StarSize");
-              //  AppConfig.AddSetting("TileWidth", value.ToString());
+                Properties.Settings.Default.TileWidth = value;
             }
         }
 

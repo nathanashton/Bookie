@@ -16,13 +16,14 @@
         private readonly SourceDirectory _source;
         private List<string> _foundPdfFiles;
         public readonly BackgroundWorker Worker;
+
+        private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
+
         private readonly BookDomain _bookDomain = new BookDomain();
 
         public ProgressWindowEventArgs ProgressArgs { get; set; }
 
         private bool _generateCovers;
-
-        private ICoverImageDomain coverImageDomain = new CoverImageDomain();
 
         public event EventHandler<BookEventArgs> BookChanged;
 
@@ -114,7 +115,7 @@
 
                 if (_generateCovers)
                 {
-                    book.CoverImage = coverImageDomain.GenerateCoverImageFromPdf(book);
+                    book.CoverImage = _coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
                 else
                 {

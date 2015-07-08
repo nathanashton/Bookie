@@ -3,6 +3,7 @@
     using Bookie.Common;
     using Bookie.Common.Model;
     using Bookie.Core.Domains;
+    using Bookie.Core.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -10,21 +11,24 @@
     using System.IO;
     using System.Linq;
 
-    using Bookie.Core.Interfaces;
-
     public class Scraper : IProgressPublisher
     {
         private readonly IsbnGuesser _guesser = new IsbnGuesser();
+
         private readonly BookDomain _bookDomain = new BookDomain();
 
+        private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
+        
         private SourceDirectory _sourceDirectory;
+
         public ProgressWindowEventArgs ProgressArgs { get; set; }
 
         private List<Book> _booksToScrape;
 
-        private ICoverImageDomain coverImageDomain = new CoverImageDomain();
+        private bool _noInternet;
 
         public readonly BackgroundWorker Worker = new BackgroundWorker();
+
         private readonly IBookScraper _scraper = new GoogleScraper();
 
         public event EventHandler<BookEventArgs> BookChanged;
@@ -58,7 +62,11 @@
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
+            if (_noInternet)
+            {
+                MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
+            }
+            _noInternet = false;
             _sourceDirectory.DateLastScanned = DateTime.Now;
             _sourceDirectory.EntityState = EntityState.Modified;
             new SourceDirectoryDomain().UpdateSourceDirectory(_sourceDirectory);
@@ -101,12 +109,12 @@
                 try
                 {
                     _results = _scraper.SearchBooks(book.Isbn);
-
                 }
                 catch (BookieException)
                 {
                     Logger.Log.Error("No internet connection while scraping. Terminated");
                     e.Cancel = true;
+                    _noInternet = true;
                     return;
                 }
 
@@ -160,7 +168,7 @@
 
                 if (!File.Exists(book.CoverImage.FullPathAndFileNameWithExtension))
                 {
-                    book.CoverImage = coverImageDomain.GenerateCoverImageFromPdf(book);
+                    book.CoverImage = _coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
                 else
                 {
@@ -202,7 +210,7 @@
             {
                 return;
             }
-
+            _noInternet = false;
             OnProgressStarted();
             Worker.RunWorkerAsync();
         }
