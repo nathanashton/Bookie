@@ -24,13 +24,13 @@
             <Grid Margin="8">
                 <DockPanel Margin="10" LastChildFill="True" Background="Transparent">
                     <StackPanel DockPanel.Dock="Bottom">
-                        <Label Padding="0" Margin="0,5,0,0" Height="20" HorizontalAlignment="Center">
-                            <TextBlock FontWeight="Bold" TextAlignment="Left" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
+                        <Label Margin="0,5,0,0" Padding="0" Height="20" HorizontalAlignment="Left">
+                            <TextBlock FontSize="12" FontFamily="Calibri" FontWeight="SemiBold" TextAlignment="Left" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
                         </Label>
 
                         <TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Left"
                                    Foreground="Black" TextTrimming="CharacterEllipsis"
-                                   Text="{Binding Path=DatePublished, StringFormat=yyyy}" />
+                                   FontFamily="Calibri" FontSize="12" Text="{Binding Path=DatePublished, StringFormat=yyyy}" />
                     </StackPanel>
 
                     <Grid ToolTip="{Binding Path=Title}">

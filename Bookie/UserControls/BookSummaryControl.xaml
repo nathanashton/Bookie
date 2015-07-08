@@ -30,7 +30,7 @@
 
                 <StackPanel VerticalAlignment="Stretch" Orientation="Vertical" Grid.Row="0">
 
-                    <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold">
+                    <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontFamily="Calibri" FontSize="22" FontWeight="Bold">
                         <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}" TextTrimming="CharacterEllipsis" />
                     </Label>
 
@@ -43,7 +43,7 @@
                 <StackPanel Margin="0,0,0,0" Height="25" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Content="Open PDF" Command="{Binding OpenPDFCommand}" Width="70" ></Button>
                 </StackPanel>
-                <TabControl Grid.Row="2" Margin="0,15,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
+                <TabControl FontFamily="Calibri" Grid.Row="2" Margin="0,15,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem  Header="General" HorizontalAlignment="Stretch">
                         <ScrollViewer VerticalScrollBarVisibility=
           "{Binding IsMouseOver,

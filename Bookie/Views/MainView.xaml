@@ -10,7 +10,7 @@
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-        Title="Bookie" Height="300" Width="600" MinWidth="830" MinHeight="300" WindowState="Maximized">
+        Title="Bookie" Height="300" Width="600" FontFamily="Calibri" MinWidth="830" MinHeight="300" WindowState="Maximized">
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
