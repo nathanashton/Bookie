@@ -83,11 +83,18 @@
     														<Setter Property="Template">
     															<Setter.Value>
     																<ControlTemplate TargetType="{x:Type ToggleButton}">
-    																	<Grid Visibility="Hidden" Background="Transparent" Height="16" Width="16">
-    																		<Path x:Name="ExpandPath" Data="M4,0L8,4 4,8z" Fill="Transparent" HorizontalAlignment="Center" Stroke="{DynamicResource BlackBrush}" StrokeThickness="1" VerticalAlignment="Center"/>
-    																	</Grid>
+
+                                                                        <BulletDecorator Margin="5,0,5,0"  VerticalAlignment="Center" >
+                                                                            <BulletDecorator.Bullet>
+                                                                                <Ellipse Height="5" Width="5" Fill="{DynamicResource AccentColorBrush}"/>
+                                                                            </BulletDecorator.Bullet>
+                                                                        </BulletDecorator>
+
+                      
+                                                                        
+                                                                        
     																	<ControlTemplate.Triggers>
-    																		<Trigger Property="IsChecked" Value="True">
+    																		<!--<Trigger Property="IsChecked" Value="True">
     																			<Setter Property="RenderTransform" TargetName="ExpandPath">
     																				<Setter.Value>
     																					<RotateTransform Angle="45" CenterY="4" CenterX="4"/>
@@ -95,7 +102,7 @@
     																			</Setter>
     																			<Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource BlackBrush}"/>
     																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource BlackBrush}"/>
-    																		</Trigger>
+    																		</Trigger>--><!--
     																		<Trigger Property="IsEnabled" Value="False">
     																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
     																		</Trigger>
@@ -105,12 +112,12 @@
     																				<Condition Property="IsChecked" Value="True"/>
     																			</MultiTrigger.Conditions>
     																			<Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
-    																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
-    																		</MultiTrigger>
-    																		<Trigger Property="IsMouseOver" Value="True">
+    																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>-->
+    																		<!--</MultiTrigger>-->
+    																		<!--<Trigger Property="IsMouseOver" Value="True">
     																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource AccentColorBrush}"/>
     																			<Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource AccentColorBrush}"/>
-    																		</Trigger>
+    																		</Trigger>-->
     																	</ControlTemplate.Triggers>
     																</ControlTemplate>
     															</Setter.Value>

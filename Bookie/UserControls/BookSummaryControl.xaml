@@ -23,12 +23,12 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="35" />
-
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                
+                <Border Grid.Row="0" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
 
-                <StackPanel VerticalAlignment="Stretch" Orientation="Vertical" Grid.Row="0">
+                    <StackPanel VerticalAlignment="Stretch" Orientation="Vertical" Grid.Row="0">
 
                     <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontFamily="Calibri" FontSize="22" FontWeight="Bold">
                         <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}" TextTrimming="CharacterEllipsis" />
@@ -38,16 +38,35 @@
 
                         <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
                     </Border>
-                    <Button Content="Open PDF" Command="{Binding OpenPDFCommand}" Width="70" ></Button>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
+                            <Rectangle Width="20" Height="20" Fill="Black">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+                        <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
+                            <Rectangle Width="8" Height="20" Fill="Black">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_information}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                    </StackPanel>
+                    
+
+
+
                 </StackPanel>
 
-                <Border Margin="15,0,15,0" Grid.Row="1" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
                    
                 </Border>
 
 
 
-                <TabControl FontFamily="Calibri" Grid.Row="2" Margin="0,15,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
+                <TabControl FontFamily="Calibri" Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem  Header="General" HorizontalAlignment="Stretch">
                         <ScrollViewer VerticalScrollBarVisibility=
           "{Binding IsMouseOver,
@@ -68,7 +87,7 @@
                                 <TextBlock Text="{Binding SelectedBook.Abstract}" Margin="7" TextWrapping="Wrap">
                                 </TextBlock>
                                 <Label FontWeight="Bold" Content="Publishers" />
-                                <DataGrid HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Publishers}" IsReadOnly="True" GridLinesVisibility="None">
+                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Publishers}" IsReadOnly="True" GridLinesVisibility="None">
                                     <DataGrid.Resources>
                                         <Style TargetType="{x:Type DataGridRow}">
                                             <Setter Property="IsHitTestVisible" Value="False" />
@@ -79,10 +98,10 @@
                                     </DataGrid.Columns>
                                 </DataGrid>
                                 <Label FontWeight="Bold" Content="Authors" />
-                                <DataGrid HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Authors}" IsReadOnly="True" GridLinesVisibility="None">
+                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Authors}" IsReadOnly="True" GridLinesVisibility="None">
 
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Width="Auto" Binding="{Binding FullName}" />
+                                        <DataGridTextColumn  Width="Auto" Binding="{Binding FullName}" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>

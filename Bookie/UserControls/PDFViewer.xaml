@@ -92,6 +92,10 @@
                             <Button Margin="5" Width="20" Height="20" Click="ButtonBase_OnClick">
                                 <Image Source="pack://application:,,,/Resources/Icons/previouspage.png" />
                             </Button>
+                            
+                            
+                            
+
                             <Button Margin="5" Width="20" Height="20" Click="Button_Click_2">
                                 <Image Source="pack://application:,,,/Resources/Icons/nextpage.png" />
                             </Button>

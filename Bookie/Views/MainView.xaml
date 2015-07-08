@@ -63,21 +63,36 @@
 
                             <Border BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SettingsViewCommand}">
-                                    <Image  Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill" Source="pack://application:,,,/Resources/Icons/cog.png" />
-                                </Button>
+                                    <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SettingsViewCommand}">
+                                        <Rectangle Height="20" Width="20" Fill="White">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Visual="{StaticResource appbar_settings }" Stretch="Fill" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Button>
 
-                                <Button Margin="0,0,0,0" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshCommand}">
-                                    <Image Margin="10,0,10,0" Width="20" Height="20" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/Icons/refresh.png" />
-                                </Button>
+                                    <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshCommand}">
+                                        <Rectangle Width="20" Height="20" Fill="White">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Visual="{StaticResource appbar_refresh}" Stretch="Fill" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Button>
 
-                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding TileViewCommand}">
-                                    <Image Width="20" Margin="10,0,10,0" Height="20" Source="pack://application:,,,/Resources/Icons/tiles.png" />
-                                </Button>
+                                    <Button Margin="5" Height="40" Width="40"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding TileViewCommand}">
+                                        <Rectangle Width="20" Height="20" Fill="White">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Visual="{StaticResource appbar_tiles_nine}" Stretch="Fill" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>                                </Button>
 
-                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
-                                    <Image Width="20" Margin="10,0,10,0" Height="20" Source="pack://application:,,,/Resources/Icons/list.png" />
-                                </Button>
+                                    <Button Margin="5" Height="40" Width="40"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                                        <Rectangle Width="20" Height="20" Fill="White">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Visual="{StaticResource appbar_text_align_justify}" Stretch="Fill" />
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Button>
 
                                     <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SourceViewCommand}">
                                     <Image  Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill" Source="pack://application:,,,/Resources/Icons/folder.png" />
@@ -85,12 +100,15 @@
                             </StackPanel>
                             </Border>
 
-                            <StackPanel Visibility="{Binding FilterBoxVisibility}" Name="FilterBox" Margin="0,0,10,0"  HorizontalAlignment="Right" Orientation="Horizontal">
+
+                            <Border Visibility="{Binding FilterBoxVisibility}" Name="FilterBox" Margin="10,5,10,5"  HorizontalAlignment="Right" BorderBrush="#ced1d6" BorderThickness="0,0,0,0">
+                            
+                            <StackPanel  Orientation="Horizontal">
 
                                 <ToggleButton Width="40" Height="40" Margin="5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
                                     <Rectangle Width="20" Height="20" Fill="{Binding ScrapedColor}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cloud_download}"/>
+                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_open_writing}"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </ToggleButton>
@@ -111,6 +129,7 @@
                                     </StackPanel>
                                 
                             </StackPanel>
+                            </Border>
                         </Grid>
 
                         <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Height="23" Background="{DynamicResource AccentColorBrush}">
