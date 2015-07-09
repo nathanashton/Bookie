@@ -12,6 +12,7 @@ namespace Bookie.UserControls
 
     using System.Linq;
 
+    using Bookie.Common;
     using Bookie.Views;
 
     /// <summary>
@@ -19,6 +20,7 @@ namespace Bookie.UserControls
     /// </summary>
     public partial class PDFViewer : UserControl, INotifyPropertyChanged
     {
+
         public Book PDFUrl
         {
             get
@@ -101,6 +103,16 @@ namespace Bookie.UserControls
             }
         }
 
+        private ICommand _deleteBookmarkCommand;
+        public ICommand DeleteBookMarkCommand
+        {
+            get
+            {
+                return _deleteBookmarkCommand
+                       ?? (_deleteBookmarkCommand = new RelayCommand((parameter) => DeleteBookMark(parameter), p => true));
+
+            }
+        }
 
 
 
@@ -315,6 +327,7 @@ namespace Bookie.UserControls
                  };
             PDFUrl.BookMarks.Add(b);
             new BookDomain().UpdateBook(PDFUrl);
+            Refresh();
         }
 
 
@@ -330,13 +343,49 @@ namespace Bookie.UserControls
         {
             //Add note
             NoteView nv = new NoteView(PDFUrl, moonPdfPanel.GetCurrentPageNumber(), null);
+            nv._viewModel.NoteChanged += _viewModel_NoteChanged;
+
             nv.ShowDialog();
         }
 
         private void EditNote(object parameter)
         {
             NoteView nv = new NoteView(PDFUrl, moonPdfPanel.GetCurrentPageNumber(), (Note)parameter);
+            nv._viewModel.NoteChanged += _viewModel_NoteChanged;
             nv.ShowDialog();
+        }
+
+
+
+        private void DeleteBookMark(object parameter)
+        {
+            foreach (var x in PDFUrl.BookMarks)
+            {
+                x.EntityState = EntityState.Unchanged;
+            }
+            foreach (var publisher in PDFUrl.Publishers)
+            {
+                publisher.EntityState = EntityState.Unchanged;
+            }
+            foreach (var author in PDFUrl.Authors)
+            {
+                author.EntityState = EntityState.Unchanged;
+            }
+
+            var bb = (BookMark)parameter;
+            bb.EntityState = EntityState.Deleted;
+
+
+            PDFUrl.BookMarks.ToList().RemoveAll(x => x.Id == bb.Id);
+            new BookDomain().UpdateBook(PDFUrl);
+            Refresh();
+        }
+
+
+
+        void _viewModel_NoteChanged(object sender, EventArgs e)
+        {
+            Refresh();
         }
 
         private void BookMarkLabel_OnClick(object sender, RoutedEventArgs e)
@@ -360,5 +409,7 @@ namespace Bookie.UserControls
         {
             Refresh();
         }
+
+
     }
 }

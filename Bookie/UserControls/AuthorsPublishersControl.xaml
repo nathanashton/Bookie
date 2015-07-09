@@ -14,227 +14,253 @@
         <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
         <converters:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
 
-    	<Style x:Key="TreeViewStyle1" TargetType="{x:Type TreeView}">
-    		<Setter Property="BorderBrush" Value="{DynamicResource BlackBrush}"/>
-            <Setter Property="Background" Value="#f1f2f4"/>
-    		<Setter Property="BorderThickness" Value="0"/>
-    		<Setter Property="SnapsToDevicePixels" Value="True"/>
-    		<Setter Property="Template">
-    			<Setter.Value>
-    				<ControlTemplate TargetType="{x:Type TreeView}">
-    					<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-    						<ScrollViewer>
-    							<ItemsPresenter/>
-    						</ScrollViewer>
-    					</Border>
-    					<ControlTemplate.Triggers>
-    						<Trigger Property="IsEnabled" Value="False">
-    							<Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource GrayBrush9}"/>
-    						</Trigger>
-    					</ControlTemplate.Triggers>
-    				</ControlTemplate>
-    			</Setter.Value>
-    		</Setter>
-    		<Setter Property="ItemContainerStyle">
-    			<Setter.Value>
-    				<Style TargetType="{x:Type TreeViewItem}">
-    					<Setter Property="MinHeight" Value="32"/>
-    					<Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
-    					<Setter Property="Background" Value="Transparent"/>
-    					<Setter Property="FocusVisualStyle">
-    						<Setter.Value>
-    							<Style>
-    								<Setter Property="Control.Template">
-    									<Setter.Value>
-    										<ControlTemplate>
-    											<Border>
-    												<Rectangle Margin="0" Opacity="0" Stroke="Black" StrokeThickness="5" StrokeDashArray="1 2"/>
-    											</Border>
-    										</ControlTemplate>
-    									</Setter.Value>
-    								</Setter>
-    							</Style>
-    						</Setter.Value>
-    					</Setter>
-    					<Setter Property="SnapsToDevicePixels" Value="True"/>
-    					<Setter Property="Template">
-    						<Setter.Value>
-    							<ControlTemplate TargetType="{x:Type TreeViewItem}">
-    								<StackPanel>
-    									<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" MinHeight="{TemplateBinding MinHeight}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-    										<Grid VerticalAlignment="Stretch">
-    											<Grid.ColumnDefinitions>
-    												<ColumnDefinition Width="19"/>
-    												<ColumnDefinition Width="*"/>
-    											</Grid.ColumnDefinitions>
-    											<Grid.Margin>
-    												<Binding RelativeSource="{RelativeSource TemplatedParent}">
-    													<Binding.Converter>
-    														<Custom:TreeViewMarginConverter Length="12"/>
-    													</Binding.Converter>
-    												</Binding>
-    											</Grid.Margin>
-    											<ToggleButton x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
-    												<ToggleButton.Style>
-    													<Style TargetType="{x:Type ToggleButton}">
-    														<Setter Property="Focusable" Value="False"/>
-    														<Setter Property="Width" Value="16"/>
-    														<Setter Property="Height" Value="16"/>
-    														<Setter Property="Template">
-    															<Setter.Value>
-    																<ControlTemplate TargetType="{x:Type ToggleButton}">
 
-                                                                        <BulletDecorator Margin="5,0,5,0"  VerticalAlignment="Center" >
-                                                                            <BulletDecorator.Bullet>
-                                                                                <Ellipse Height="5" Width="5" Fill="{DynamicResource AccentColorBrush}"/>
-                                                                            </BulletDecorator.Bullet>
-                                                                        </BulletDecorator>
-
-                      
-                                                                        
-                                                                        
-    																	<ControlTemplate.Triggers>
-    																		<!--<Trigger Property="IsChecked" Value="True">
-    																			<Setter Property="RenderTransform" TargetName="ExpandPath">
-    																				<Setter.Value>
-    																					<RotateTransform Angle="45" CenterY="4" CenterX="4"/>
-    																				</Setter.Value>
-    																			</Setter>
-    																			<Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource BlackBrush}"/>
-    																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource BlackBrush}"/>
-    																		</Trigger>--><!--
-    																		<Trigger Property="IsEnabled" Value="False">
-    																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
-    																		</Trigger>
-    																		<MultiTrigger>
-    																			<MultiTrigger.Conditions>
-    																				<Condition Property="IsEnabled" Value="False"/>
-    																				<Condition Property="IsChecked" Value="True"/>
-    																			</MultiTrigger.Conditions>
-    																			<Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
-    																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>-->
-    																		<!--</MultiTrigger>-->
-    																		<!--<Trigger Property="IsMouseOver" Value="True">
-    																			<Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource AccentColorBrush}"/>
-    																			<Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource AccentColorBrush}"/>
-    																		</Trigger>-->
-    																	</ControlTemplate.Triggers>
-    																</ControlTemplate>
-    															</Setter.Value>
-    														</Setter>
-    													</Style>
-    												</ToggleButton.Style>
-    											</ToggleButton>
-    											<ContentPresenter x:Name="PART_Header" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-    										</Grid>
-    									</Border>
-    									<ItemsPresenter x:Name="ItemsHost">
-    										<ItemsPresenter.LayoutTransform>
-    											<ScaleTransform ScaleY="1"/>
-    										</ItemsPresenter.LayoutTransform>
-    									</ItemsPresenter>
-    								</StackPanel>
-    								<ControlTemplate.Triggers>
-    									<Trigger Property="IsExpanded" Value="False">
-    										<Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
-    									</Trigger>
-    									<Trigger Property="HasItems" Value="False">
-    										<Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
-    									</Trigger>
-    									<Trigger Property="IsMouseOver" SourceName="Border" Value="True">
-                                            <Setter Property="Background" Value="#D3D6DD"/>
-                                            <Setter Property="TextElement.Foreground" Value="#454442"/>
-    									</Trigger>
-    									<Trigger Property="IsSelected" Value="True">
-                     
+        <Style x:Key="TreeViewStyle2" TargetType="{x:Type TreeView}">
+            <Setter Property="BorderBrush" Value="{DynamicResource BlackBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TreeView}">
+                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <ScrollViewer>
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="BorderBrush" TargetName="Border" Value="{DynamicResource GrayBrush9}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="MinHeight" Value="28"/>
+                        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FocusVisualStyle">
+                            <Setter.Value>
+                                <Style>
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Border>
+                                                    <Rectangle Margin="0" Opacity="0" Stroke="Black" StrokeThickness="5" StrokeDashArray="1 2"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                                    <StackPanel>
+                                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" MinHeight="{TemplateBinding MinHeight}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                            <Grid VerticalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="19"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.Margin>
+                                                    <Binding RelativeSource="{RelativeSource TemplatedParent}">
+                                                        <Binding.Converter>
+                                                            <Custom:TreeViewMarginConverter Length="12"/>
+                                                        </Binding.Converter>
+                                                    </Binding>
+                                                </Grid.Margin>
+                                                <ToggleButton x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                                    <ToggleButton.Style>
+                                                        <Style TargetType="{x:Type ToggleButton}">
+                                                            <Setter Property="Focusable" Value="False"/>
+                                                            <Setter Property="Width" Value="16"/>
+                                                            <Setter Property="Height" Value="16"/>
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                                        <Grid Background="Transparent" Height="16" Width="16">
+                                                                            <Path x:Name="ExpandPath" Data="M4,0L8,4 4,8z" Fill="Transparent" HorizontalAlignment="Center" Stroke="{DynamicResource BlackBrush}" StrokeThickness="1" VerticalAlignment="Center"/>
+                                                                        </Grid>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsChecked" Value="True">
+                                                                                <Setter Property="RenderTransform" TargetName="ExpandPath">
+                                                                                    <Setter.Value>
+                                                                                        <RotateTransform Angle="45" CenterY="4" CenterX="4"/>
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                                <Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource BlackBrush}"/>
+                                                                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource BlackBrush}"/>
+                                                                            </Trigger>
+                                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
+                                                                            </Trigger>
+                                                                            <MultiTrigger>
+                                                                                <MultiTrigger.Conditions>
+                                                                                    <Condition Property="IsEnabled" Value="False"/>
+                                                                                    <Condition Property="IsChecked" Value="True"/>
+                                                                                </MultiTrigger.Conditions>
+                                                                                <Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
+                                                                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource GrayBrush5}"/>
+                                                                            </MultiTrigger>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Stroke" TargetName="ExpandPath" Value="{DynamicResource AccentColorBrush}"/>
+                                                                                <Setter Property="Fill" TargetName="ExpandPath" Value="{DynamicResource AccentColorBrush}"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </ToggleButton.Style>
+                                                </ToggleButton>
+                                                <ContentPresenter x:Name="PART_Header" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                            </Grid>
+                                        </Border>
+                                        <ItemsPresenter x:Name="ItemsHost">
+                                            <ItemsPresenter.LayoutTransform>
+                                                <ScaleTransform ScaleY="1"/>
+                                            </ItemsPresenter.LayoutTransform>
+                                        </ItemsPresenter>
+                                    </StackPanel>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsExpanded" Value="False">
+                                            <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
                                         </Trigger>
-    									<Trigger Property="IsEnabled" Value="False">
-    										<Setter Property="Foreground" Value="{DynamicResource GrayBrush7}"/>
-    									</Trigger>
-    									<MultiTrigger>
-    										<MultiTrigger.Conditions>
-    											<Condition Property="IsEnabled" Value="False"/>
-    											<Condition Property="IsSelected" Value="True"/>
-    										</MultiTrigger.Conditions>
-    										<Setter Property="Background" TargetName="Border" Value="{DynamicResource GrayBrush7}"/>
-    										<Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}"/>
-    									</MultiTrigger>
-    									<MultiTrigger>
-    										<MultiTrigger.Conditions>
-    											<Condition Property="IsSelected" Value="True"/>
-    											<Condition Property="IsSelectionActive" Value="True"/>
-    										</MultiTrigger.Conditions>
-                                            <Setter Property="Background" TargetName="Border" Value="#D3D6DD"/>
-
+                                        <Trigger Property="HasItems" Value="False">
+                                            <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" SourceName="Border" Value="True">
+                                            <Setter Property="Background" TargetName="Border" Value="{DynamicResource AccentColorBrush3}"/>
+                                            <Setter Property="TextElement.Foreground" Value="{DynamicResource BlackColorBrush}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" TargetName="Border" Value="{DynamicResource AccentColorBrush}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource GrayBrush7}"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsEnabled" Value="False"/>
+                                                <Condition Property="IsSelected" Value="True"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" TargetName="Border" Value="{DynamicResource GrayBrush7}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource AccentSelectedColorBrush}"/>
                                         </MultiTrigger>
-    								</ControlTemplate.Triggers>
-    							</ControlTemplate>
-    						</Setter.Value>
-    					</Setter>
-    				</Style>
-    			</Setter.Value>
-    		</Setter>
-    	</Style>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="True"/>
+                                                <Condition Property="IsSelectionActive" Value="True"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Background" TargetName="Border" Value="{DynamicResource AccentColorBrush2}"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
 
     </UserControl.Resources>
 
-    <Grid TextOptions.TextRenderingMode="ClearType" TextOptions.TextFormattingMode="Display"  Visibility="{Binding LeftPane}" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#f1f2f4">
-			<ScrollViewer VerticalScrollBarVisibility="{Binding IsMouseOver, Converter={StaticResource MouseOverToScrollBarVisibility}, RelativeSource={RelativeSource Self}}">
-				<StackPanel Background="Transparent"  Orientation="Vertical" HorizontalAlignment="Stretch">
+    <Grid Visibility="{Binding LeftPane}" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" DockPanel.Dock="Left" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#f1f2f4">
+        <ScrollViewer VerticalScrollBarVisibility=
+          "{Binding IsMouseOver,
+                    RelativeSource={RelativeSource Self},
+                    Converter={StaticResource MouseOverToScrollBarVisibility}}">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                <Expander Background="Transparent" FontFamily="Calibri"   IsExpanded="True" BorderThickness="0" BorderBrush="Transparent"  HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <TextBlock Foreground="{DynamicResource AccentColorBrush}" FontWeight="SemiBold" FontFamily="Calibri" FontSize="16">
+                                PUBLISHERS
+                        </TextBlock>
+                    </Expander.Header>
+
+                    <Border BorderBrush="#ced1d6" BorderThickness="0,1,0,0">
+                    <TreeView Margin="0,10,0,0" FontFamily="Calibri" Style="{StaticResource TreeViewStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="publisherTV" ItemsSource="{Binding PublishersTV}">
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type core:PublisherTreeView}" ItemsSource="{Binding Books}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Margin="5,0,10,0" Height="16" Width="16">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Opacity="0.3" Visual="{StaticResource appbar_book_open}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <!--<Image Height="16" Width="16" Source="pack://application:,,,/Resources/Icons/openbook.png" Margin="0,0,5,0" />-->
+
+                                    <TextBlock FontSize="12" Text="{Binding Publisher.Name}" ToolTip="{Binding Pubisher.Name}" />
+                                        <TextBlock Text=" [" Foreground="{DynamicResource AccentColorBrush}" />
+                                        <TextBlock Text="{Binding Books.Count}" Foreground="{DynamicResource AccentColorBrush}" />
+                                        <TextBlock Text="]" Foreground="{DynamicResource AccentColorBrush}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                            <DataTemplate DataType="{x:Type model:Book}">
+                                <StackPanel Orientation="Horizontal">
+                                    <!--<Image Height="16" Width="16" Source="pack://application:,,,/Resources/Icons/person.png" Margin="0,0,5,0" />-->
+                                    <Rectangle Margin="5,0,10,0" Height="16" Width="16">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Opacity="0.3" Visual="{StaticResource appbar_user}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Text="{Binding Title}" ToolTip="{Binding Title}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </TreeView.Resources>
+                    </TreeView>
+                    </Border>
+                </Expander>
+                <Expander FontFamily="Calibri" Background="Transparent" IsExpanded="True" BorderThickness="0" BorderBrush="Transparent">
+                    <Expander.Header>
+                        <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource AccentColorBrush}" FontFamily="Calibri" FontSize="16">
+                                AUTHORS
+                        </TextBlock>
+                    </Expander.Header>
+                    <Border BorderBrush="#ced1d6" BorderThickness="0,1,0,0">
+                        <TreeView Margin="0,10,0,0" FontFamily="Calibri"  Style="{StaticResource TreeViewStyle2}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Name="authorTV" ItemsSource="{Binding AuthorsTV}">
+                            <TreeView.Resources>
+                                <HierarchicalDataTemplate DataType="{x:Type core:AuthorTreeView}" ItemsSource="{Binding Books}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--<Image Height="16" Width="16" Source="pack://application:,,,/Resources/Icons/person.png" Margin="0,0,5,0" />-->
+                                        <Rectangle Margin="5,0,10,0" Height="16" Width="16">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Opacity="0.3" Visual="{StaticResource appbar_user}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <TextBlock FontSize="12" Text="{Binding Author.FullName}" ToolTip="{Binding Author.FullName}" />
+                                        <TextBlock Text=" [" Foreground="{DynamicResource AccentColorBrush}" />
+                                        <TextBlock Text="{Binding Books.Count}" Foreground="{DynamicResource AccentColorBrush}" />
+                                        <TextBlock Text="]" Foreground="{DynamicResource AccentColorBrush}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                                <DataTemplate DataType="{x:Type model:Book}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--<Image Height="16" Width="16" Source="pack://application:,,,/Resources/Icons/openbook.png" Margin="0,0,5,0" />-->
+                                        <Rectangle Margin="5,0,10,0" Height="16" Width="16">
+                                            <Rectangle.Fill>
+                                                <VisualBrush Opacity="0.3" Visual="{StaticResource appbar_book_open}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <TextBlock Text="{Binding Title}" ToolTip="{Binding Title}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TreeView.Resources>
+                        </TreeView>
+                    </Border>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 
 
-                <Border Margin="15,10,30,10" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
-                    <Label Foreground="{DynamicResource AccentColorBrush}" FontWeight="Bold" FontFamily="Calibri" FontSize="18" Content="PUBLISHERS"/>
-                </Border>
 
-
-                <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="publisherTV" ItemsSource="{Binding PublishersTV}" Style="{DynamicResource TreeViewStyle1}">
-							<TreeView.Resources>
-      <HierarchicalDataTemplate DataType="{x:Type core:PublisherTreeView}" ItemsSource="{Binding Books}">
-									<StackPanel Orientation="Horizontal">
-										<!--<Image Height="14" Width="14" Source="pack://application:,,,/Resources/Icons/openbook.png" Margin="0,0,5,0" />-->
-                                    <TextBlock Foreground="#595959" FontFamily="Calibri" FontSize="12" Text="{Binding Publisher.Name}" ToolTip="{Binding Publisher.Name}" />
-                                    <TextBlock Foreground="#595959"  FontFamily="Calibri" FontSize="12" FontWeight="Bold" Text="{Binding Books.Count,StringFormat=' {0}'}"  />
-									</StackPanel>
-								</HierarchicalDataTemplate>
-								<DataTemplate DataType="{x:Type model:Book}">
-									<StackPanel Orientation="Horizontal">
-										<!--<Image Height="14" Width="14" Source="pack://application:,,,/Resources/Icons/person.png" Margin="0,0,5,0" />-->
-                                <BulletDecorator Margin="0,0,5,0"  VerticalAlignment="Center" >
-                                    <BulletDecorator.Bullet>
-                                        <Ellipse Height="5" Width="5" Fill="{DynamicResource AccentColorBrush}"/>
-                                     </BulletDecorator.Bullet>
-                                     </BulletDecorator>
-                                <TextBlock Foreground="#595959" FontFamily="Calibri" FontSize="12" Text="{Binding Title}" ToolTip="{Binding Title}" />
-									</StackPanel>
-								</DataTemplate>
-							</TreeView.Resources>
-						</TreeView>
-                <Border Margin="15,10,30,10" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
-                    <Label Foreground="{DynamicResource AccentColorBrush}" FontWeight="Bold" FontFamily="Calibri" FontSize="18" Content="AUTHORS"/>
-                </Border>
-                <TreeView Style="{DynamicResource TreeViewStyle1}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="authorTV" ItemsSource="{Binding AuthorsTV}">
-							<TreeView.Resources>
-								<HierarchicalDataTemplate DataType="{x:Type core:AuthorTreeView}" ItemsSource="{Binding Books}">
-									<StackPanel Orientation="Horizontal">
-										<!--<Image Height="14" Width="14" Source="pack://application:,,,/Resources/Icons/person.png" Margin="0,0,5,0" />-->
-                                    <TextBlock Foreground="#595959"  FontFamily="Calibri" FontSize="12"  Text="{Binding Author.FullName}" ToolTip="{Binding Author.FullName}" />
-                                    <TextBlock Foreground="#595959"  Text="{Binding Books.Count,StringFormat=' {0}'}" FontFamily="Calibri" FontSize="12" FontWeight="Bold" />
-									</StackPanel>
-								</HierarchicalDataTemplate>
-								<DataTemplate DataType="{x:Type model:Book}">
-									<StackPanel Orientation="Horizontal">
-                                <BulletDecorator Margin="0,0,5,0"  VerticalAlignment="Center" >
-                                    <BulletDecorator.Bullet>
-                                        <Ellipse Height="5" Width="5" Fill="{DynamicResource AccentColorBrush}"/>
-                                    </BulletDecorator.Bullet>
-                                </BulletDecorator>
-                                <TextBlock Foreground="#595959"  FontFamily="Calibri" FontSize="12" Text="{Binding Title}" ToolTip="{Binding Title}" />
-									</StackPanel>
-								</DataTemplate>
-							</TreeView.Resources>
-						</TreeView>
-				</StackPanel>
-			</ScrollViewer>
-		</Grid>
 </UserControl>

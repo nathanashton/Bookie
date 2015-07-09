@@ -1,5 +1,5 @@
 ﻿<Window x:Class="Bookie.Views.SplashView"
-        Background="{DynamicResource AccentColorBrush}"
+        Background="#09506E"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"

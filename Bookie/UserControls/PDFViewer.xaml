@@ -10,7 +10,7 @@
 
     <UserControl.Resources>
     </UserControl.Resources>
-    
+
     <DockPanel LastChildFill="True" UseLayoutRounding="True">
 
         <DockPanel LastChildFill="True">
@@ -25,7 +25,22 @@
                     <ListBox Background="#f1f2f4" SelectedItem="{Binding SelectedBookMark}" ItemsSource="{Binding PDFUrl.BookMarks}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Label Content="{Binding BookMarkedPage,Mode=TwoWay}" ContentStringFormat="Page {0}" />
+                                <DockPanel LastChildFill="True">
+                                    <Button Margin="5" DockPanel.Dock="Right" Content="X" Width="15" Command="{Binding DeleteBookMarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type userControls:PDFViewer}}}" CommandParameter="{Binding}">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Label HorizontalAlignment="Center" Content="{Binding BookMarkedPage,Mode=TwoWay}" ContentStringFormat="Page {0}" />
+
+                                </DockPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -40,7 +55,7 @@
 
 
                     <ListBox FontFamily="Calibri" Background="#f1f2f4" SelectedItem="{Binding SelectedNote, Mode=TwoWay}" HorizontalAlignment="Stretch" ItemsSource="{Binding PDFUrl.Notes}">
-                        
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel Height="80" Width="250" LastChildFill="True" Margin="5">
@@ -52,10 +67,24 @@
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Column="1" HorizontalAlignment="Left" DockPanel.Dock="Top" Content="{Binding CreatedDateTime}" />
                                         <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,10,0" HorizontalAlignment="Left" DockPanel.Dock="Top" Content="{Binding PageNumber}" ContentStringFormat="Page {0}" />
-                                        <Button Grid.Column="2" Height="15" HorizontalAlignment="Right" Command="{Binding EditNoteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type userControls:PDFViewer}}}" Content="View" CommandParameter="{Binding}" />
+                                        <Button Grid.Column="2" Height="15" HorizontalAlignment="Right" Command="{Binding EditNoteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type userControls:PDFViewer}}}" Content="View" CommandParameter="{Binding}" >
+
+
+                                            <Button.Style>
+                                                <Style TargetType="{x:Type Button}">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+
+                                        </Button>
                                     </Grid>
                                     <Border BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
-                                    <TextBlock Margin="0,5,0,0" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Text="{Binding NoteText}"></TextBlock>
+                                        <TextBlock Margin="0,5,0,0" TextTrimming="WordEllipsis" TextWrapping="Wrap"  Text="{Binding NoteText}"></TextBlock>
                                     </Border>
                                 </DockPanel>
                             </DataTemplate>
@@ -68,82 +97,167 @@
 
 
 
-                <Grid Background="White" DockPanel.Dock="Top" VerticalAlignment="Top" Height="35">
-                        <Grid.ColumnDefinitions>
+                <Grid Background="White" DockPanel.Dock="Top" VerticalAlignment="Top" Height="40">
+                    <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
 
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    
+                    </Grid.ColumnDefinitions>
+
                     <StackPanel Grid.Column="0" Orientation="Horizontal" >
-                        <Button Margin="5" BorderThickness="0" Background="{DynamicResource AccentColorBrush}" Command="{Binding LeftPaneCommand}" Width="20" HorizontalAlignment="Right" />
-    
+
+
+
+                        <Button Command="{Binding LeftPaneCommand}" ToolTip="Add Note" Margin="2" Height="35" Width="35">
+                            <Rectangle Width="20" Height="20" Fill="{DynamicResource AccentColorBrush}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_left }" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
 
                     </StackPanel>
-                    
-                        <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            
-                            <Button Margin="5" Width="20" Height="20" Click="Button_Click_1">
-                                <Image Source="pack://application:,,,/Resources/Icons/firstpage.png" />
-                            </Button>
-                            <Button Margin="5" Width="20" Height="20" Click="ButtonBase_OnClick">
-                                <Image Source="pack://application:,,,/Resources/Icons/previouspage.png" />
-                            </Button>
-                            
-                            
-                            
 
-                            <Button Margin="5" Width="20" Height="20" Click="Button_Click_2">
-                                <Image Source="pack://application:,,,/Resources/Icons/nextpage.png" />
-                            </Button>
-                            <Button Margin="5" Width="20" Height="20" Click="ButtonBase1_OnClick">
-                                <Image Source="pack://application:,,,/Resources/Icons/lastpage.png" />
-                            </Button>
-                            <Button Width="100" Margin="5" Click="ButtonBase9_OnClick" Content="Refresh"/>
-                        </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button ToolTip="First Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="18" Height="9" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_control_rewind}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
 
-                        <StackPanel Grid.Column="2" Margin="20,0,50,0" Orientation="Horizontal">
-                            <Button Margin="5" Width="20" Height="20" Click="Button_Click_3">
-                                <Image Source="pack://application:,,,/Resources/Icons/fitwidth.png" />
-                            </Button>
-                            <Button Margin="5" Width="20" Height="20" Click="ButtonBase2_OnClick">
-                                <Image Source="pack://application:,,,/Resources/Icons/fitheight.png" />
-                            </Button>
-                            <Button Margin="5" Width="20" Height="20" Click="Button_Click_5">
-                                <Image Source="pack://application:,,,/Resources/Icons/zoomin.png" />
-                            </Button>
-                            <Button Margin="5" Width="20" Height="20" Click="Button_Click_6">
-                                <Image Source="pack://application:,,,/Resources/Icons/zoomout.png" />
-                            </Button>
-                        <Button Content="S" Margin="5" Width="20" Height="20" Click="ButtonBas3_OnClick">
-                            </Button>
-                            <Button Content="C" Margin="5" Width="20" Height="20" Click="Button_Click_4">
-                            </Button>
-                        </StackPanel>
+                        <Button ToolTip="Previous Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="18" Height="9" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_control_rewind_variant}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
 
-                        <StackPanel Margin="50,0,50,0" Grid.Column="3" HorizontalAlignment="Center" Orientation="Horizontal">
-                            <TextBox Name="gotopage" Height="25" Width="50" />
-                            <Button Margin="5" Click="GotoPage_OnClick">
-                                <Image Source="pack://application:,,,/Resources/Icons/rightarrow.png" />
-                            </Button>
-                            <Label VerticalAlignment="Center"  Name="pageCount" Width="80" Foreground="White" FontSize="14" FontWeight="Bold"/>
-                        </StackPanel>
+                        <Button ToolTip="Next Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="18" Height="9" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_control_fastforward_variant}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                        <Button ToolTip="Last Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="18" Height="9" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_control_fastforward}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="40,0,50,0" Orientation="Horizontal">
+                        <Button ToolTip="Fit Width" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="18" Height="9" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_dimension_line_width}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                        <Button ToolTip="Fit Height" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Margin="0,1,0,0" Width="9" Height="18" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_dimension_line_height}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+
+                        <Button ToolTip="Zoom In" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="17" Height="17" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_magnify_add}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                        <Button ToolTip="Zoom Out"  Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="17" Height="17" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_magnify_minus}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+
+                        <Button ToolTip="View Single" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Margin="1,0,0,0" Width="14" Height="17" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_page}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                        <Button ToolTip="View Continuous" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="16" Height="17" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_page_break}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+
+                       
+
+                    </StackPanel>
+
+                    <StackPanel Margin="50,0,50,0" Grid.Column="3" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <TextBox Name="gotopage" Height="25" Width="50" />
+                        <Button Margin="5" Click="GotoPage_OnClick">
+                            <Image Source="pack://application:,,,/Resources/Icons/rightarrow.png" />
+                        </Button>
+                        <Label VerticalAlignment="Center"  Name="pageCount" Width="80" Foreground="Black" FontSize="14" FontWeight="Bold"/>
+                    </StackPanel>
 
 
 
-                        <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Click="BookMarkLabel_OnClick" Name="BookMarkLabel" Margin="5" Background="Yellow" Content="Has BookMark"/>
-                            <Button Click="NoteLabel_OnClick" Name="NoteLabel" Margin="5" Background="Yellow" Content="Has Note"/>
-                            <Button Content="Add BookMark" Margin="5" Click="Button_Click" />
-                            <Button Content="Add Note" Margin="5" Click="ButtonBase5_OnClick" />
-                            <Button Margin="5" BorderThickness="0" Background="{DynamicResource AccentColorBrush}" Command="{Binding RightPaneCommand}" Width="20" HorizontalAlignment="Right" />
-                        </StackPanel>
-                        
+                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Click="BookMarkLabel_OnClick" Name="BookMarkLabel" Margin="5" Background="Yellow" Content="Has BookMark"/>
+                        <Button Click="NoteLabel_OnClick" Name="NoteLabel" Margin="5" Background="Yellow" Content="Has Note"/>
+                        <Button ToolTip="Add BookMark" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                            <Rectangle Width="16" Height="17" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_page_corner_bookmark}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                        <Button ToolTip="Add Note" Margin="2,2,40,2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}">
+                            <Rectangle Width="16" Height="17" Fill="#595959">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_draw_pencil}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+
+                        <Button Command="{Binding RightPaneCommand}" ToolTip="Add Note" Margin="2" Height="35" Width="35">
+                            <Rectangle Width="20" Height="20" Fill="{DynamicResource AccentColorBrush}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_right }" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+
+
+
+                       
+                    </StackPanel>
+
                 </Grid>
-                    
+
                 <moonPdfLib:MoonPdfPanel MouseDown="moonPdfPanel_MouseDown" Background="LightGray" ViewType="SinglePage" PageRowDisplay="SinglePageRow" PageMargin="0,2,4,2" AllowDrop="True" x:Name="moonPdfPanel" x:FieldModifier="private" />
             </DockPanel>
         </DockPanel>

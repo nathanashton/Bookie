@@ -20,7 +20,6 @@
 
 
         <DataTemplate DataType="{x:Type entities:Book}">
-            
             <Grid Margin="8">
                 <DockPanel Margin="10" LastChildFill="True" Background="Transparent">
                     <StackPanel DockPanel.Dock="Bottom">
@@ -60,7 +59,7 @@ VirtualizingPanel.ScrollUnit="Pixel"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch"
                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
                      ItemsSource="{Binding Path=Books, Mode=OneWay}" IsSynchronizedWithCurrentItem="True">
-
+             
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Edit Details"></MenuItem>
@@ -68,12 +67,14 @@ VirtualizingPanel.ScrollUnit="Pixel"
                         <MenuItem Header="Remove"></MenuItem>
                     </ContextMenu>
                 </ListBox.ContextMenu>
+                
                 <ListBox.ItemsPanel>
 
                     <ItemsPanelTemplate>
                         <userControls:VirtualizingWrapPanel ItemHeight="{Binding TileHeight}"
                                                             ItemWidth="{Binding TileWidth}" />
-                        
+                         
+
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
