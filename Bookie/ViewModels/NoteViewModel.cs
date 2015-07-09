@@ -10,6 +10,9 @@ namespace Bookie.ViewModels
 
     public class NoteViewModel : NotifyBase
     {
+        public event EventHandler<EventArgs> NoteChanged;
+
+
         private Note _editing;
 
         public Window Window { get; set; }
@@ -86,6 +89,8 @@ namespace Bookie.ViewModels
 
             _editing.EntityState = EntityState.Modified;
             new BookDomain().UpdateBook(_book);
+            OnNoteChanged();
+
             Window.Close();
         }
 
@@ -95,6 +100,7 @@ namespace Bookie.ViewModels
 
             _editing.EntityState = EntityState.Deleted;
             new BookDomain().UpdateBook(_book);
+            OnNoteChanged();
             Window.Close();
         }
 
@@ -126,7 +132,18 @@ namespace Bookie.ViewModels
             note.EntityState = EntityState.Added;
             _book.Notes.Add(note);
             new BookDomain().UpdateBook(_book);
+
+            OnNoteChanged();
+
             Window.Close();
+        }
+
+        public void OnNoteChanged()
+        {
+            if (NoteChanged != null)
+            {
+                NoteChanged(this,null);
+            }
         }
     }
 }

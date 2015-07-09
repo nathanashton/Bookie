@@ -13,7 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AssemblyVersion>15188.1515.0.0</AssemblyVersion>
+    <AssemblyVersion>15190.1784.0.0</AssemblyVersion>
+    <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -105,8 +106,17 @@
     <Compile Include="Converters\MouseToScrollBarVisibility.cs" />
     <Compile Include="Helpers\TreeViewHelper.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
+      <DependentUpon>SampleDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AuthorsPublishersControl.xaml.cs">
+      <DependentUpon>AuthorsPublishersControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\BookDetails.xaml.cs">
       <DependentUpon>BookDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\BookSummaryControl.xaml.cs">
+      <DependentUpon>BookSummaryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\BookTiles.xaml.cs">
       <DependentUpon>BookTiles.xaml</DependentUpon>
@@ -116,6 +126,9 @@
     </Compile>
     <Compile Include="UserControls\ReportViewer.xaml.cs">
       <DependentUpon>ReportViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControl1.xaml.cs">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\VirtualizingWrapPanel.cs" />
     <Compile Include="ViewModels\ExceptionViewModel.cs" />
@@ -158,6 +171,14 @@
     <Compile Include="Views\SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SampleData\SampleDataSource\SampleDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\FlyoutOverride.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -170,9 +191,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControls\AuthorsPublishersControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\BookDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\BookSummaryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\BookTiles.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +214,10 @@
     <Page Include="UserControls\ReportViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UserControl1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ExceptionView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +266,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Entypo.ttf" />
+    <Resource Include="Resources\Entypo-license.txt" />
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+    <Resource Include="Resources\Icons\star.png" />
     <Resource Include="Resources\Images\bookie.png" />
     <Resource Include="Resources\Icons\bookie.ico" />
     <Resource Include="bookie.ico" />
@@ -257,6 +294,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <DesignTimeOnly Include="SampleData\SampleDataSource\SampleDataSource.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bookie.Core\Bookie.Core.csproj">

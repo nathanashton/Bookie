@@ -14,6 +14,7 @@
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {
@@ -29,10 +30,51 @@
             {
                 _toggleScraped = value;
                 NotifyPropertyChanged("ToggleScraped");
+                if (value)
+                {
+                    ScrapedColor = new SolidColorBrush(Colors.Yellow);
+
+                }
+                else
+                {
+                    ScrapedColor = new SolidColorBrush(Colors.White);
+
+                }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
             }
         }
+
+        private Brush _starColor;
+
+        public Brush StarColor
+        {
+            get
+            {
+                return _starColor;
+            }
+            set
+            {
+                _starColor = value;
+                NotifyPropertyChanged("StarColor");
+            }
+        }
+
+        private Brush _scrapedColor;
+
+        public Brush ScrapedColor
+        {
+            get
+            {
+                return _scrapedColor;
+            }
+            set
+            {
+                _scrapedColor = value;
+                NotifyPropertyChanged("ScrapedColor");
+            }
+        }
+
 
         private bool _toggleFavourite;
 
@@ -46,6 +88,16 @@
             {
                 _toggleFavourite = value;
                 NotifyPropertyChanged("ToggleFavourite");
+                if (value)
+                {
+                    StarColor = new SolidColorBrush(Colors.Yellow);
+
+                }
+                else
+                {
+                    StarColor = new SolidColorBrush(Colors.White);
+
+                }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
 
@@ -521,6 +573,9 @@
 
         public MainViewModel()
         {
+            StarColor = new SolidColorBrush(Colors.White);
+            ScrapedColor = new SolidColorBrush(Colors.White);
+
             _bookDomain = new BookDomain();
             BookTiles = new BookTiles();
             BookDetails = new BookDetails();

@@ -12,6 +12,7 @@ namespace Bookie.UserControls
 
     using System.Linq;
 
+    using Bookie.Common;
     using Bookie.Views;
 
     /// <summary>
@@ -19,6 +20,7 @@ namespace Bookie.UserControls
     /// </summary>
     public partial class PDFViewer : UserControl, INotifyPropertyChanged
     {
+
         public Book PDFUrl
         {
             get
@@ -101,6 +103,16 @@ namespace Bookie.UserControls
             }
         }
 
+        private ICommand _deleteBookmarkCommand;
+        public ICommand DeleteBookMarkCommand
+        {
+            get
+            {
+                return _deleteBookmarkCommand
+                       ?? (_deleteBookmarkCommand = new RelayCommand((parameter) => DeleteBookMark(parameter), p => true));
+
+            }
+        }
 
 
 
@@ -228,42 +240,42 @@ namespace Bookie.UserControls
             pageCount.Content = moonPdfPanel.GetCurrentPageNumber() + "/" + moonPdfPanel.TotalPages;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ButtonFirstPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoFirstPage();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonPreviousPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoPreviousPage();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void ButtonNextPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoNextPage();
         }
 
-        private void ButtonBase1_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonLastPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoLastPage();
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void ButtonZoomWidth(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomToWidth();
         }
 
-        private void ButtonBase2_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonZoomHeight(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomToHeight();
         }
 
-        private void ButtonBas3_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonSinglePage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.PageRowDisplay = MoonPdfLib.PageRowDisplayType.SinglePageRow;
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void ButtonContinuous(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.PageRowDisplay = MoonPdfLib.PageRowDisplayType.ContinuousPageRows;
         }
@@ -276,12 +288,12 @@ namespace Bookie.UserControls
             }
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void ButtonZoomIn(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomIn();
         }
 
-        private void Button_Click_6(object sender, RoutedEventArgs e)
+        private void ButtonZoomOut(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomOut();
         }
@@ -290,7 +302,7 @@ namespace Bookie.UserControls
         {
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddBookMark(object sender, RoutedEventArgs e)
         {
             foreach (var x in PDFUrl.BookMarks)
             {
@@ -315,6 +327,7 @@ namespace Bookie.UserControls
                  };
             PDFUrl.BookMarks.Add(b);
             new BookDomain().UpdateBook(PDFUrl);
+            Refresh();
         }
 
 
@@ -326,17 +339,53 @@ namespace Bookie.UserControls
             }
         }
 
-        private void ButtonBase5_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonAddNote(object sender, RoutedEventArgs e)
         {
             //Add note
             NoteView nv = new NoteView(PDFUrl, moonPdfPanel.GetCurrentPageNumber(), null);
+            nv._viewModel.NoteChanged += _viewModel_NoteChanged;
+
             nv.ShowDialog();
         }
 
         private void EditNote(object parameter)
         {
             NoteView nv = new NoteView(PDFUrl, moonPdfPanel.GetCurrentPageNumber(), (Note)parameter);
+            nv._viewModel.NoteChanged += _viewModel_NoteChanged;
             nv.ShowDialog();
+        }
+
+
+
+        private void DeleteBookMark(object parameter)
+        {
+            foreach (var x in PDFUrl.BookMarks)
+            {
+                x.EntityState = EntityState.Unchanged;
+            }
+            foreach (var publisher in PDFUrl.Publishers)
+            {
+                publisher.EntityState = EntityState.Unchanged;
+            }
+            foreach (var author in PDFUrl.Authors)
+            {
+                author.EntityState = EntityState.Unchanged;
+            }
+
+            var bb = (BookMark)parameter;
+            bb.EntityState = EntityState.Deleted;
+
+
+            PDFUrl.BookMarks.ToList().RemoveAll(x => x.Id == bb.Id);
+            new BookDomain().UpdateBook(PDFUrl);
+            Refresh();
+        }
+
+
+
+        void _viewModel_NoteChanged(object sender, EventArgs e)
+        {
+            Refresh();
         }
 
         private void BookMarkLabel_OnClick(object sender, RoutedEventArgs e)
@@ -360,5 +409,7 @@ namespace Bookie.UserControls
         {
             Refresh();
         }
+
+
     }
 }

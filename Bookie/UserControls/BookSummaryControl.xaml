@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="Bookie.UserControls.BookSummaryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Bookie.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+
+        <converters:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
+
+        <converters:CoverImageConverter x:Key="CoverImageConverter" />
+        <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
+    </UserControl.Resources>
+
+    <Border BorderBrush="#ced1d6" BorderThickness="1,0,0,0">
+
+        <Grid Background="#f1f2f4" Width="300" MinWidth="300"  Visibility="{Binding RightPane}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+            <Grid Margin="5" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  x:Name="Right" Background="Transparent">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <Border Grid.Row="0" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
+
+                    <StackPanel VerticalAlignment="Stretch" Orientation="Vertical" Grid.Row="0">
+
+                    <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontFamily="Calibri" FontSize="22" FontWeight="Bold">
+                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}" TextTrimming="CharacterEllipsis" />
+                    </Label>
+
+                    <Border MaxWidth="200" MinWidth="150" BorderBrush="#FF00AADE" BorderThickness="1" Height="Auto" Width="Auto" Margin="15,15,15,10" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+
+                        <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
+                    </Border>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
+                            <Rectangle Width="20" Height="20" Fill="Black">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+                        <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
+                            <Rectangle Width="8" Height="20" Fill="Black">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Visual="{StaticResource appbar_information}" Stretch="Fill" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                        </Button>
+
+                    </StackPanel>
+                    
+
+
+
+                </StackPanel>
+
+                   
+                </Border>
+
+
+
+                <TabControl FontFamily="Calibri" Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
+                    <TabItem  Header="General" HorizontalAlignment="Stretch">
+                        <ScrollViewer VerticalScrollBarVisibility=
+          "{Binding IsMouseOver,
+                    RelativeSource={RelativeSource Self},
+                    Converter={StaticResource MouseOverToScrollBarVisibility}}">
+                            <StackPanel Margin="7" Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontWeight="Bold" Content="Published" />
+                                    <Label Content="{Binding SelectedBook.DatePublished}" />
+                                    <Label FontWeight="Bold" Content="Pages" />
+                                    <Label Content="{Binding SelectedBook.Pages}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontWeight="Bold" Content="ISBN" />
+                                    <Label Content="{Binding SelectedBook.Isbn}" />
+                                </StackPanel>
+                                <Label FontWeight="Bold" Content="Abstract" />
+                                <TextBlock Text="{Binding SelectedBook.Abstract}" Margin="7" TextWrapping="Wrap">
+                                </TextBlock>
+                                <Label FontWeight="Bold" Content="Publishers" />
+                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Publishers}" IsReadOnly="True" GridLinesVisibility="None">
+                                    <DataGrid.Resources>
+                                        <Style TargetType="{x:Type DataGridRow}">
+                                            <Setter Property="IsHitTestVisible" Value="False" />
+                                        </Style>
+                                    </DataGrid.Resources>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Width="Auto" Binding="{Binding Name}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <Label FontWeight="Bold" Content="Authors" />
+                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Authors}" IsReadOnly="True" GridLinesVisibility="None">
+
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn  Width="Auto" Binding="{Binding FullName}" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Header="File" VerticalAlignment="Stretch">
+                        <StackPanel Margin="7" Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="File Path" FontWeight="Bold" />
+                                <Label Content="{Binding SelectedBook.BookFile.FullPathAndFileNameWithExtension}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Filesize" FontWeight="Bold" />
+                                <Label Content="{Binding SelectedBook.BookFile.FileSizeBytes}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="File Extension" FontWeight="Bold" />
+                                <Label Content="{Binding SelectedBook.BookFile.FileExtension}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Cover Path" FontWeight="Bold" />
+                                <Label Content="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Imported" FontWeight="Bold" />
+                                <Label Content="{Binding SelectedBook.CreatedDateTime}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

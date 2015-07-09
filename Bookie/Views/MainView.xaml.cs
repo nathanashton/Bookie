@@ -27,7 +27,6 @@
             VersionNumber.Content = Globals.VersionNumber;
         }
 
-
         private void Load()
         {
             MessagingService.Register(this, MessagingService_messages);
@@ -39,12 +38,11 @@
             ApplySettings();
             App.SplashScreen.AddMessage("Loading Books...");
 
-
             ViewModel = new MainViewModel();
             DataContext = ViewModel;
-          
-            //var savedTileWidth = AppConfig.LoadSetting("TileWidth");
-           // ViewModel.TileWidth = String.IsNullOrEmpty(savedTileWidth) ? 130 : Int32.Parse(savedTileWidth);
+
+            var savedTileWidth = Properties.Settings.Default.TileWidth;
+            ViewModel.TileWidth = savedTileWidth == 0 ? 130 : savedTileWidth;
 
             ViewModel.TileWidth = 130;
 
@@ -94,7 +92,6 @@
                     MoreDetails = e.MoreDetails,
                     Fatal = e.Fatal
                 }
-          
             };
             exceptionView.ShowDialog();
         }
