@@ -240,42 +240,42 @@ namespace Bookie.UserControls
             pageCount.Content = moonPdfPanel.GetCurrentPageNumber() + "/" + moonPdfPanel.TotalPages;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ButtonFirstPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoFirstPage();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonPreviousPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoPreviousPage();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void ButtonNextPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoNextPage();
         }
 
-        private void ButtonBase1_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonLastPage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.GotoLastPage();
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void ButtonZoomWidth(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomToWidth();
         }
 
-        private void ButtonBase2_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonZoomHeight(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomToHeight();
         }
 
-        private void ButtonBas3_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonSinglePage(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.PageRowDisplay = MoonPdfLib.PageRowDisplayType.SinglePageRow;
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void ButtonContinuous(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.PageRowDisplay = MoonPdfLib.PageRowDisplayType.ContinuousPageRows;
         }
@@ -288,12 +288,12 @@ namespace Bookie.UserControls
             }
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void ButtonZoomIn(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomIn();
         }
 
-        private void Button_Click_6(object sender, RoutedEventArgs e)
+        private void ButtonZoomOut(object sender, RoutedEventArgs e)
         {
             moonPdfPanel.ZoomOut();
         }
@@ -302,7 +302,7 @@ namespace Bookie.UserControls
         {
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddBookMark(object sender, RoutedEventArgs e)
         {
             foreach (var x in PDFUrl.BookMarks)
             {
@@ -339,7 +339,7 @@ namespace Bookie.UserControls
             }
         }
 
-        private void ButtonBase5_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonAddNote(object sender, RoutedEventArgs e)
         {
             //Add note
             NoteView nv = new NoteView(PDFUrl, moonPdfPanel.GetCurrentPageNumber(), null);

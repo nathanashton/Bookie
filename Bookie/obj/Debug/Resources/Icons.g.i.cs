@@ -51,7 +51,7 @@ public partial class resources_icons_xaml : System.Windows.ResourceDictionary, S
             return;
         }
         _contentLoaded = true;
-        System.Uri resourceLocater = new System.Uri("/Bookie;V15190.1779.0.0;component/resources/icons.xaml", System.UriKind.Relative);
+        System.Uri resourceLocater = new System.Uri("/Bookie;V15190.1784.0.0;component/resources/icons.xaml", System.UriKind.Relative);
         
         #line 1 "..\..\..\Resources\Icons.xaml"
         System.Windows.Application.LoadComponent(this, resourceLocater);

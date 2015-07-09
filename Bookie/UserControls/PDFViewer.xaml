@@ -123,7 +123,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Button ToolTip="First Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="First Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonFirstPage">
                             <Rectangle Width="18" Height="9" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_control_rewind}" Stretch="Fill" />
@@ -131,7 +131,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Previous Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Previous Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonPreviousPage">
                             <Rectangle Width="18" Height="9" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_control_rewind_variant}" Stretch="Fill" />
@@ -139,7 +139,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Next Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Next Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonNextPage">
                             <Rectangle Width="18" Height="9" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_control_fastforward_variant}" Stretch="Fill" />
@@ -147,7 +147,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Last Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Last Page" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonLastPage">
                             <Rectangle Width="18" Height="9" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_control_fastforward}" Stretch="Fill" />
@@ -156,8 +156,8 @@
                         </Button>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2" Margin="40,0,50,0" Orientation="Horizontal">
-                        <Button ToolTip="Fit Width" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                    <StackPanel Grid.Column="2" Margin="40,0,20,0" Orientation="Horizontal">
+                        <Button ToolTip="Fit Width" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonZoomWidth">
                             <Rectangle Width="18" Height="9" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_dimension_line_width}" Stretch="Fill" />
@@ -165,7 +165,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Fit Height" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Fit Height" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonZoomHeight">
                             <Rectangle Margin="0,1,0,0" Width="9" Height="18" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_dimension_line_height}" Stretch="Fill" />
@@ -174,7 +174,7 @@
                         </Button>
 
 
-                        <Button ToolTip="Zoom In" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Zoom In" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonZoomIn">
                             <Rectangle Width="17" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_magnify_add}" Stretch="Fill" />
@@ -182,7 +182,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Zoom Out"  Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Zoom Out"  Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonZoomOut">
                             <Rectangle Width="17" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_magnify_minus}" Stretch="Fill" />
@@ -191,7 +191,7 @@
                         </Button>
 
 
-                        <Button ToolTip="View Single" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="View Single" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonSinglePage">
                             <Rectangle Margin="1,0,0,0" Width="14" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_page}" Stretch="Fill" />
@@ -199,7 +199,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="View Continuous" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="View Continuous" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonContinuous">
                             <Rectangle Width="16" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_page_break}" Stretch="Fill" />
@@ -212,9 +212,11 @@
 
                     </StackPanel>
 
-                    <StackPanel Margin="50,0,50,0" Grid.Column="3" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel Margin="10,0,0,0" Grid.Column="3" HorizontalAlignment="Center" Orientation="Horizontal">
                         <TextBox Name="gotopage" Height="25" Width="50" />
-                        <Button Margin="5" Click="GotoPage_OnClick">
+                        
+                        
+                        <Button Margin="5" Height="20" Click="GotoPage_OnClick">
                             <Image Source="pack://application:,,,/Resources/Icons/rightarrow.png" />
                         </Button>
                         <Label VerticalAlignment="Center"  Name="pageCount" Width="80" Foreground="Black" FontSize="14" FontWeight="Bold"/>
@@ -225,7 +227,7 @@
                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Click="BookMarkLabel_OnClick" Name="BookMarkLabel" Margin="5" Background="Yellow" Content="Has BookMark"/>
                         <Button Click="NoteLabel_OnClick" Name="NoteLabel" Margin="5" Background="Yellow" Content="Has Note"/>
-                        <Button ToolTip="Add BookMark" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                        <Button ToolTip="Add BookMark" Margin="2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonAddBookMark">
                             <Rectangle Width="16" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_page_corner_bookmark}" Stretch="Fill" />
@@ -233,7 +235,7 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Add Note" Margin="2,2,40,2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Button ToolTip="Add Note" Margin="2,2,40,2" Height="35" Width="35"  Style="{DynamicResource MetroCircleButtonStyle}" Click="ButtonAddNote">
                             <Rectangle Width="16" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_draw_pencil}" Stretch="Fill" />
