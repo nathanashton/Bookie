@@ -23,35 +23,7 @@
             return _publisherRepository.GetAll();
         }
 
-        public List<PublisherTreeView> GetPublisherTree()
-        {
-            var allBooks = new BookDomain().GetAllBooks().ToList();
-
-            List<PublisherTreeView> Publishers = new List<PublisherTreeView>();
-
-            var allPublishers = _publisherRepository.GetAll(x => x.Book).ToList();
-
-            HashSet<string> elements = new HashSet<string>(); // Type of property
-            allPublishers.RemoveAll(i => !elements.Add(i.Name));
-
-            foreach (var publisher in allPublishers)
-            {
-                PublisherTreeView tree = new PublisherTreeView();
-                tree.Publisher = publisher;
-                foreach (var book in allBooks)
-                {
-                    foreach (var pub in book.Publishers)
-                    {
-                        if (pub.Name == publisher.Name)
-                        {
-                            tree.Books.Add(book);
-                        }
-                    }
-                }
-                Publishers.Add(tree);
-            }
-            return Publishers;
-        }
+     
 
         public Publisher GetPublisherByName(string publisherName)
         {

@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              xmlns:rv="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <WindowsFormsHost>
             <rv:ReportViewer x:Name="reportViewer" RenderingComplete="reportViewer_RenderingComplete" Load="reportViewer_Load" />
         </WindowsFormsHost>

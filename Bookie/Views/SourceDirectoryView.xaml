@@ -7,7 +7,7 @@
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-        Title="Source Directories" Topmost="True" Height="235.667" Width="565" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+        Title="Source Directories" Height="235.667" Width="565" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
 
     <Window.Resources>
         <converters:CoverImageConverter x:Key="CoverImageConverter" />

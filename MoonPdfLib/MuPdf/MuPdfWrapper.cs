@@ -28,6 +28,8 @@ using System.Runtime.InteropServices;
 
 namespace MoonPdfLib.MuPdf
 {
+    using log4net.Repository.Hierarchy;
+
     public static class MuPdfWrapper
     {
         /// <summary>
@@ -43,8 +45,16 @@ namespace MoonPdfLib.MuPdf
             using (var stream = new PdfFileStream(source))
             {
                 ValidatePassword(stream.Document, password);
-
-                IntPtr p = NativeMethods.LoadPage(stream.Document, pageNumberIndex); // loads the page
+                //TODO below method fails sometimes
+                IntPtr p = new IntPtr();
+                try
+                {
+                    p = NativeMethods.LoadPage(stream.Document, pageNumberIndex); // loads the page
+                }
+                catch (Exception ex)
+                {
+                    Bookie.Common.Logger.Log.Error("Error extracting cover image with MuPDF", ex);
+                }
                 var bmp = RenderPage(stream.Context, stream.Document, p, zoomFactor);
                 NativeMethods.FreePage(stream.Document, p); // releases the resources consumed by the page
 
@@ -331,7 +341,7 @@ namespace MoonPdfLib.MuPdf
 
     public class FileSource : IPdfSource
     {
-        public string Filename { get; private set; }
+        public string Filename { get; set; }
 
         public FileSource(string filename)
         {

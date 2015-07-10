@@ -10,6 +10,8 @@
 
     using Bookie.Common;
 
+    using MoonPdfLib.MuPdf;
+
     public class CoverImageDomain : ICoverImageDomain
     {
         private readonly ICoverImageRepository _coverImageRepository;
@@ -52,7 +54,16 @@
 
         public CoverImage GenerateCoverImageFromPdf(Book book)
         {
-            var savedImageUrl = GetPdfImage.SaveImage(book, 1);
+            var outImageName = book.Title + ".jpg";
+
+            var savedImageUrl = Globals.CoverImageFolder + "\\" + outImageName;
+            var file = new FileSource(book.BookFile.FullPathAndFileNameWithExtension);
+            var img = MuPdfWrapper.ExtractPage(file, 1);
+            img.Save(savedImageUrl);
+
+
+
+
             if (book.CoverImage == null)
             {
                 book.CoverImage = new CoverImage();

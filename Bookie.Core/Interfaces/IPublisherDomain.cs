@@ -15,6 +15,5 @@
 
         void RemovePublisher(params Publisher[] publisher);
 
-        List<PublisherTreeView> GetPublisherTree();
     }
 }

@@ -21,7 +21,7 @@ namespace Bookie.ViewModels
             {
                 if (_deleteLogsCommand == null)
                 {
-                    _deleteLogsCommand = new RelayCommand(p => DeleteAllLogs(), p => _allLogEntries.Count > 0);
+                    _deleteLogsCommand = new RelayCommand(p => DeleteAllLogs(), p => _allLogEntries != null && _allLogEntries.Count > 0);
                 }
                 return _deleteLogsCommand;
             }
@@ -151,13 +151,15 @@ namespace Bookie.ViewModels
         public LogViewModel()
         {
             _logDomain = new LogDomain();
-            RefreshLog();
         }
 
-        public void RefreshLog()
+        public async void RefreshLog()
         {
+            var le = await _logDomain.GetAllAsync();
+
+
             _allLogEntries = new ObservableCollection<LogEntity>(
-                _logDomain.GetAll());
+                le);
             Log = CollectionViewSource.GetDefaultView(_allLogEntries);
             FilterDate = null;
             FilterNone = true;

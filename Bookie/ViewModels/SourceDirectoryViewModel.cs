@@ -11,6 +11,8 @@
     using System.Windows.Forms;
     using System.Windows.Input;
 
+    using Bookie.Views;
+
     public class SourceDirectoryViewModel : NotifyBase
     {
         private readonly SourceDirectoryDomain _domain;
@@ -120,7 +122,7 @@
             var allSources = await _domain.GetAllSourceDirectoriesAsync();
             SourceDirectories = new ObservableCollection<SourceDirectory>(allSources);
             MainViewModel.RefreshAllBooks();
-            MainViewModel.RefreshPublishersAndAuthors();
+        MainViewModel.RefreshPublishersAndAuthors();
         }
 
         public void Add()
@@ -164,11 +166,19 @@
 
         public void Scan()
         {
+            var v = new ConfirmImportView();
+            v.ShowDialog();
+
+
             SelectedSourceDirectory.DateLastImported = DateTime.Now;
             SelectedSourceDirectory.EntityState = EntityState.Modified;
             _domain.UpdateSourceDirectory(SelectedSourceDirectory);
 
             ProgressReportingActive = true;
+
+
+
+
 
             _importer = new Importer(SelectedSourceDirectory);
             _importer.BookChanged += MainViewModel.i_BookChanged;
@@ -178,6 +188,11 @@
             _importer.ProgressComplete += delegate { ProgressReportingActive = false; };
 
             Refresh();
+
+
+
+
+
         }
 
         private void _worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -187,6 +202,10 @@
 
         public void Scrape()
         {
+            var v = new ConfirmScrapeView();
+            v.ShowDialog();
+
+
             var scraper = new Scraper();
 
             ProgressReportingActive = true;

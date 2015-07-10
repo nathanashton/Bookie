@@ -6,7 +6,7 @@
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-        Title="Log" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="300">
+        Title="Log" WindowStartupLocation="CenterScreen" MinWidth="650" MinHeight="300" Loaded="MetroWindow_Loaded">
     <Grid>
         <DockPanel LastChildFill="True">
             <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="50">

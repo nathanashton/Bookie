@@ -38,5 +38,10 @@ namespace Bookie.Views
         {
             _viewModel.FilterDate = null;
         }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _viewModel.RefreshLog();
+        }
     }
 }

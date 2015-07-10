@@ -2,7 +2,6 @@
 {
     using Bookie.Common;
     using Bookie.Common.Model;
-    using Bookie.Core;
     using Bookie.Core.Domains;
     using Bookie.UserControls;
     using Bookie.Views;
@@ -33,12 +32,10 @@
                 if (value)
                 {
                     ScrapedColor = new SolidColorBrush(Colors.Yellow);
-
                 }
                 else
                 {
                     ScrapedColor = new SolidColorBrush(Colors.White);
-
                 }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
@@ -75,7 +72,6 @@
             }
         }
 
-
         private bool _toggleFavourite;
 
         public bool ToggleFavourite
@@ -91,19 +87,15 @@
                 if (value)
                 {
                     StarColor = new SolidColorBrush(Colors.Yellow);
-
                 }
                 else
                 {
                     StarColor = new SolidColorBrush(Colors.White);
-
                 }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
-
             }
         }
-
 
         private ICommand _viewLog;
         private bool _showProgress;
@@ -145,8 +137,8 @@
         private readonly BookDomain _bookDomain;
 
         private string _selectedSort;
-        private ObservableCollection<AuthorTreeView> _authorsTV;
-        private ObservableCollection<PublisherTreeView> _publishersTV;
+        private ObservableCollection<Author> _authorsTV;
+        private ObservableCollection<Publisher> _publishersTV;
 
         private ObservableCollection<string> _sortList;
 
@@ -189,7 +181,7 @@
 
                 if (_selectedSort != null)
                 {
-                    FilterBooks();
+                    SortBooks();
                 }
             }
         }
@@ -323,7 +315,7 @@
             }
         }
 
-        public ObservableCollection<PublisherTreeView> PublishersTV
+        public ObservableCollection<Publisher> PublishersList
         {
             get
             {
@@ -332,11 +324,11 @@
             set
             {
                 _publishersTV = value;
-                NotifyPropertyChanged("PublishersTV");
+                NotifyPropertyChanged("PublishersList");
             }
         }
 
-        public ObservableCollection<AuthorTreeView> AuthorsTV
+        public ObservableCollection<Author> AuthorsList
         {
             get
             {
@@ -345,7 +337,7 @@
             set
             {
                 _authorsTV = value;
-                NotifyPropertyChanged("AuthorsTV");
+                NotifyPropertyChanged("AuthorsList");
             }
         }
 
@@ -360,6 +352,57 @@
                 _filter = value;
                 NotifyPropertyChanged("Filter");
                 Books.Filter = ApplyTextFilter;
+                Books.Refresh();
+            }
+        }
+
+        private Publisher _publisherFilter;
+
+        public Publisher PublisherFilter
+        {
+            get
+            {
+                return _publisherFilter;
+            }
+            set
+            {
+                _publisherFilter = value;
+                NotifyPropertyChanged("PublisherFilter");
+                Books.Filter = ApplyPublisherFilter;
+                Books.Refresh();
+            }
+        }
+
+        private SourceDirectory _sourceDirectoryFilter;
+
+        public SourceDirectory SourceDirectoryFilter
+        {
+            get
+            {
+                return _sourceDirectoryFilter;
+            }
+            set
+            {
+                _sourceDirectoryFilter = value;
+                NotifyPropertyChanged("SourceDirectoryFilter");
+                Books.Filter = ApplySourceDirectoryFilter;
+                Books.Refresh();
+            }
+        }
+
+        private Author _authorFilter;
+
+        public Author AuthorFilter
+        {
+            get
+            {
+                return _authorFilter;
+            }
+            set
+            {
+                _authorFilter = value;
+                NotifyPropertyChanged("AuthorFilter");
+                Books.Filter = ApplyAuthorFilter;
                 Books.Refresh();
             }
         }
@@ -384,6 +427,8 @@
                 }
             }
         }
+
+        private SourceDirectoryDomain _sourceDomain = new SourceDirectoryDomain();
 
         public Book SelectedBook
         {
@@ -556,6 +601,21 @@
             }
         }
 
+        private ObservableCollection<SourceDirectory> _sourceDirectories;
+
+        public ObservableCollection<SourceDirectory> SourceDirectories
+        {
+            get
+            {
+                return _sourceDirectories;
+            }
+            set
+            {
+                _sourceDirectories = value;
+                NotifyPropertyChanged("SourceDirectories");
+            }
+        }
+
         public List<Publisher> AllPublishers
         {
             get
@@ -573,6 +633,7 @@
 
         public MainViewModel()
         {
+            SourceDirectories = new ObservableCollection<SourceDirectory>();
             StarColor = new SolidColorBrush(Colors.White);
             ScrapedColor = new SolidColorBrush(Colors.White);
 
@@ -581,7 +642,7 @@
             BookDetails = new BookDetails();
             PdfViewer = new PDFViewer();
 
-          //  var savedView = AppConfig.LoadSetting("SavedView");
+            //  var savedView = AppConfig.LoadSetting("SavedView");
             //switch (savedView)
             //{
             //    case "Tiles":
@@ -613,7 +674,6 @@
             RefreshAllBooks();
             RefreshPublishersAndAuthors();
             SelectedSort = "Title [A-Z]";
-
         }
 
         public void _progress_ProgressStarted(object sender, EventArgs e)
@@ -648,7 +708,7 @@
             object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            //   NotifyPropertyChanged("BooksCount");
+            NotifyPropertyChanged("BooksCount");
         }
 
         public void ChangeToPdfView()
@@ -663,7 +723,6 @@
             BookView = PdfViewer;
         }
 
-
         private void CancelProgress()
         {
             ProgressService.Cancel();
@@ -671,10 +730,9 @@
 
         private void ViewLogWindow()
         {
-            LogWindow log = new LogWindow();
+            var log = new LogWindow();
             log.ShowDialog();
         }
-
 
         public void i_BookChanged(object sender, BookEventArgs e)
         {
@@ -734,24 +792,53 @@
         private bool ApplyTextFilter(object item)
         {
             var book = item as Book;
-            return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+            return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
         }
 
+        private bool ApplyPublisherFilter(object item)
+        {
+            var book = item as Book;
+            if (PublisherFilter != null && PublisherFilter.Name == "All Publishers")
+            {
+                return true;
+            }
+            return book != null && book.Publishers.Any(x => x.Name == PublisherFilter.Name);
+        }
 
+        private bool ApplyAuthorFilter(object item)
+        {
+            var book = item as Book;
+            if (AuthorFilter != null && AuthorFilter.FirstName == "All Authors")
+            {
+                return true;
+            }
+
+            return book != null && book.Authors.Any(x => x.FullName == AuthorFilter.FullName);
+        }
+
+        private bool ApplySourceDirectoryFilter(object item)
+        {
+            var book = item as Book;
+            if (SourceDirectoryFilter == null)
+            {
+                SourceDirectoryFilter = new SourceDirectory { SourceDirectoryUrl = "All Sources" };
+            }
+            if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+            {
+                return true;
+            }
+            return book != null && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+        }
 
         private void SwitchToTilesView()
         {
             if (Equals(BookView, PdfViewer))
             {
                 LeftPane = Visibility.Visible;
-                RightPane = Visibility.Visible;     
+                RightPane = Visibility.Visible;
             }
             BookView = BookTiles;
-       
         }
-
-
-
 
         private void SwitchToDetailsView()
         {
@@ -761,12 +848,7 @@
                 RightPane = Visibility.Visible;
             }
             BookView = BookDetails;
-
         }
-
-
-
-
 
         private void ApplyToggleFilter()
         {
@@ -785,12 +867,7 @@
             Books.Refresh();
         }
 
-
-
-
-
-
-        private void FilterBooks()
+        private void SortBooks()
         {
             switch (SelectedSort)
             {
@@ -825,7 +902,6 @@
                     Books.SortDescriptions.Add(new SortDescription("CreatedDateTime", ListSortDirection.Ascending));
                     break;
             }
-            //    Books.Refresh();
         }
 
         public async void RefreshAllBooks()
@@ -834,30 +910,37 @@
             AllBooks = b != null ? new ObservableCollection<Book>(b) : new ObservableCollection<Book>();
             Books = CollectionViewSource.GetDefaultView(AllBooks);
             Books.CollectionChanged += Books_CollectionChanged;
+
+            SourceDirectories.Clear();
+            SourceDirectories = new ObservableCollection<SourceDirectory>(_sourceDomain.GetAllSourceDirectories().ToList());
+            SourceDirectories.Insert(0, new SourceDirectory { SourceDirectoryUrl = "All Sources" });
+            SourceDirectoryFilter = SourceDirectories[0];
         }
 
         public void RefreshPublishersAndAuthors()
         {
             var p = new PublisherDomain();
-            var all = p.GetPublisherTree();
+            var all = p.GetAllPublishers();
             if (all != null)
             {
+                all.Insert(0, new Publisher { Name = "All Publishers" });
                 if (Books != null)
                 {
-                    all.Sort((x, y) => string.Compare(x.Publisher.Name, y.Publisher.Name)); 
-                    PublishersTV = new ObservableCollection<PublisherTreeView>(all);
+                    PublishersList = new ObservableCollection<Publisher>(all);
                 }
             }
 
             var a = new AuthorDomain();
-            var allAuthors = a.GetAuthorTreeView();
-            if (allAuthors != null)
+            var allAuthors = a.GetAllAuthors();
+            if (allAuthors == null)
             {
-                if (Books != null)
-                {
-                    allAuthors.Sort((x, y) => string.Compare(x.Author.FirstName, y.Author.FirstName));
-                    AuthorsTV = new ObservableCollection<AuthorTreeView>(allAuthors);
-                }
+                return;
+            }
+            allAuthors.Insert(0, new Author { FirstName = "All Authors" });
+
+            if (Books != null)
+            {
+                AuthorsList = new ObservableCollection<Author>(allAuthors);
             }
         }
 

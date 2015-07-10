@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AssemblyVersion>15190.1784.0.0</AssemblyVersion>
+    <AssemblyVersion>15191.1879.0.0</AssemblyVersion>
     <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -131,12 +131,20 @@
       <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\VirtualizingWrapPanel.cs" />
+    <Compile Include="ViewModels\ConfirmImportViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmScrapeViewModel.cs" />
     <Compile Include="ViewModels\ExceptionViewModel.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\SourceDirectoryViewModel.cs" />
+    <Compile Include="Views\ConfirmImportView.xaml.cs">
+      <DependentUpon>ConfirmImportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfirmScrapeView.xaml.cs">
+      <DependentUpon>ConfirmScrapeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExceptionView.xaml.cs">
       <DependentUpon>ExceptionView.xaml</DependentUpon>
     </Compile>
@@ -218,6 +226,14 @@
     <Page Include="UserControls\UserControl1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConfirmImportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConfirmScrapeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ExceptionView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -304,10 +320,6 @@
     <ProjectReference Include="..\Bookie.Common\Bookie.Common.csproj">
       <Project>{e2e98231-07da-47d4-b41f-60f6c4b87dd6}</Project>
       <Name>Bookie.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bookie.Reporting\Bookie.Reporting.csproj">
-      <Project>{b2ca261a-f166-44e2-8131-f910fceac75a}</Project>
-      <Name>Bookie.Reporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\MoonPdfLib\MoonPdfLib.csproj">
       <Project>{e5c5a57c-e464-4402-ad62-d6119ea92a8d}</Project>

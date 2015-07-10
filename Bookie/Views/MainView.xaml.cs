@@ -51,9 +51,6 @@
 
         private void ApplySettings()
         {
-            //AppConfig.AddSetting("CoverImageFolder", Globals.ApplicationPath + @"\Covers\");
-            //Globals.CoverImageFolder = AppConfig.LoadSetting("CoverImageFolder");
-
             if (!File.Exists(Globals.ApplicationDatabaseFullPath))
             {
                 App.SplashScreen.AddMessage("Creating Database...");

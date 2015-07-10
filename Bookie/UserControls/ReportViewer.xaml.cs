@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Bookie.UserControls
 {
     using Bookie.Common.Model;
     using Bookie.Core.Domains;
-
     using Microsoft.Reporting.WinForms;
+    using System.Data;
 
     /// <summary>
     /// Interaction logic for ReportViewer.xaml
@@ -33,18 +24,29 @@ namespace Bookie.UserControls
         private void reportViewer_Load(object sender, EventArgs e)
         {
             List<Book> books = new BookDomain().GetAllBooks().ToList();
-          //  ReportDataSource reportDataSource = new ReportDataSource();
-           // reportDataSource.Name = "BokkieData"; // Name of the DataSet we set in .rdlc
-            reportViewer.LocalReport.ReportPath = "Report1.rdlc"; // Path of the rdlc file
 
-          //  reportViewer.LocalReport.DataSources.Add(reportDataSource);
-            reportViewer.LocalReport.DataSources.Add(new ReportDataSource("BokkieData", books));
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("Title", typeof(string)));
+            dt.Columns.Add(new DataColumn("Abstract", typeof(string)));
+            foreach (var book in books)
+            {
+                DataRow dr = dt.NewRow();
+                dr["Title"] = book.Title;
+                dr["Abstract"] = book.Abstract;
+                dt.Rows.Add(dr);
+            }
+
+            ReportDataSource reportDataSource = new ReportDataSource();
+            reportDataSource.Name = "DataSet1"; // Name of the DataSet we set in .rdlc
+            reportDataSource.Value = dt;
+            reportViewer.LocalReport.ReportPath = "AllBooks.rdlc"; // Path of the rdlc file
+
+            reportViewer.LocalReport.DataSources.Add(reportDataSource);
             reportViewer.RefreshReport();
         }
 
         private void reportViewer_RenderingComplete(object sender, RenderingCompleteEventArgs e)
         {
-
         }
     }
 }

@@ -124,8 +124,10 @@
                                 <ComboBox Margin="0,2,0,2" Height="25" Width="220" ItemsSource="{Binding SortList}" SelectedValue="{Binding SelectedSort}" />
 
                                     <StackPanel Orientation="Horizontal" >
-                                    <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0" VerticalContentAlignment="Center" />
-                                    <TextBox FontSize="12" Width="241" Height="20" Name="Filter" Controls:TextBoxHelper.ClearTextButton="True"  Controls:TextBoxHelper.Watermark="Search" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" KeyUp="Filter_KeyUp" />
+                                        <Label Foreground="White" FontSize="14" Content="Sources" Margin="5,0,5,0" VerticalContentAlignment="Center" />
+                                       <ComboBox SelectedItem="{Binding SourceDirectoryFilter}" ItemsSource="{Binding SourceDirectories}" Height="20" Width="150"/>
+                                        <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0" VerticalContentAlignment="Center" />
+                                    <TextBox FontSize="12" Width="241" Height="20" Name="Filter" Controls:TextBoxHelper.ClearTextButton="True"  Controls:TextBoxHelper.Watermark="Search Titles" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" KeyUp="Filter_KeyUp" />
                                     </StackPanel>
                                 
                             </StackPanel>

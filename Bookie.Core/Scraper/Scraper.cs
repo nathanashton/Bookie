@@ -86,6 +86,7 @@
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            //TODO Needs work as images arent being generated if no isbn if found
             for (var index = 0; index < _booksToScrape.Count; index++)
             {
                 if (Worker.CancellationPending)

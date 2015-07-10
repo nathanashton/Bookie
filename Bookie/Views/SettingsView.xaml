@@ -16,7 +16,11 @@
             <Label Content="Default tiles of details view"/>
         </StackPanel>-->
         <TabControl>
-            <TabItem Header="General"/>
+            <TabItem Header="General">
+                <Button Height="25" Width="60" Click="Button_Click" Content="View Log"/>
+            </TabItem>
+                    
+            <Button Content="View Log"/>
             <TabItem Header="Appearance"/>
             <TabItem Header="Advanced"/>
 

@@ -39,14 +39,14 @@
                         <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
                     </Border>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
+                        <Button ToolTip="View Book" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
                             <Rectangle Width="20" Height="20" Fill="Black">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="Fill" />
                                 </Rectangle.OpacityMask>
                             </Rectangle>
                         </Button>
-                        <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
+                        <Button ToolTip="Edit Book Information" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
                             <Rectangle Width="8" Height="20" Fill="Black">
                                 <Rectangle.OpacityMask>
                                     <VisualBrush Visual="{StaticResource appbar_information}" Stretch="Fill" />

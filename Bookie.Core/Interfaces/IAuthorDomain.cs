@@ -15,6 +15,5 @@
 
         void RemoveAuthor(params Author[] author);
 
-        List<AuthorTreeView> GetAuthorTreeView();
     }
 }

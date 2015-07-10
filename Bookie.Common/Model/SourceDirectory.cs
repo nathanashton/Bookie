@@ -47,5 +47,10 @@
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return SourceDirectoryUrl;
+        }
     }
 }
