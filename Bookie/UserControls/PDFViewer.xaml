@@ -112,12 +112,18 @@
 
 
                         <Button Command="{Binding LeftPaneCommand}" ToolTip="Add Note" Margin="2" Height="35" Width="35">
-                            <Rectangle Width="20" Height="20" Fill="{DynamicResource AccentColorBrush}">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_left }" Stretch="Fill" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle VerticalAlignment="Center" Width="20" Height="20" Fill="Black">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Visual="{StaticResource appbar_layout_collapse_left }" Stretch="Fill" />
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </ControlTemplate>
+                            </Button.Template>
                         </Button>
+
+                  
 
 
                     </StackPanel>
@@ -245,11 +251,15 @@
 
 
                         <Button Command="{Binding RightPaneCommand}" ToolTip="Add Note" Margin="2" Height="35" Width="35">
-                            <Rectangle Width="20" Height="20" Fill="{DynamicResource AccentColorBrush}">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_right }" Stretch="Fill" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Rectangle VerticalAlignment="Center" Width="20" Height="20" Fill="Black">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Visual="{StaticResource appbar_layout_collapse_right }" Stretch="Fill" />
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </ControlTemplate>
+                            </Button.Template>
                         </Button>
 
 

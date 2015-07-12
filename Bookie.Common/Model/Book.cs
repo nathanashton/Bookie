@@ -63,8 +63,5 @@
         [NotMapped]
         public EntityState EntityState { get; set; }
 
-
-
-
     }
 }

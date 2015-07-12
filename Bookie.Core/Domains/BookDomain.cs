@@ -20,18 +20,18 @@
 
         public IList<Book> GetAllBooks()
         {
-            var s = _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f=> f.BookMarks, g=> g.Notes);
+            var s = _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f=> f.BookMarks, g=> g.Notes, h=> h.SourceDirectory);
             return s;
         }
 
         public Book GetBookByTitle(string title)
         {
-            return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g=> g.Notes).Single(x=> x.Title.Equals(title));
+            return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g=> g.Notes, h=> h.SourceDirectory).Single(x=> x.Title.Equals(title));
         }
 
         public Book GetBookById(int id)
         {
-            return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g => g.Notes).Single(x => x.Id.Equals(id));
+            return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g => g.Notes, h=> h.SourceDirectory).Single(x => x.Id.Equals(id));
         }
 
         Book IBookDomain.SetUnchanged(Book book)
@@ -102,6 +102,10 @@
             {
                 n.EntityState = EntityState.Unchanged;
             }
+            book.SourceDirectory.EntityState = EntityState.Unchanged;
+            book.BookFile.EntityState = EntityState.Unchanged;
+            book.BookHistory.EntityState = EntityState.Unchanged;
+            book.CoverImage.EntityState = EntityState.Unchanged;
             return book;
         }
     }

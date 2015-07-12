@@ -42,6 +42,52 @@
             }
         }
 
+
+        public bool ToggleFavouriteBook
+        {
+            get
+            {
+                if (SelectedBook != null)
+                {
+                    ToggleFavouriteColor = SelectedBook.Favourite ? new SolidColorBrush(Colors.Yellow) : new SolidColorBrush(Colors.Black);
+                    return SelectedBook.Favourite;
+                }
+                return false;
+            }
+            set
+            {
+                SelectedBook.Favourite = value;
+                ToggleFavouriteColor = value ? new SolidColorBrush(Colors.Yellow) : new SolidColorBrush(Colors.Black);
+                NotifyPropertyChanged("ToggleFavouriteBook");
+                BookDomain.SetUnchanged(SelectedBook);
+                SelectedBook.EntityState = EntityState.Modified;
+                _bookDomain.UpdateBook(SelectedBook);
+
+
+                if (ToggleFavourite)
+                {
+                    ApplyToggleFilter();
+                    NotifyPropertyChanged("Books");
+                }
+
+            }
+        }
+
+        private Brush _toggleFavouriteColor;
+
+        public Brush ToggleFavouriteColor
+        {
+            get
+            {
+                return _toggleFavouriteColor;
+            }
+            set
+            {
+                _toggleFavouriteColor = value;
+                NotifyPropertyChanged("ToggleFavouriteColor");
+            }
+        }
+
         private Brush _starColor;
 
         public Brush StarColor
@@ -417,14 +463,7 @@
             {
                 _bookView = value;
                 NotifyPropertyChanged("BookView");
-                if (_bookView == PdfViewer)
-                {
-                    FilterBoxVisibility = Visibility.Hidden;
-                }
-                else
-                {
-                    FilterBoxVisibility = Visibility.Visible;
-                }
+                FilterBoxVisibility = Equals(_bookView, PdfViewer) ? Visibility.Hidden : Visibility.Visible;
             }
         }
 
@@ -445,6 +484,7 @@
                 }
                 NotifyPropertyChanged("SelectedBook");
                 NotifyPropertyChanged("SelectedBookEmpty");
+                NotifyPropertyChanged("ToggleFavouriteBook");
             }
         }
 
@@ -636,6 +676,7 @@
             SourceDirectories = new ObservableCollection<SourceDirectory>();
             StarColor = new SolidColorBrush(Colors.White);
             ScrapedColor = new SolidColorBrush(Colors.White);
+            ToggleFavouriteColor = new SolidColorBrush(Colors.Black);
 
             _bookDomain = new BookDomain();
             BookTiles = new BookTiles();

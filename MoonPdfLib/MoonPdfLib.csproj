@@ -11,7 +11,7 @@
     <AssemblyName>MoonPdfLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>15191.234.1.0</AssemblyVersion>
+    <AssemblyVersion>15193.239.1.0</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
