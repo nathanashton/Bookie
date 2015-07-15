@@ -36,7 +36,6 @@ namespace Bookie.Core.Scraper
             try
             {
                 response = (HttpWebResponse)request.GetResponse();
-
             }
             catch (WebException)
             {
@@ -54,8 +53,7 @@ namespace Bookie.Core.Scraper
             if (String.IsNullOrEmpty(isbn13))
                 throw new ArgumentNullException("isbn13");
             isbn13 = isbn13.Replace("-", "").Replace(" ", "");
-            if (isbn13.Length != 13)
-                throw new ArgumentException("The ISBN doesn't contain 13 characters.", "isbn13");
+            if (isbn13.Length != 13) return null;
 
             String isbn10 = isbn13.Substring(3, 9);
             int checksum = 0;

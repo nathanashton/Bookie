@@ -11,7 +11,7 @@
     <AssemblyName>Bookie.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>15193.642.0.0</AssemblyVersion>
+    <AssemblyVersion>15196.675.0.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +92,7 @@
     <Compile Include="Scraper\IsbnGuesser.cs" />
     <Compile Include="Scraper\PDFIsbnParser.cs" />
     <Compile Include="Scraper\Scraper.cs" />
+    <Compile Include="Tagger.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bookie.Common\Bookie.Common.csproj">

@@ -1,12 +1,10 @@
 ﻿namespace Bookie.Common.Model
 {
-
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class BookMark : IEntity, ITrackableEntity
     {
-
         public int Id { get; set; }
 
         [NotMapped]

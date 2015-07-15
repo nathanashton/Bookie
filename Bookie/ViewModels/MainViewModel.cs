@@ -17,6 +17,36 @@
 
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {
+        private bool _filterOnTitle;
+
+        private bool _filterOnDescription;
+
+        public bool FilterOnTitle
+        {
+            get
+            {
+                return _filterOnTitle;
+            }
+            set
+            {
+                _filterOnTitle = value;
+                NotifyPropertyChanged("FilterOnTitle");
+            }
+        }
+
+        public bool FilterOnDescription
+        {
+            get
+            {
+                return _filterOnDescription;
+            }
+            set
+            {
+                _filterOnDescription = value;
+                NotifyPropertyChanged("FilterOnDescription");
+            }
+        }
+
         private bool _toggleScraped;
 
         public bool ToggleScraped
@@ -39,9 +69,9 @@
                 }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
+                NotifyPropertyChanged("BooksCount");
             }
         }
-
 
         public bool ToggleFavouriteBook
         {
@@ -63,13 +93,11 @@
                 SelectedBook.EntityState = EntityState.Modified;
                 _bookDomain.UpdateBook(SelectedBook);
 
-
                 if (ToggleFavourite)
                 {
                     ApplyToggleFilter();
                     NotifyPropertyChanged("Books");
                 }
-
             }
         }
 
@@ -140,6 +168,7 @@
                 }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
+                NotifyPropertyChanged("BooksCount");
             }
         }
 
@@ -165,7 +194,7 @@
         private Visibility _filterBoxVisibility;
         private Visibility _rightPane;
         private ICollectionView _books;
-        private ICommand _openPDFCommand;
+        private ICommand _openPdfCommand;
         private ICommand _leftPaneCommand;
         private ICommand _refreshCommand;
         private ICommand _listViewCommand;
@@ -183,8 +212,8 @@
         private readonly BookDomain _bookDomain;
 
         private string _selectedSort;
-        private ObservableCollection<Author> _authorsTV;
-        private ObservableCollection<Publisher> _publishersTV;
+        private ObservableCollection<Author> _authorsTv;
+        private ObservableCollection<Publisher> _publishersTv;
 
         private ObservableCollection<string> _sortList;
 
@@ -365,11 +394,11 @@
         {
             get
             {
-                return _publishersTV;
+                return _publishersTv;
             }
             set
             {
-                _publishersTV = value;
+                _publishersTv = value;
                 NotifyPropertyChanged("PublishersList");
             }
         }
@@ -378,11 +407,11 @@
         {
             get
             {
-                return _authorsTV;
+                return _authorsTv;
             }
             set
             {
-                _authorsTV = value;
+                _authorsTv = value;
                 NotifyPropertyChanged("AuthorsList");
             }
         }
@@ -569,12 +598,12 @@
             }
         }
 
-        public ICommand OpenPDFCommand
+        public ICommand OpenPdfCommand
         {
             get
             {
-                return _openPDFCommand
-                       ?? (_openPDFCommand = new RelayCommand(p => ChangeToPdfView(), p => SelectedBook != null));
+                return _openPdfCommand
+                       ?? (_openPdfCommand = new RelayCommand(p => ChangeToPdfView(), p => SelectedBook != null));
             }
         }
 
@@ -682,7 +711,7 @@
             BookTiles = new BookTiles();
             BookDetails = new BookDetails();
             PdfViewer = new PDFViewer();
-
+            FilterOnTitle = true;
             //  var savedView = AppConfig.LoadSetting("SavedView");
             //switch (savedView)
             //{
@@ -833,6 +862,27 @@
         private bool ApplyTextFilter(object item)
         {
             var book = item as Book;
+            if (FilterOnTitle)
+            {
+                if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+                {
+                    return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+                return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+            }
+            if (FilterOnDescription)
+            {
+                if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+                {
+                    return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+                return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+            }
+           
+            if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+            {
+                return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
             return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
         }
 
@@ -964,6 +1014,7 @@
             var all = p.GetAllPublishers();
             if (all != null)
             {
+                all = all.GroupBy(r => r.Name).Select(y => y.First()).ToList();
                 all.Insert(0, new Publisher { Name = "All Publishers" });
                 if (Books != null)
                 {
@@ -977,6 +1028,8 @@
             {
                 return;
             }
+
+            allAuthors = allAuthors.GroupBy(o => o.FullName).Select(g => g.First()).ToList();
             allAuthors.Insert(0, new Author { FirstName = "All Authors" });
 
             if (Books != null)

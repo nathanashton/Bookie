@@ -12,7 +12,6 @@ namespace Bookie.ViewModels
     {
         public event EventHandler<EventArgs> NoteChanged;
 
-
         private Note _editing;
 
         public Window Window { get; set; }
@@ -142,7 +141,7 @@ namespace Bookie.ViewModels
         {
             if (NoteChanged != null)
             {
-                NoteChanged(this,null);
+                NoteChanged(this, null);
             }
         }
     }

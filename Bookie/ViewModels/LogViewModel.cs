@@ -157,9 +157,7 @@ namespace Bookie.ViewModels
         {
             var le = await _logDomain.GetAllAsync();
 
-
-            _allLogEntries = new ObservableCollection<LogEntity>(
-                le);
+            _allLogEntries = new ObservableCollection<LogEntity>(le);
             Log = CollectionViewSource.GetDefaultView(_allLogEntries);
             FilterDate = null;
             FilterNone = true;

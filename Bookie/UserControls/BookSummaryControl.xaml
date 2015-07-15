@@ -25,53 +25,44 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                
+
                 <Border Grid.Row="0" BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
 
                     <StackPanel VerticalAlignment="Stretch" Orientation="Vertical" Grid.Row="0">
 
-                    <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontFamily="Calibri" FontSize="22" FontWeight="Bold">
-                        <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}" TextTrimming="CharacterEllipsis" />
-                    </Label>
+                        <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontFamily="Calibri" FontSize="22" FontWeight="Bold">
+                            <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}" TextTrimming="CharacterEllipsis" />
+                        </Label>
 
-                    <Border MaxWidth="200" MinWidth="150" BorderBrush="#FF00AADE" BorderThickness="1" Height="Auto" Width="Auto" Margin="15,15,15,10" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+                        <Border MaxWidth="200" MinWidth="150" BorderBrush="#FF00AADE" BorderThickness="1" Height="Auto" Width="Auto" Margin="15,15,15,10" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
 
-                        <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
-                    </Border>
+                            <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
+                        </Border>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Button ToolTip="View Book" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
-                            <Rectangle Width="20" Height="20" Fill="Black">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="Fill" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Button>
-                        <Button ToolTip="Edit Book Information" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPDFCommand}">
-                            <Rectangle Width="8" Height="20" Fill="Black">
-                                <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_information}" Stretch="Fill" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle>
-                        </Button>
+                            <Button ToolTip="View Book" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPdfCommand}">
+                                <Rectangle Width="20" Height="20" Fill="Black">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="Fill" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
+                            <Button ToolTip="Edit Book Information" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPdfCommand}">
+                                <Rectangle Width="8" Height="20" Fill="Black">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Visual="{StaticResource appbar_information}" Stretch="Fill" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                            </Button>
                             <ToggleButton ToolTip="Favourite" Width="40" Height="40" Margin="5,5,30,5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleFavouriteBook, Mode=TwoWay}">
                                 <Rectangle Width="20" Height="20" Fill="{Binding ToggleFavouriteColor}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}"/>
+                                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </ToggleButton>
-
                         </StackPanel>
-                    
-
-
-
-                </StackPanel>
-
-                   
+                    </StackPanel>
                 </Border>
-
-
 
                 <TabControl FontFamily="Calibri" Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
                     <TabItem  Header="General" HorizontalAlignment="Stretch">

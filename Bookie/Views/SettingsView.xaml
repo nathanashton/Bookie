@@ -9,21 +9,20 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" WindowStartupLocation="CenterScreen">
     <Grid>
         <!--<StackPanel Orientation="Vertical">
-        <Label Content="Cover render quality"/>
-        <Label Content="Cover folder"/>
-        <Label Content="Theme"/>
-            <Label Content="Reset db on restart"/>
-            <Label Content="Default tiles of details view"/>
+        <Label Content="Cover render quality" />
+        <Label Content="Cover folder" />
+        <Label Content="Theme" />
+            <Label Content="Reset db on restart" />
+            <Label Content="Default tiles of details view" />
         </StackPanel>-->
         <TabControl>
             <TabItem Header="General">
-                <Button Height="25" Width="60" Click="Button_Click" Content="View Log"/>
+                <Button Height="25" Width="60" Click="Button_Click" Content="View Log" />
             </TabItem>
-                    
-            <Button Content="View Log"/>
-            <TabItem Header="Appearance"/>
-            <TabItem Header="Advanced"/>
 
+            <Button Content="View Log" />
+            <TabItem Header="Appearance" />
+            <TabItem Header="Advanced" />
         </TabControl>
     </Grid>
 </Controls:MetroWindow>

@@ -15,7 +15,7 @@
 
     <Grid Name="MainGrid">
         <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
-         
+
             <DataGrid RowHeaderWidth="0"
         RowHeight="22" IsReadOnly="True" HorizontalAlignment="Stretch" GridLinesVisibility="None"
                       AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single"
@@ -31,7 +31,7 @@
                     <DataGridTextColumn Width="Auto" Header="Title" Binding="{Binding Title}" />
                     <DataGridTextColumn Width="*" Header="Abstract" Binding="{Binding Abstract}" />
                     <DataGridTextColumn Width="Auto" Header="Pages" Binding="{Binding Pages}" />
-                    <DataGridTextColumn Width="Auto" Header="Published" Binding="{Binding YearPublished}" />
+                    <DataGridTextColumn Width="Auto" Header="Published" Binding="{Binding DatePublished, StringFormat=yyyy}" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

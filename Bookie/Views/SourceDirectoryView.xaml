@@ -10,10 +10,9 @@
         Title="Source Directories" Height="235.667" Width="565" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
 
     <Window.Resources>
-        <converters:CoverImageConverter x:Key="CoverImageConverter" />
-        <converters:EnumBooleanConverter x:Key="EnumBoolConverter" />
         <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
     </Window.Resources>
+
 
     <DockPanel IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" LastChildFill="True">
 

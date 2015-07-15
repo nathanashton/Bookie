@@ -1,16 +1,14 @@
 ﻿namespace Bookie.Core.Domains
 {
+    using Bookie.Common;
     using Bookie.Common.Model;
     using Bookie.Core.Interfaces;
     using Bookie.Data.Interfaces;
     using Bookie.Data.Repositories;
+    using MoonPdfLib.MuPdf;
     using System;
     using System.Collections.Generic;
     using System.IO;
-
-    using Bookie.Common;
-
-    using MoonPdfLib.MuPdf;
 
     public class CoverImageDomain : ICoverImageDomain
     {
@@ -54,15 +52,22 @@
 
         public CoverImage GenerateCoverImageFromPdf(Book book)
         {
-            var outImageName = book.Title + ".jpg";
+            if (!File.Exists(book.BookFile.FullPathAndFileNameWithExtension))
+            {
+                return EmptyCoverImage();
+            }
+            string outImageName = book.Title;
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                outImageName = outImageName.Replace(c.ToString(), String.Empty);
+            }
+            outImageName += ".jpg";
 
             var savedImageUrl = Globals.CoverImageFolder + "\\" + outImageName;
             var file = new FileSource(book.BookFile.FullPathAndFileNameWithExtension);
             var img = MuPdfWrapper.ExtractPage(file, 1);
+
             img.Save(savedImageUrl);
-
-
-
 
             if (book.CoverImage == null)
             {
@@ -77,7 +82,6 @@
             {
                 book.CoverImage.Id = book.CoverImage.Id;
                 book.CoverImage.EntityState = EntityState.Modified;
-
             }
 
             book.CoverImage.FileNameWithExtension = Path.GetFileName(savedImageUrl);

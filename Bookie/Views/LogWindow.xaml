@@ -35,31 +35,17 @@
                 </DockPanel>
             </Grid>
 
-            <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Log}" IsReadOnly="True" AutoGenerateColumns="False" CanUserSortColumns="True" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HorizontalContentAlignment="Stretch" ScrollViewer.CanContentScroll="False" CanUserResizeColumns="True">
+            <!--<DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Log}" AutoGenerateColumns="True"/>-->
+            
+            
+            <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Log}" IsReadOnly="True" AutoGenerateColumns="False" >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="Auto" Header="Date" Binding="{Binding Date, StringFormat={}{0:dd/MM/yyyy HH:mm:s}}" />
+                    <DataGridTextColumn Width="Auto" Header="Date" Binding="{Binding Date}"/>
                     <DataGridTextColumn Width="Auto" Header="Thread" Binding="{Binding Thread}" />
                     <DataGridTextColumn Width="Auto" Header="Level" Binding="{Binding Level}" />
-                    <DataGridTextColumn Width="*" Header="Message" Binding="{Binding Message}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                                <Setter Property="TextBlock.TextAlignment" Value="Left" />
-                                <Setter Property="TextBlock.VerticalAlignment" Value="Top" />
-
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Width="*" Header="Exception" Binding="{Binding Exception}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                                <Setter Property="TextBlock.TextAlignment" Value="Left" />
-                                <Setter Property="TextBlock.VerticalAlignment" Value="Top" />
-
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Header="Message" Binding="{Binding Message}"/>
+                    <DataGridTextColumn Width="*" Header="Exception" Binding="{Binding Exception}"/>
+   
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

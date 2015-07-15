@@ -1,6 +1,7 @@
 ﻿namespace Bookie.Core.Importer
 {
     using Bookie.Common.Model;
+    using Bookie.Core.Interfaces;
     using global::Bookie.Common;
     using global::Bookie.Core.Domains;
     using System;
@@ -8,8 +9,6 @@
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-
-    using Bookie.Core.Interfaces;
 
     public class Importer : IProgressPublisher
     {
@@ -101,6 +100,7 @@
                 var book = new Book();
 
                 book.Title = Path.GetFileNameWithoutExtension(foundBook);
+                book.Abstract = "";
                 book.BookFile.FileNameWithExtension = Path.GetFileName(foundBook);
                 book.BookFile.FullPathAndFileNameWithExtension = foundBook;
                 book.BookFile.FileExtension = Path.GetExtension(foundBook);
@@ -111,7 +111,6 @@
                 book.BookHistory.DateImported = DateTime.Now;
                 book.BookHistory.EntityState = EntityState.Added;
                 book.CoverImage = new CoverImage();
-
 
                 if (_generateCovers)
                 {
@@ -152,8 +151,8 @@
             _generateCovers = generateCovers;
             var option = includeSubDirectories == false ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories;
             _foundPdfFiles = Directory.GetFiles(_source.SourceDirectoryUrl, FileTypes.PDF, option).ToList();
-            Logger.Log.Debug(String.Format("Found {0} files in {1} with an extension of {2}", _foundPdfFiles.Count(),_source.SourceDirectoryUrl , FileTypes.PDF));
-  
+            Logger.Log.Debug(String.Format("Found {0} files in {1} with an extension of {2}", _foundPdfFiles.Count(), _source.SourceDirectoryUrl, FileTypes.PDF));
+
             Logger.Log.Info(
                 String.Format(
                     "Importing from {0}: Subdirectories {1}: Generate Covers {2}",

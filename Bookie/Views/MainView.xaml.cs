@@ -13,6 +13,8 @@
     using System.Windows.Data;
     using System.Windows.Input;
 
+    using Bookie.Core;
+
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
@@ -135,6 +137,12 @@
             {
                 ViewModel.SelectedBook = book;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Tagger t = new Tagger();
+            var s = t.Go();
         }
     }
 }

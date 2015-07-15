@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class Book : ITrackableEntity, IEntity
@@ -59,9 +58,7 @@
 
         public virtual ICollection<Note> Notes { get; set; }
 
-
         [NotMapped]
         public EntityState EntityState { get; set; }
-
     }
 }

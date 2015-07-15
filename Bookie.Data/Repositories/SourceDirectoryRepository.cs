@@ -1,11 +1,10 @@
 ﻿namespace Bookie.Data.Repositories
 {
+    using Bookie.Common.Model;
+    using Bookie.Data.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
-
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;

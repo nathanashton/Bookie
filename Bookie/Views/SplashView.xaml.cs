@@ -1,7 +1,5 @@
 ﻿namespace Bookie.Views
 {
-    using System;
-
     using Bookie.Common;
 
     public partial class SplashView : ISplashScreen

@@ -41,7 +41,6 @@
             try
             {
                 xdcDocument.Load(retrieveUrl);
-
             }
             catch (WebException ex)
             {
@@ -88,7 +87,7 @@
                 var xmlDescription = xndNode["dc:description"];
                 if (xmlDescription != null)
                 {
-                   // Remove ASCII Control Characters
+                    // Remove ASCII Control Characters
                     book.Abstract = xmlDescription.InnerText.Replace("&#39;", "'");
                     book.Abstract = xmlDescription.InnerText.Replace("&quot;", String.Empty);
                 }

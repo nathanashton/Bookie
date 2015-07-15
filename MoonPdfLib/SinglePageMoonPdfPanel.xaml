@@ -16,10 +16,10 @@
     <ItemsControl x:Name="itemsControl" MouseDown="ItemsControl_OnMouseDown" ItemsSource="{Binding}" Style="{StaticResource moonPdfItems}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.Template>
-            
+
             <ControlTemplate TargetType="{x:Type ItemsControl}">
                 <ScrollViewer CanContentScroll="False" FocusVisualStyle="{x:Null}">
-                        <ItemsPresenter/>
+                    <ItemsPresenter />
                 </ScrollViewer>
             </ControlTemplate>
         </ItemsControl.Template>

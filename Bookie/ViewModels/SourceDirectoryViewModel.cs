@@ -5,13 +5,12 @@
     using Bookie.Core.Domains;
     using Bookie.Core.Importer;
     using Bookie.Core.Scraper;
+    using Bookie.Views;
     using System;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Forms;
     using System.Windows.Input;
-
-    using Bookie.Views;
 
     public class SourceDirectoryViewModel : NotifyBase
     {
@@ -93,7 +92,6 @@
             }
         }
 
-
         public ObservableCollection<SourceDirectory> SourceDirectories
         {
             get
@@ -122,7 +120,7 @@
             var allSources = await _domain.GetAllSourceDirectoriesAsync();
             SourceDirectories = new ObservableCollection<SourceDirectory>(allSources);
             MainViewModel.RefreshAllBooks();
-        MainViewModel.RefreshPublishersAndAuthors();
+            MainViewModel.RefreshPublishersAndAuthors();
         }
 
         public void Add()
@@ -160,15 +158,24 @@
         public void Remove()
         {
             SelectedSourceDirectory.EntityState = EntityState.Deleted;
-             _domain.RemoveSourceDirectory(SelectedSourceDirectory);
+            _domain.RemoveSourceDirectory(SelectedSourceDirectory);
             Refresh();
         }
 
         public void Scan()
         {
+            var covers = false;
+            var subdirectories = false;
             var v = new ConfirmImportView();
-            v.ShowDialog();
-
+            if (v.ShowDialog() == true)
+            {
+               covers = v._viewModel.GenerateCovers;
+               subdirectories = v._viewModel.SubDirectories;
+            }
+            else
+            {
+                return;
+            }
 
             SelectedSourceDirectory.DateLastImported = DateTime.Now;
             SelectedSourceDirectory.EntityState = EntityState.Modified;
@@ -176,23 +183,14 @@
 
             ProgressReportingActive = true;
 
-
-
-
-
             _importer = new Importer(SelectedSourceDirectory);
             _importer.BookChanged += MainViewModel.i_BookChanged;
             _importer.Worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
 
-            _importer.ScanSource(false, false);
+            _importer.ScanSource(subdirectories, covers);
             _importer.ProgressComplete += delegate { ProgressReportingActive = false; };
 
             Refresh();
-
-
-
-
-
         }
 
         private void _worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -202,9 +200,18 @@
 
         public void Scrape()
         {
+            var covers = false;
+            var rescrape = false;
             var v = new ConfirmScrapeView();
-            v.ShowDialog();
-
+            if (v.ShowDialog() == true)
+            {
+                covers = v._viewModel.GenerateCovers;
+                rescrape = v._viewModel.ReScrape;
+            }
+            else
+            {
+                return;
+            }
 
             var scraper = new Scraper();
 
@@ -213,7 +220,7 @@
             scraper.BookChanged += MainViewModel.i_BookChanged;
             scraper.Worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
 
-            scraper.Scrape(SelectedSourceDirectory, MainViewModel.Books.Cast<Book>().ToList());
+            scraper.Scrape(SelectedSourceDirectory, MainViewModel.Books.Cast<Book>().ToList(), covers, rescrape);
             scraper.ProgressComplete += delegate { ProgressReportingActive = false; };
             Refresh();
         }

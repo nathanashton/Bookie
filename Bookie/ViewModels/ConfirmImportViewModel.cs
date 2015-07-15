@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using System.Windows.Forms;
+
     using Bookie.Common;
     using Bookie.Core.Importer;
 
@@ -30,7 +26,7 @@ namespace Bookie.ViewModels
 
         public Importer Importer { get; set; }
 
-        public bool ReScrape
+        public bool SubDirectories
         {
             get
             {
@@ -39,8 +35,13 @@ namespace Bookie.ViewModels
             set
             {
                 _reScrape = value;
-                NotifyPropertyChanged("ReScrape");
+                NotifyPropertyChanged("SubDirectories");
             }
+        }
+
+        public void OK()
+        {
+            
         }
     }
 }

@@ -6,7 +6,6 @@
     using Bookie.Data.Repositories;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class AuthorDomain : IAuthorDomain
     {
@@ -46,7 +45,5 @@
         {
             _authorRepository.Remove(author);
         }
-
-     
     }
 }

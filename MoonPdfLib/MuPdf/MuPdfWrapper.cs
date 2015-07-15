@@ -28,8 +28,6 @@ using System.Runtime.InteropServices;
 
 namespace MoonPdfLib.MuPdf
 {
-    using log4net.Repository.Hierarchy;
-
     public static class MuPdfWrapper
     {
         /// <summary>
@@ -214,6 +212,8 @@ namespace MoonPdfLib.MuPdf
                 {
                     var fs = (FileSource)source;
                     Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT); // Creates the context
+
+                    //TODO Following fails if file doesnt exist
                     Stream = NativeMethods.OpenFile(Context, fs.Filename); // opens file as a stream
                     Document = NativeMethods.OpenDocumentStream(Context, ".pdf", Stream); // opens the document
                 }

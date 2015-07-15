@@ -10,15 +10,13 @@ SizeToContent="WidthAndHeight"
         Title="Confirm" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <Grid>
         <StackPanel Margin="10" Orientation="Vertical">
-        <CheckBox IsChecked="{Binding GenerateCovers}" Margin="5" Content="Generate Covers"/>
-        <CheckBox IsChecked="{Binding ReScrape}" Margin="5" Content="Re-Scrape All Books"/>
-         
+            <CheckBox IsChecked="{Binding GenerateCovers}" Margin="5" Content="Generate Covers" />
+            <CheckBox IsChecked="{Binding ReScrape}" Margin="5" Content="Re-Scrape All Books" />
+
             <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button Margin="5" Content="Go"/>
-                <Button Margin="5" Content="Cancel"/>
+                <Button Margin="5" Content="Go" Click="Button_Click" />
+                <Button Margin="5" Content="Cancel" Click="Button_Click_1"/>
             </StackPanel>
-
         </StackPanel>
-
     </Grid>
 </Controls:MetroWindow>

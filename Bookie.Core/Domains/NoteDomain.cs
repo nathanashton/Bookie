@@ -2,15 +2,13 @@
 {
     using Bookie.Common.Model;
     using Bookie.Core.Interfaces;
+    using Bookie.Data.Interfaces;
+    using Bookie.Data.Repositories;
     using System;
     using System.Collections.Generic;
 
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-
     public class NoteDomain : INoteDomain
     {
-
         private readonly INoteRepository _noteRepository;
 
         public NoteDomain()

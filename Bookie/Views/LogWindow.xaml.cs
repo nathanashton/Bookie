@@ -27,6 +27,8 @@ namespace Bookie.Views
                 textBox1.BorderThickness = new Thickness(0, 0, 0, 0);
                 textBox1.BorderBrush = Brushes.Transparent;
             };
+            _viewModel.RefreshLog();
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -41,7 +43,6 @@ namespace Bookie.Views
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel.RefreshLog();
         }
     }
 }

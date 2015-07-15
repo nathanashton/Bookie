@@ -4,10 +4,8 @@
     using Bookie.Core.Interfaces;
     using Bookie.Data.Interfaces;
     using Bookie.Data.Repositories;
-    using iTextSharp.text;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class PublisherDomain : IPublisherDomain
     {
@@ -22,8 +20,6 @@
         {
             return _publisherRepository.GetAll();
         }
-
-     
 
         public Publisher GetPublisherByName(string publisherName)
         {

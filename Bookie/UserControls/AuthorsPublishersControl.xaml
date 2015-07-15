@@ -1,22 +1,18 @@
 ﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:core="clr-namespace:Bookie.Core;assembly=Bookie.Core"
              xmlns:model="clr-namespace:Bookie.Common.Model;assembly=Bookie.Common"
              xmlns:converters="clr-namespace:Bookie.Converters"
              xmlns:Custom="http://metro.mahapps.com/winfx/xaml/shared" x:Class="Bookie.UserControls.AuthorsPublishersControl"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
         <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
         <converters:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
-
-
-       
-
     </UserControl.Resources>
 
     <Grid Visibility="{Binding LeftPane}" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" DockPanel.Dock="Left" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#f1f2f4">
@@ -33,9 +29,8 @@
                     </Expander.Header>
 
                     <Border BorderBrush="#ced1d6" BorderThickness="0,1,0,0">
-                            
+
                         <ListBox SelectedItem="{Binding PublisherFilter}" Background="Transparent" ItemsSource="{Binding PublishersList}">
-                            
                         </ListBox>
                     </Border>
                 </Expander>
@@ -47,17 +42,10 @@
                     </Expander.Header>
                     <Border BorderBrush="#ced1d6" BorderThickness="0,1,0,0">
                         <ListBox SelectedItem="{Binding AuthorFilter}"  Background="Transparent" ItemsSource="{Binding AuthorsList}">
-
                         </ListBox>
-
-
-
                     </Border>
                 </Expander>
             </StackPanel>
         </ScrollViewer>
     </Grid>
-
-
-
 </UserControl>

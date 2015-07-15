@@ -18,7 +18,7 @@
         private readonly BookDomain _bookDomain = new BookDomain();
 
         private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
-        
+
         private SourceDirectory _sourceDirectory;
 
         public ProgressWindowEventArgs ProgressArgs { get; set; }
@@ -26,6 +26,10 @@
         private List<Book> _booksToScrape;
 
         private bool _noInternet;
+
+        private bool _generateCovers;
+
+        private bool _rescrape;
 
         public readonly BackgroundWorker Worker = new BackgroundWorker();
 
@@ -95,10 +99,10 @@
                     return;
                 }
                 var book = _booksToScrape[index];
-                if (book.Scraped)
+                if (_rescrape == false && book.Scraped)
                 {
                     continue;
-                }
+                } 
 
                 book.Isbn = _guesser.GuessBookIsbn(book.BookFile.FullPathAndFileNameWithExtension);
                 if (String.IsNullOrEmpty(book.Isbn))
@@ -128,7 +132,7 @@
                     }
                     book.Isbn = book.Isbn;
                     book.Title = b.Book.Title;
-                    book.Abstract = b.Book.Abstract;
+                    book.Abstract = b.Book.Abstract ?? "";
                     book.Pages = b.Book.Pages;
                     book.DatePublished = b.Book.DatePublished;
                     book.Scraped = true;
@@ -162,12 +166,12 @@
                     }
                     book.Isbn = book.Isbn;
                     book.Title = b.Book.Title;
-                    book.Abstract = b.Book.Abstract;
+                    book.Abstract = b.Book.Abstract ?? "";
                     book.Pages = b.Book.Pages;
                     book.DatePublished = b.Book.DatePublished;
                 }
 
-                if (!File.Exists(book.CoverImage.FullPathAndFileNameWithExtension))
+                if (_generateCovers)
                 {
                     book.CoverImage = _coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
@@ -203,7 +207,7 @@
             }
         }
 
-        public void Scrape(SourceDirectory source, List<Book> books)
+        public void Scrape(SourceDirectory source, List<Book> books, bool generateCovers, bool reScrape)
         {
             _sourceDirectory = source;
             _booksToScrape = books;
@@ -211,6 +215,8 @@
             {
                 return;
             }
+            _generateCovers = generateCovers;
+            _rescrape = reScrape;
             _noInternet = false;
             OnProgressStarted();
             Worker.RunWorkerAsync();

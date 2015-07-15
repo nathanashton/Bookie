@@ -28,8 +28,6 @@ using System.Windows.Threading;
 
 namespace MoonPdfLib
 {
-    using System.Timers;
-
     public partial class MoonPdfPanel : UserControl
     {
         public event EventHandler PdfLoaded;
@@ -156,6 +154,7 @@ namespace MoonPdfLib
         private int previousPage = 1;
 
         private int currentPage;
+
         public MoonPdfPanel()
         {
             InitializeComponent();
@@ -173,7 +172,7 @@ namespace MoonPdfLib
             resizeTimer.Tick += resizeTimer_Tick;
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
             currentPage = this.GetCurrentPageNumber();
             if (currentPage != previousPage)
@@ -183,7 +182,6 @@ namespace MoonPdfLib
             }
         }
 
-
         private void PageChanged()
         {
             if (PageChangedEvent != null)
@@ -191,8 +189,6 @@ namespace MoonPdfLib
                 PageChangedEvent(this, null);
             }
         }
-
-
 
         private void PdfViewerPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {

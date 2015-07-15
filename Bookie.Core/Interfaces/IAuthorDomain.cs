@@ -14,6 +14,5 @@
         void UpdateAuthor(params Author[] author);
 
         void RemoveAuthor(params Author[] author);
-
     }
 }

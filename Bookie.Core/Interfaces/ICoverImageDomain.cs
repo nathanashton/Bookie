@@ -18,6 +18,5 @@
         CoverImage GenerateCoverImageFromPdf(Book book);
 
         CoverImage EmptyCoverImage();
-
     }
 }

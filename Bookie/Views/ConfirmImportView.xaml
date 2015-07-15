@@ -6,19 +6,17 @@ SizeToContent="WidthAndHeight"
                               BorderBrush="{DynamicResource AccentColorBrush}"
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
-                      WindowTransitionsEnabled="False"
+                      WindowTransitionsEnabled="False" 
         Title="Confirm" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <Grid>
         <StackPanel Margin="10" Orientation="Vertical">
-            <CheckBox IsChecked="{Binding GenerateCovers}" Margin="5" Content="Generate Covers"/>
-            <CheckBox IsChecked="{Binding ReScrape}" Margin="5" Content="Scan all sub-directories"/>
+            <CheckBox IsChecked="{Binding GenerateCovers}" Margin="5" Content="Generate Covers" />
+            <CheckBox IsChecked="{Binding SubDirectories}" Margin="5" Content="Scan all sub-directories" />
 
             <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button Margin="5" Content="Go"/>
-                <Button  Click="Button_Click" Margin="5" Content="Cancel"/>
+                <Button Margin="5" Content="Go" Click="Button_Click_1" />
+                <Button  Click="Button_Click" Margin="5" Content="Cancel" />
             </StackPanel>
-
         </StackPanel>
-
     </Grid>
 </Controls:MetroWindow>

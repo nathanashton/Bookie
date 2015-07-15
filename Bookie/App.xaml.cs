@@ -12,12 +12,12 @@
         public static ISplashScreen SplashScreen;
         private ManualResetEvent _resetSplashCreated;
         private Thread _splashThread;
+
         // ReSharper disable once UnusedMember.Local
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public App()
         {
-
             //    System.Threading.Thread.CurrentThread.CurrentUICulture =
             //                new System.Globalization.CultureInfo("de-DE");
 
@@ -53,7 +53,7 @@
         protected override void OnStartup(StartupEventArgs e)
         {
             _resetSplashCreated = new ManualResetEvent(false);
-            _splashThread = new Thread(ShowSplash); _splashThread.SetApartmentState(ApartmentState.STA); 
+            _splashThread = new Thread(ShowSplash); _splashThread.SetApartmentState(ApartmentState.STA);
             _splashThread.IsBackground = true;
             _splashThread.Name = "Splash Screen";
             _splashThread.Start();

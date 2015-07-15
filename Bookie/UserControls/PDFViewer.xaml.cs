@@ -5,22 +5,17 @@ using System.Windows.Input;
 
 namespace Bookie.UserControls
 {
-    using System.ComponentModel;
-
     using Bookie.Common.Model;
     using Bookie.Core.Domains;
-
-    using System.Linq;
-
-    using Bookie.Common;
     using Bookie.Views;
+    using System.ComponentModel;
+    using System.Linq;
 
     /// <summary>
     /// Interaction logic for PDFViewer.xaml
     /// </summary>
     public partial class PDFViewer : UserControl, INotifyPropertyChanged
     {
-
         public Book PDFUrl
         {
             get
@@ -50,7 +45,6 @@ namespace Bookie.UserControls
                 NotifyPropertyChanged("LeftPane");
             }
         }
-
 
         public Visibility RightPane
         {
@@ -104,33 +98,30 @@ namespace Bookie.UserControls
         }
 
         private ICommand _deleteBookmarkCommand;
+
         public ICommand DeleteBookMarkCommand
         {
             get
             {
                 return _deleteBookmarkCommand
                        ?? (_deleteBookmarkCommand = new RelayCommand((parameter) => DeleteBookMark(parameter), p => true));
-
             }
         }
 
-
-
         private ICommand _editNoteCommand;
+
         public ICommand EditNoteCommand
         {
             get
             {
                 return _editNoteCommand
                        ?? (_editNoteCommand = new RelayCommand((parameter) => EditNote(parameter), p => true));
-
             }
         }
 
-
-
         private ICommand _rightPaneCommand;
         private ICommand _leftPaneCommand;
+
         public ICommand LeftPaneCommand
         {
             get
@@ -151,7 +142,6 @@ namespace Bookie.UserControls
 
         private int currentPage;
 
-
         public static readonly DependencyProperty PDFUrlProperty = DependencyProperty.Register(
             "PDFUrl",
             typeof(Book),
@@ -160,18 +150,15 @@ namespace Bookie.UserControls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-
         private void LeftPaneToggle()
         {
             LeftPane = LeftPane == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-
         }
 
         private void RightPaneToggle()
         {
             RightPane = RightPane == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
-
 
         private void SetValueDp(
             DependencyProperty property,
@@ -188,16 +175,18 @@ namespace Bookie.UserControls
         public PDFViewer()
         {
             InitializeComponent();
+            LeftPane = Visibility.Collapsed;
+            RightPane = Visibility.Collapsed;
+
             SelectedBookMark = null;
             SelectedNote = null;
             NoteLabel.Visibility = Visibility.Hidden;
             BookMarkLabel.Visibility = Visibility.Hidden;
             (Content as FrameworkElement).DataContext = this;
             moonPdfPanel.PageChangedEvent += moonPdfPanel_PageChangedEvent;
-
         }
 
-        void moonPdfPanel_PageChangedEvent(object sender, EventArgs e)
+        private void moonPdfPanel_PageChangedEvent(object sender, EventArgs e)
         {
             currentPage = moonPdfPanel.GetCurrentPageNumber();
             pageCount.Content = moonPdfPanel.GetCurrentPageNumber() + "/" + moonPdfPanel.TotalPages;
@@ -224,9 +213,6 @@ namespace Bookie.UserControls
                 SelectedBookMark = null;
                 BookMarkLabel.Visibility = Visibility.Hidden;
             }
-
-
-
         }
 
         public void Refresh()
@@ -317,19 +303,16 @@ namespace Bookie.UserControls
                 author.EntityState = EntityState.Unchanged;
             }
 
-
-
             BookMark b = new BookMark
                              {
                                  Book = PDFUrl,
                                  BookMarkedPage = moonPdfPanel.GetCurrentPageNumber(),
                                  EntityState = EntityState.Added
-                 };
+                             };
             PDFUrl.BookMarks.Add(b);
             new BookDomain().UpdateBook(PDFUrl);
             Refresh();
         }
-
 
         public void NotifyPropertyChanged(string info)
         {
@@ -355,8 +338,6 @@ namespace Bookie.UserControls
             nv.ShowDialog();
         }
 
-
-
         private void DeleteBookMark(object parameter)
         {
             foreach (var x in PDFUrl.BookMarks)
@@ -375,15 +356,12 @@ namespace Bookie.UserControls
             var bb = (BookMark)parameter;
             bb.EntityState = EntityState.Deleted;
 
-
             PDFUrl.BookMarks.ToList().RemoveAll(x => x.Id == bb.Id);
             new BookDomain().UpdateBook(PDFUrl);
             Refresh();
         }
 
-
-
-        void _viewModel_NoteChanged(object sender, EventArgs e)
+        private void _viewModel_NoteChanged(object sender, EventArgs e)
         {
             Refresh();
         }
@@ -409,7 +387,5 @@ namespace Bookie.UserControls
         {
             Refresh();
         }
-
-
     }
 }

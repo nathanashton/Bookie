@@ -14,6 +14,5 @@
         void UpdatePublisher(params Publisher[] publisher);
 
         void RemovePublisher(params Publisher[] publisher);
-
     }
 }

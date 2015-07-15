@@ -21,6 +21,5 @@
         SourceDirectory GetSourceDirectoryForBook(Book book);
 
         Task<IList<SourceDirectory>> GetAllSourceDirectoriesAsync();
-
     }
 }
