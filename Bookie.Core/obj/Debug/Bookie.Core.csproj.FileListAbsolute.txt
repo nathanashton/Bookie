@@ -47,3 +47,23 @@ C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Core
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Core\bin\Debug\MoonPdfLib.dll
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Core\bin\Debug\MouseKeyboardActivityMonitor.dll
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Core\bin\Debug\MoonPdfLib.pdb
+C:\Git Repos\Bookie\Bookie.Core\obj\Debug\Bookie.Core.csprojResolveAssemblyReference.cache
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Log4Net.config
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\libmupdf.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Bookie.Core.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Bookie.Core.pdb
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Bookie.Common.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Bookie.Data.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\EntityFramework.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\itextsharp.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\log4net.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\MoonPdfLib.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\MouseKeyboardActivityMonitor.dll
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Bookie.Common.pdb
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\Bookie.Data.pdb
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\MoonPdfLib.pdb
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\EntityFramework.xml
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\itextsharp.xml
+C:\Git Repos\Bookie\Bookie.Core\bin\Debug\log4net.xml
+C:\Git Repos\Bookie\Bookie.Core\obj\Debug\Bookie.Core.dll
+C:\Git Repos\Bookie\Bookie.Core\obj\Debug\Bookie.Core.pdb

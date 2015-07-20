@@ -1,17 +1,18 @@
-﻿namespace Bookie.ViewModels
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
-    using Bookie.Core.Importer;
-    using Bookie.Core.Scraper;
-    using Bookie.Views;
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Windows.Forms;
-    using System.Windows.Input;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Domains;
+using Bookie.Core.Importer;
+using Bookie.Core.Scraper;
+using Bookie.Views;
 
+namespace Bookie.ViewModels
+{
     public class SourceDirectoryViewModel : NotifyBase
     {
         private readonly SourceDirectoryDomain _domain;
@@ -193,7 +194,7 @@
             Refresh();
         }
 
-        private void _worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Refresh();
         }

@@ -1,9 +1,8 @@
 ﻿using System;
+using Bookie.Common;
 
 namespace Bookie.ViewModels
 {
-    using Bookie.Common;
-
     public class ExceptionViewModel : NotifyBase
     {
         private string _message;

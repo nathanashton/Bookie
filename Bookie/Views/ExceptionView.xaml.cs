@@ -1,16 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
+using Bookie.ViewModels;
+using MahApps.Metro.Controls;
 
 namespace Bookie.Views
 {
-    using Bookie.ViewModels;
-
-    using MahApps.Metro.Controls;
-
     /// <summary>
     /// Interaction logic for ExceptionView.xaml
     /// </summary>
-    public partial class ExceptionView : MetroWindow
+    public partial class ExceptionView
     {
         public ExceptionViewModel ViewModel { get; set; }
 
@@ -33,11 +32,11 @@ namespace Bookie.Views
             var w = SystemParameters.PrimaryScreenWidth;
             var h = SystemParameters.PrimaryScreenHeight;
 
-            this.Left = (w - e.NewSize.Width) / 2;
-            this.Top = (h - e.NewSize.Height) / 2;
+            Left = (w - e.NewSize.Width) / 2;
+            Top = (h - e.NewSize.Height) / 2;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (ViewModel.Fatal)
             {

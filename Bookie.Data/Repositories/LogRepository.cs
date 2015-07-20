@@ -1,17 +1,13 @@
-﻿namespace Bookie.Data.Repositories
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlServerCe;
+using System.Threading.Tasks;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Data.Interfaces;
+
+namespace Bookie.Data.Repositories
 {
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.SqlServerCe;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
-
-    using Bookie.Common;
-
     public class LogRepository : GenericDataRepository<LogEntity>, ILogRepository
     {
         public void RemoveAll()

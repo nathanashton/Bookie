@@ -10,7 +10,7 @@ namespace Bookie.Helpers
 
         public static object GetSelectedItem(DependencyObject obj)
         {
-            return (object)obj.GetValue(SelectedItemProperty);
+            return obj.GetValue(SelectedItemProperty);
         }
 
         public static void SetSelectedItem(DependencyObject obj, object value)

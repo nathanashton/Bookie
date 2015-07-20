@@ -1,7 +1,7 @@
-﻿namespace Bookie.Common.Model
-{
-    using System;
+﻿using System;
 
+namespace Bookie.Common.Model
+{
     public interface ITrackableEntity
     {
         DateTime? CreatedDateTime { get; set; }

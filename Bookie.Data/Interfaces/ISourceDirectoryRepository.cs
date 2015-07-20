@@ -1,11 +1,11 @@
-﻿namespace Bookie.Data.Interfaces
-{
-    using Bookie.Common.Model;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Bookie.Common.Model;
 
+namespace Bookie.Data.Interfaces
+{
     public interface ISourceDirectoryRepository : IGenericDataRepository<SourceDirectory>
     {
         bool Exists(string sourceUrl);

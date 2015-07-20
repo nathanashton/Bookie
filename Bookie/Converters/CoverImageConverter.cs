@@ -1,11 +1,11 @@
-﻿namespace Bookie.Converters
-{
-    using System;
-    using System.Globalization;
-    using System.IO;
-    using System.Windows.Data;
-    using System.Windows.Media.Imaging;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
+namespace Bookie.Converters
+{
     public class CoverImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

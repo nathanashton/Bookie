@@ -1,15 +1,15 @@
-﻿namespace Bookie.Core.Importer
-{
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using global::Bookie.Common;
-    using global::Bookie.Core.Domains;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Domains;
+using Bookie.Core.Interfaces;
 
+namespace Bookie.Core.Importer
+{
     public class Importer : IProgressPublisher
     {
         private readonly SourceDirectory _source;

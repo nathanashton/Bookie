@@ -1,7 +1,7 @@
-﻿namespace Bookie.ViewModels
-{
-    using Bookie.Common;
+﻿using Bookie.Common;
 
+namespace Bookie.ViewModels
+{
     public class ConfirmScrapeViewModel : NotifyBase
     {
         private bool _generateCovers;

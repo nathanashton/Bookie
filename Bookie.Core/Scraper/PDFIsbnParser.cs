@@ -1,12 +1,12 @@
-﻿namespace Bookie.Core.Scraper
-{
-    using Bookie.Common;
-    using iTextSharp.text.pdf;
-    using iTextSharp.text.pdf.parser;
-    using System;
-    using System.Text;
-    using System.Text.RegularExpressions;
+﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
+using Bookie.Common;
+using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 
+namespace Bookie.Core.Scraper
+{
     internal class PdfIsbnParser
     {
         private string _isbn = string.Empty;

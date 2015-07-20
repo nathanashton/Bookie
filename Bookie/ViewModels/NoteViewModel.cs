@@ -1,30 +1,59 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Input;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Domains;
 
 namespace Bookie.ViewModels
 {
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
-    using System.Windows;
-    using System.Windows.Input;
-
     public class NoteViewModel : NotifyBase
     {
-        public event EventHandler<EventArgs> NoteChanged;
-
+        private readonly BookDomain _bookDomain;
+        private ICommand _addNoteCommand;
+        private Book _book;
         private Note _editing;
+        private string _noteText;
+        private int? _pageNumber;
+        private ICommand _removeNoteCommand;
+        private ICommand _saveNoteCommand;
+
+        public NoteViewModel()
+        {
+            _bookDomain = new BookDomain();
+        }
+
+        public Note Editing
+        {
+            get { return _editing; }
+            set
+            {
+                _editing = value;
+                NotifyPropertyChanged("Editing");
+            }
+        }
+
+        public Book Book
+        {
+            get { return _book; }
+            set
+            {
+                _book = value;
+                NotifyPropertyChanged("Book");
+            }
+        }
+
+        public int? PageNumber
+        {
+            get { return _pageNumber; }
+            set
+            {
+                _pageNumber = value;
+                NotifyPropertyChanged("PageNumber");
+            }
+        }
 
         public Window Window { get; set; }
-
-        private string _noteText;
-
-        private Book _book;
-
-        private int? _pageNumber;
-
-        private ICommand _addNoteCommand;
-
-        private ICommand _saveNoteCommand;
 
         public string NoteDate
         {
@@ -37,8 +66,6 @@ namespace Bookie.ViewModels
                 return "";
             }
         }
-
-        private ICommand _removeNoteCommand;
 
         public ICommand SaveNoteCommand
         {
@@ -69,10 +96,7 @@ namespace Bookie.ViewModels
 
         public string NoteText
         {
-            get
-            {
-                return _noteText;
-            }
+            get { return _noteText; }
             set
             {
                 _noteText = value;
@@ -80,69 +104,54 @@ namespace Bookie.ViewModels
             }
         }
 
+        public void Set(Book book, Note note, int? pageNumber)
+        {
+            Book = book;
+            Editing = note;
+            PageNumber = pageNumber;
+
+            if (Editing == null) return;
+            NoteText = Editing.NoteText;
+            Book = Editing.Book;
+            PageNumber = Editing.PageNumber;
+        }
+
+        public event EventHandler<EventArgs> NoteChanged;
+
         public void SaveNote()
         {
-            _book = BookDomain.SetUnchanged(_book);
-
-            _editing.NoteText = _noteText;
-
-            _editing.EntityState = EntityState.Modified;
-            new BookDomain().UpdateBook(_book);
+            Book = BookDomain.SetUnchanged(_book);
+            Editing.NoteText = _noteText;
+            Editing.EntityState = EntityState.Modified;
+            _bookDomain.UpdateBook(Book);
             OnNoteChanged();
-
-            Window.Close();
         }
 
         public void RemoveNote()
         {
-            _book = BookDomain.SetUnchanged(_book);
-
-            _editing.EntityState = EntityState.Deleted;
-            new BookDomain().UpdateBook(_book);
+            Book = BookDomain.SetUnchanged(Book);
+            Editing.EntityState = EntityState.Deleted;
+            _bookDomain.UpdateBook(Book);
             OnNoteChanged();
-            Window.Close();
-        }
-
-        public NoteViewModel(Book book, int? pageNumber, Note note)
-        {
-            _editing = note;
-            _book = book;
-            _pageNumber = pageNumber;
-
-            if (_editing != null)
-            {
-                NoteText = _editing.NoteText;
-                _book = _editing.Book;
-                _pageNumber = _editing.PageNumber;
-            }
         }
 
         private void AddNote()
         {
-            _book = BookDomain.SetUnchanged(_book);
-
-            Note note = new Note { Book = _book, NoteText = _noteText, CreatedDateTime = DateTime.Now };
-
-            if (_pageNumber != null)
+            Book = BookDomain.SetUnchanged(Book);
+            var note = new Note {Book = Book, NoteText = _noteText, CreatedDateTime = DateTime.Now};
+            if (PageNumber != null)
             {
-                note.PageNumber = _pageNumber;
+                note.PageNumber = PageNumber;
             }
-
             note.EntityState = EntityState.Added;
-            _book.Notes.Add(note);
-            new BookDomain().UpdateBook(_book);
-
+            Book.Notes.Add(note);
+            _bookDomain.UpdateBook(Book);
             OnNoteChanged();
-
-            Window.Close();
         }
 
         public void OnNoteChanged()
         {
-            if (NoteChanged != null)
-            {
-                NoteChanged(this, null);
-            }
+            NoteChanged?.Invoke(this, null);
         }
     }
 }

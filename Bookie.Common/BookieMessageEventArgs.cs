@@ -1,7 +1,7 @@
-﻿namespace Bookie.Common
-{
-    using System;
+﻿using System;
 
+namespace Bookie.Common
+{
     public class BookieMessageEventArgs : EventArgs
     {
         public string MoreDetails { get; set; }

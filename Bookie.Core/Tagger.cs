@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Bookie.Core.Domains;
 
 namespace Bookie.Core
 {
-    using Bookie.Core.Domains;
-
     public class Tagger
     {
         private readonly BookDomain _bookDomain = new BookDomain();
 
-        private List<string> words = new List<string>();
+        private readonly List<string> words = new List<string>();
 
         private readonly string[] _removedwords = {
                                                 "edition", "for", "and", "with", "in", "the", "of", "to","1","2","3","4","5","6","7","8","9","0","by","1st","2nd","3rd","4th","5th","6th", " "

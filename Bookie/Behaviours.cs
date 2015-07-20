@@ -1,8 +1,8 @@
-﻿namespace Bookie
-{
-    using System.Windows;
-    using System.Windows.Interactivity;
+﻿using System.Windows;
+using System.Windows.Interactivity;
 
+namespace Bookie
+{
     public class Behaviours : Behavior<Window>
     {
         protected override void OnAttached()

@@ -15,16 +15,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using MoonPdfLib.Helper;
-
-/*
- * 2013 - Modified and extended version of W. Jordan's code (see AUTHORS file)
- */
-
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Bookie.Common;
+using MoonPdfLib.Helper;
+using Size = System.Windows.Size;
+/*
+ * 2013 - Modified and extended version of W. Jordan's code (see AUTHORS file)
+ */
 
 namespace MoonPdfLib.MuPdf
 {
@@ -51,7 +51,7 @@ namespace MoonPdfLib.MuPdf
                 }
                 catch (Exception ex)
                 {
-                    Bookie.Common.Logger.Log.Error("Error extracting cover image with MuPDF", ex);
+                    Logger.Log.Error("Error extracting cover image with MuPDF", ex);
                 }
                 var bmp = RenderPage(stream.Context, stream.Document, p, zoomFactor);
                 NativeMethods.FreePage(stream.Document, p); // releases the resources consumed by the page
@@ -67,19 +67,19 @@ namespace MoonPdfLib.MuPdf
         /// <param name="rotation">The rotation that should be applied</param>
         /// <param name="password">The password for the pdf file (if required)</param>
         /// <returns></returns>
-        public static System.Windows.Size[] GetPageBounds(IPdfSource source, ImageRotation rotation = ImageRotation.None, string password = null)
+        public static Size[] GetPageBounds(IPdfSource source, ImageRotation rotation = ImageRotation.None, string password = null)
         {
-            Func<double, double, System.Windows.Size> sizeCallback = (width, height) => new System.Windows.Size(width, height);
+            Func<double, double, Size> sizeCallback = (width, height) => new Size(width, height);
 
             if (rotation == ImageRotation.Rotate90 || rotation == ImageRotation.Rotate270)
-                sizeCallback = (width, height) => new System.Windows.Size(height, width); // switch width and height
+                sizeCallback = (width, height) => new Size(height, width); // switch width and height
 
             using (var stream = new PdfFileStream(source))
             {
                 ValidatePassword(stream.Document, password);
 
                 var pageCount = NativeMethods.CountPages(stream.Document); // gets the number of pages in the document
-                var resultBounds = new System.Windows.Size[pageCount];
+                var resultBounds = new Size[pageCount];
 
                 for (int i = 0; i < pageCount; i++)
                 {
@@ -200,11 +200,11 @@ namespace MoonPdfLib.MuPdf
         {
             private const uint FZ_STORE_DEFAULT = 256 << 20;
 
-            public IntPtr Context { get; private set; }
+            public IntPtr Context { get; }
 
-            public IntPtr Stream { get; private set; }
+            public IntPtr Stream { get; }
 
-            public IntPtr Document { get; private set; }
+            public IntPtr Document { get; }
 
             public PdfFileStream(IPdfSource source)
             {
@@ -310,9 +310,9 @@ namespace MoonPdfLib.MuPdf
     {
         public float Left, Top, Right, Bottom;
 
-        public float Width { get { return this.Right - this.Left; } }
+        public float Width { get { return Right - Left; } }
 
-        public float Height { get { return this.Bottom - this.Top; } }
+        public float Height { get { return Bottom - Top; } }
     }
 
 #pragma warning disable 0649
@@ -345,17 +345,17 @@ namespace MoonPdfLib.MuPdf
 
         public FileSource(string filename)
         {
-            this.Filename = filename;
+            Filename = filename;
         }
     }
 
     public class MemorySource : IPdfSource
     {
-        public byte[] Bytes { get; private set; }
+        public byte[] Bytes { get; }
 
         public MemorySource(byte[] bytes)
         {
-            this.Bytes = bytes;
+            Bytes = bytes;
         }
     }
 }

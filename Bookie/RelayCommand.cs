@@ -1,9 +1,9 @@
-﻿namespace Bookie
-{
-    using System;
-    using System.Diagnostics;
-    using System.Windows.Input;
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Input;
 
+namespace Bookie
+{
     public class RelayCommand : ICommand
     {
         private readonly Action<object> _execute;

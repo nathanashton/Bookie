@@ -1,8 +1,8 @@
-﻿namespace Bookie.Common
-{
-    using Bookie.Common.Model;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Bookie.Common.Model;
 
+namespace Bookie.Common
+{
     public class SearchResult
     {
         public enum Search

@@ -1,13 +1,13 @@
-﻿namespace Bookie.UserControls
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
-    using System.Windows.Media;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
+namespace Bookie.UserControls
+{
     // class from: https://github.com/samueldjack/VirtualCollection/blob/master/VirtualCollection/VirtualCollection/VirtualizingWrapPanel.cs
     // MakeVisible() method from: http://www.switchonthecode.com/tutorials/wpf-tutorial-implementing-iscrollinfo
     public class VirtualizingWrapPanel : VirtualizingPanel, IScrollInfo
@@ -298,7 +298,7 @@
                            FirstRealizedItemIndex = firstRealizedIndex,
                            FirstRealizedItemLeft = firstRealizedItemLeft,
                            FirstRealizedLineTop = firstRealizedItemTop,
-                           LastRealizedItemIndex = lastRealizedIndex,
+                           LastRealizedItemIndex = lastRealizedIndex
                        };
         }
 
@@ -318,7 +318,7 @@
                            ItemsPerLine = itemsPerLine,
                            TotalLines = totalLines,
                            ExtentHeight = extentHeight,
-                           MaxVerticalOffset = extentHeight - viewPortSize.Height,
+                           MaxVerticalOffset = extentHeight - viewPortSize.Height
                        };
         }
 

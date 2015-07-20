@@ -18,22 +18,22 @@ namespace Bookie.Common
 
         public static void ShowMessage(string message)
         {
-            Message(null, new BookieMessageEventArgs() { MoreDetails = null, Message = message });
+            Message(null, new BookieMessageEventArgs { MoreDetails = null, Message = message });
         }
 
         public static void ShowErrorMessage(string message, bool fatal)
         {
-            Message(null, new BookieMessageEventArgs() { MoreDetails = null, Message = message, Fatal = fatal });
+            Message(null, new BookieMessageEventArgs { MoreDetails = null, Message = message, Fatal = fatal });
         }
 
         public static void ShowErrorMessage(string message, string moredetails, bool fatal)
         {
-            Message(null, new BookieMessageEventArgs() { MoreDetails = moredetails, Message = message, Fatal = fatal });
+            Message(null, new BookieMessageEventArgs { MoreDetails = moredetails, Message = message, Fatal = fatal });
         }
 
         public static void ShowInfoMessage(string message, bool fatal)
         {
-            Message(null, new BookieMessageEventArgs() { MoreDetails = null, Message = message, Fatal = false });
+            Message(null, new BookieMessageEventArgs { MoreDetails = null, Message = message, Fatal = false });
         }
     }
 }

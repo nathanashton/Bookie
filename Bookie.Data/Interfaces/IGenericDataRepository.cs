@@ -1,10 +1,10 @@
-﻿namespace Bookie.Data.Interfaces
-{
-    using Bookie.Common.Model;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using Bookie.Common.Model;
 
+namespace Bookie.Data.Interfaces
+{
     public interface IGenericDataRepository<T> where T : class, IEntity
     {
         IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties);

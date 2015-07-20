@@ -1,23 +1,23 @@
 ﻿namespace Bookie.Views
 {
-    using Bookie.Common.Model;
-    using Bookie.ViewModels;
-
-    using MahApps.Metro.Controls;
+    using ViewModels;
 
     /// <summary>
     /// Interaction logic for NoteView.xaml
     /// </summary>
-    public partial class NoteView : MetroWindow
+    public partial class NoteView
     {
-        public NoteViewModel _viewModel;
+        public NoteViewModel ViewModel => (NoteViewModel)Resources["ViewModel"];
 
-        public NoteView(Book book, int? pageNumber, Note note)
+        public NoteView()
         {
             InitializeComponent();
-            _viewModel = new NoteViewModel(book, pageNumber, note);
-            this.DataContext = _viewModel;
-            _viewModel.Window = this;
+            ViewModel.NoteChanged += ViewModel_NoteChanged;
+        }
+
+        private void ViewModel_NoteChanged(object sender, System.EventArgs e)
+        {
+            Close();
         }
     }
 }

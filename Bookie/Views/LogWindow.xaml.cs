@@ -1,24 +1,22 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Bookie.ViewModels;
+using MahApps.Metro.Controls;
 
 namespace Bookie.Views
 {
-    using Bookie.ViewModels;
-
-    using MahApps.Metro.Controls;
-
     /// <summary>
     /// Interaction logic for LogWindow.xaml
     /// </summary>
-    public partial class LogWindow : MetroWindow
+    public partial class LogWindow
     {
         private readonly LogViewModel _viewModel;
 
-        public LogWindow()
+        public LogWindow(LogViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = new LogViewModel();
+            _viewModel = viewModel;
             DataContext = _viewModel;
             datePicker.Loaded += delegate
             {

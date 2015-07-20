@@ -1,9 +1,10 @@
-﻿namespace Bookie.Common
-{
-    using log4net;
+﻿using System.Reflection;
+using log4net;
 
+namespace Bookie.Common
+{
     public static class Logger
     {
-        public static ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     }
 }

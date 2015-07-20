@@ -1,20 +1,19 @@
-﻿namespace Bookie.Views
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using Bookie.Common;
+using Bookie.Core.Domains;
+using Bookie.Properties;
+using Bookie.ViewModels;
+using MahApps.Metro;
+
+namespace Bookie.Views
 {
-    using Bookie.Common;
-    using Bookie.Core.Domains;
-    using Bookie.ViewModels;
-    using MahApps.Metro;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Threading;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Input;
-
-    using Bookie.Core;
-
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
@@ -24,8 +23,11 @@
 
         public MainView()
         {
+            ViewModel = new MainViewModel();
             Load();
             InitializeComponent();
+            DataContext = ViewModel;
+
             VersionNumber.Content = Globals.VersionNumber;
         }
 
@@ -41,9 +43,8 @@
             App.SplashScreen.AddMessage("Loading Books...");
 
             ViewModel = new MainViewModel();
-            DataContext = ViewModel;
 
-            var savedTileWidth = Properties.Settings.Default.TileWidth;
+            var savedTileWidth = Settings.Default.TileWidth;
             ViewModel.TileWidth = savedTileWidth == 0 ? 130 : savedTileWidth;
 
             ViewModel.TileWidth = 130;
@@ -111,38 +112,5 @@
             }
         }
 
-        private void PublisherTree_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            var title = sender as TextBlock;
-            if (title == null)
-            {
-                return;
-            }
-            var book = ViewModel.AllBooks.FirstOrDefault(x => x.Title.Equals(title.Text));
-            if (book != null)
-            {
-                ViewModel.SelectedBook = book;
-            }
-        }
-
-        private void AuthorTree_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            var title = sender as TextBlock;
-            if (title == null)
-            {
-                return;
-            }
-            var book = ViewModel.AllBooks.FirstOrDefault(x => x.Title.Equals(title.Text));
-            if (book != null)
-            {
-                ViewModel.SelectedBook = book;
-            }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Tagger t = new Tagger();
-            var s = t.Go();
-        }
     }
 }

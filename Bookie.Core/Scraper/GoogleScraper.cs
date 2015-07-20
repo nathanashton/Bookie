@@ -1,14 +1,15 @@
-﻿namespace Bookie.Core.Scraper
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using System;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Net;
-    using System.Text.RegularExpressions;
-    using System.Xml;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Xml;
+using Bookie.Common;
+using Bookie.Common.Model;
 
+namespace Bookie.Core.Scraper
+{
     public class GoogleScraper : NotifyBase, IBookScraper
     {
         private static DateTime lastTimeIWasCalled = DateTime.Now;
@@ -30,7 +31,7 @@
 
             if (DateTime.Now.Subtract(lastTimeIWasCalled).Seconds < 1)
             {
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
             }
 
             lastTimeIWasCalled = DateTime.Now;
@@ -120,7 +121,7 @@
                 var xmlPublisher = xndNode["dc:publisher"];
                 if (xmlPublisher != null)
                 {
-                    searchResult.Publishers.Add(new Publisher() { Name = xmlPublisher.InnerText });
+                    searchResult.Publishers.Add(new Publisher { Name = xmlPublisher.InnerText });
                 }
 
                 var xmlAuthor = xndNode["dc:creator"];
@@ -129,11 +130,11 @@
                     var words = xmlAuthor.InnerText.Split(' ');
                     if (words.Length == 1)
                     {
-                        searchResult.Authors.Add(new Author() { LastName = words[0] });
+                        searchResult.Authors.Add(new Author { LastName = words[0] });
                     }
                     else
                     {
-                        searchResult.Authors.Add(new Author()
+                        searchResult.Authors.Add(new Author
                         {
                             FirstName = words[0],
                             LastName = words[1]

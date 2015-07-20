@@ -46,3 +46,21 @@ C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Data
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Data\obj\Debug\Bookie.Data.csprojResolveAssemblyReference.cache
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Data\obj\Debug\Bookie.Data.dll
 C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie.Data\obj\Debug\Bookie.Data.pdb
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\Log4Net.config
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\Bookie.Data.dll.config
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\Bookie.Data.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\Bookie.Data.pdb
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\Bookie.Common.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\EntityFramework.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\EntityFramework.SqlServerCompact.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\log4net.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\System.Data.SqlServerCe.dll
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\Bookie.Common.pdb
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\EntityFramework.xml
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\EntityFramework.SqlServerCompact.xml
+C:\Git Repos\Bookie\Bookie.Data\bin\Debug\log4net.xml
+C:\Git Repos\Bookie\Bookie.Data\obj\Debug\Bookie.Data.csprojResolveAssemblyReference.cache
+C:\Git Repos\Bookie\Bookie.Data\obj\Debug\Bookie.Data.dll
+C:\Git Repos\Bookie\Bookie.Data\obj\Debug\Bookie.Data.pdb

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using log4net.Config;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -13,7 +14,7 @@ using System.Windows;
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: log4net.Config.XmlConfigurator(ConfigFile =
+[assembly: XmlConfigurator(ConfigFile =
 "Log4Net.config"
 , Watch =
 true

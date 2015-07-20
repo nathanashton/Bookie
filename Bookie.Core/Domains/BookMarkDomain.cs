@@ -1,13 +1,13 @@
-﻿namespace Bookie.Core.Domains
-{
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Bookie.Common.Model;
+using Bookie.Core.Interfaces;
+using Bookie.Data.Interfaces;
+using Bookie.Data.Repositories;
 
+namespace Bookie.Core.Domains
+{
     public class BookMarkDomain : IBookMarkDomain
     {
         private readonly IBookMarkRepository _bookMarkRepository;

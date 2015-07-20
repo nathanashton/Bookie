@@ -1,15 +1,15 @@
-﻿namespace Bookie.Core.Domains
-{
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bookie.Common.Model;
+using Bookie.Core.Interfaces;
+using Bookie.Data.Interfaces;
+using Bookie.Data.Repositories;
 
+namespace Bookie.Core.Domains
+{
     public class LogDomain : ILogDomain
     {
-        private ILogRepository _logRepository;
+        private readonly ILogRepository _logRepository;
 
         public LogDomain()
         {

@@ -1,15 +1,15 @@
-﻿namespace Bookie.Core.Domains
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using MoonPdfLib.MuPdf;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Interfaces;
+using Bookie.Data.Interfaces;
+using Bookie.Data.Repositories;
+using MoonPdfLib.MuPdf;
 
+namespace Bookie.Core.Domains
+{
     public class CoverImageDomain : ICoverImageDomain
     {
         private readonly ICoverImageRepository _coverImageRepository;

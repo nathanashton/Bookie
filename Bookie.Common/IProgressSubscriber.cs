@@ -1,7 +1,7 @@
-﻿namespace Bookie.Common
-{
-    using System;
+﻿using System;
 
+namespace Bookie.Common
+{
     public interface IProgressSubscriber
     {
         void _progress_ProgressChanged(object sender, ProgressWindowEventArgs e);

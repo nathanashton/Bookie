@@ -1,16 +1,21 @@
-﻿<Controls:MetroWindow x:Class="Bookie.Views.NoteView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      WindowStartupLocation="CenterScreen"
-                      ShowMinButton="False" ShowMaxRestoreButton="False"
-                xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      ResizeMode="CanResize"
- BorderBrush="{DynamicResource AccentColorBrush}"
-                      BorderThickness="1"
-                      EnableDWMDropShadow="True"
-                      WindowTransitionsEnabled="False"
-        Title="Note" Height="300" Width="300">
-    <Grid>
+﻿<!-- ReSharper disable once ObsoleteElement -->
+<controls:MetroWindow x:Class="Bookie.Views.NoteView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	WindowStartupLocation="CenterScreen"
+	ShowMinButton="False" ShowMaxRestoreButton="False"
+	xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	ResizeMode="CanResize"
+	xmlns:viewModels="clr-namespace:Bookie.ViewModels"
+	BorderBrush="{DynamicResource AccentColorBrush}"
+	BorderThickness="1"
+	EnableDWMDropShadow="True"
+	WindowTransitionsEnabled="False"
+	Title="Note" Height="300" Width="300">
+    <Window.Resources>
+        <viewModels:NoteViewModel x:Key="ViewModel" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
         <DockPanel Margin="7,0,7,0" LastChildFill="True">
             <Button DockPanel.Dock="Top" Command="{Binding AddNoteCommand}" Margin="10" Content="Add Note" Width="80" />
             <Label DockPanel.Dock="Top" Content="{Binding NoteDate}" />
@@ -19,8 +24,8 @@
                 <Button Command="{Binding RemoveNoteCommand}" Margin="5" Content="Remove" Width="90" />
             </StackPanel>
             <Border BorderBrush="Black" BorderThickness="0.7">
-                <TextBox VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  TextWrapping="Wrap"  Padding="5" Background="Yellow"  Text="{Binding NoteText, Mode=TwoWay}" />
+                <TextBox VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  TextWrapping="Wrap"  Padding="5" Background="#FFFEC6"  Text="{Binding NoteText, Mode=TwoWay}" />
             </Border>
         </DockPanel>
     </Grid>
-</Controls:MetroWindow>
+</controls:MetroWindow>

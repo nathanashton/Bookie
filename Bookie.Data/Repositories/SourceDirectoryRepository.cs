@@ -1,14 +1,14 @@
-﻿namespace Bookie.Data.Repositories
-{
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Bookie.Common.Model;
+using Bookie.Data.Interfaces;
 
+namespace Bookie.Data.Repositories
+{
     public class SourceDirectoryRepository : GenericDataRepository<SourceDirectory>, ISourceDirectoryRepository
     {
         public bool Exists(string sourceUrl)

@@ -1,20 +1,22 @@
-﻿namespace Bookie.ViewModels
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
-    using Bookie.UserControls;
-    using Bookie.Views;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Data;
-    using System.Windows.Input;
-    using System.Windows.Media;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Domains;
+using Bookie.Properties;
+using Bookie.UserControls;
+using Bookie.Views;
 
+namespace Bookie.ViewModels
+{
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {
         private bool _filterOnTitle;
@@ -271,7 +273,7 @@
 
         public BookDetails BookDetails;
 
-        public PDFViewer PdfViewer;
+        public PdfViewer PdfViewer;
 
         public bool ShowProgress
         {
@@ -496,7 +498,7 @@
             }
         }
 
-        private SourceDirectoryDomain _sourceDomain = new SourceDirectoryDomain();
+        private readonly SourceDirectoryDomain _sourceDomain = new SourceDirectoryDomain();
 
         public Book SelectedBook
         {
@@ -509,7 +511,7 @@
                 _selectedBook = value;
                 if (value != null)
                 {
-                    PdfViewer.PDFUrl = SelectedBook;
+                PdfViewer.ViewModel.Book = SelectedBook;
                 }
                 NotifyPropertyChanged("SelectedBook");
                 NotifyPropertyChanged("SelectedBookEmpty");
@@ -559,7 +561,7 @@
                 NotifyPropertyChanged("TileWidth");
                 NotifyPropertyChanged("TileHeight");
                 NotifyPropertyChanged("StarSize");
-                Properties.Settings.Default.TileWidth = value;
+                Settings.Default.TileWidth = value;
             }
         }
 
@@ -710,7 +712,7 @@
             _bookDomain = new BookDomain();
             BookTiles = new BookTiles();
             BookDetails = new BookDetails();
-            PdfViewer = new PDFViewer();
+            PdfViewer = new PdfViewer();
             FilterOnTitle = true;
             //  var savedView = AppConfig.LoadSetting("SavedView");
             //switch (savedView)
@@ -776,7 +778,7 @@
 
         private void Books_CollectionChanged(
             object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+            NotifyCollectionChangedEventArgs e)
         {
             NotifyPropertyChanged("BooksCount");
         }
@@ -789,7 +791,8 @@
             }
             LeftPane = Visibility.Collapsed;
             RightPane = Visibility.Collapsed;
-            PdfViewer.OpenPDF(SelectedBook.BookFile.FullPathAndFileNameWithExtension);
+          PdfViewer.ViewModel.OpenPdf(SelectedBook.BookFile.FullPathAndFileNameWithExtension);
+         
             BookView = PdfViewer;
         }
 
@@ -800,7 +803,7 @@
 
         private void ViewLogWindow()
         {
-            var log = new LogWindow();
+            var log = new LogWindow(new LogViewModel());
             log.ShowDialog();
         }
 

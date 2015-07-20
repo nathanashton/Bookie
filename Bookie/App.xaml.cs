@@ -1,12 +1,14 @@
-﻿namespace Bookie
-{
-    using Bookie.Common;
-    using Bookie.Views;
-    using log4net;
-    using System;
-    using System.Threading;
-    using System.Windows;
+﻿using System;
+using System.Reflection;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using Bookie.Common;
+using Bookie.Views;
+using log4net;
 
+namespace Bookie
+{
     public partial class App
     {
         public static ISplashScreen SplashScreen;
@@ -14,7 +16,7 @@
         private Thread _splashThread;
 
         // ReSharper disable once UnusedMember.Local
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public App()
         {
@@ -34,7 +36,7 @@
             Logger.Log.Info("Application terminated");
         }
 
-        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Logger.Log.Error("Unhandled exception", e.Exception);
             MessagingService.ShowErrorMessage(Common.Resources.Strings.Resources.UnhandledException, e.Exception.ToString(), false);
@@ -47,7 +49,7 @@
             SplashScreen = splashScreenWindow;
             splashScreenWindow.Show();
             _resetSplashCreated.Set();
-            System.Windows.Threading.Dispatcher.Run();
+            Dispatcher.Run();
         }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -1,7 +1,8 @@
-﻿namespace Bookie.Views
-{
-    using MahApps.Metro.Controls;
+﻿using System.Windows;
+using MahApps.Metro.Controls;
 
+namespace Bookie.Views
+{
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
@@ -12,9 +13,9 @@
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            LogWindow w = new LogWindow();
+            LogWindow w = new LogWindow(new ViewModels.LogViewModel());
             w.ShowDialog();
         }
     }

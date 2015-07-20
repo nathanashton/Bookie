@@ -70,7 +70,6 @@
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -121,11 +120,8 @@
     <Compile Include="UserControls\BookTiles.xaml.cs">
       <DependentUpon>BookTiles.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PDFViewer.xaml.cs">
-      <DependentUpon>PDFViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ReportViewer.xaml.cs">
-      <DependentUpon>ReportViewer.xaml</DependentUpon>
+    <Compile Include="UserControls\PdfViewer.xaml.cs">
+      <DependentUpon>PdfViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\VirtualizingWrapPanel.cs" />
     <Compile Include="ViewModels\ConfirmImportViewModel.cs" />
@@ -134,6 +130,7 @@
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />
+    <Compile Include="ViewModels\PdfViewerViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
     <Compile Include="ViewModels\SourceDirectoryViewModel.cs" />
     <Compile Include="Views\ConfirmImportView.xaml.cs">
@@ -153,9 +150,6 @@
     </Compile>
     <Compile Include="Views\NoteView.xaml.cs">
       <DependentUpon>NoteView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReportView.xaml.cs">
-      <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -212,13 +206,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\PDFViewer.xaml">
+    <Page Include="UserControls\PdfViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\ReportViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConfirmImportView.xaml">
       <SubType>Designer</SubType>
@@ -241,10 +231,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NoteView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,7 +1,7 @@
-﻿namespace Bookie.Common
-{
-    using System;
+﻿using System;
 
+namespace Bookie.Common
+{
     public class ProgressWindowEventArgs : EventArgs
     {
         public int ProgressPercentage { get; set; }

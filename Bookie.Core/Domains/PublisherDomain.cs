@@ -1,12 +1,12 @@
-﻿namespace Bookie.Core.Domains
-{
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Bookie.Common.Model;
+using Bookie.Core.Interfaces;
+using Bookie.Data.Interfaces;
+using Bookie.Data.Repositories;
 
+namespace Bookie.Core.Domains
+{
     public class PublisherDomain : IPublisherDomain
     {
         private readonly IPublisherRepository _publisherRepository;

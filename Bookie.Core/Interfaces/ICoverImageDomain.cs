@@ -1,8 +1,8 @@
-﻿namespace Bookie.Core.Interfaces
-{
-    using Bookie.Common.Model;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Bookie.Common.Model;
 
+namespace Bookie.Core.Interfaces
+{
     public interface ICoverImageDomain
     {
         IList<CoverImage> GetAllCoverImages();

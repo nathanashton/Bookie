@@ -1,9 +1,9 @@
-﻿namespace Bookie.Core.Interfaces
-{
-    using Bookie.Common.Model;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bookie.Common.Model;
 
+namespace Bookie.Core.Interfaces
+{
     public interface ISourceDirectoryDomain
     {
         IList<SourceDirectory> GetAllSourceDirectories();

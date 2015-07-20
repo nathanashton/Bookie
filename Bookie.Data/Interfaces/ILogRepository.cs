@@ -1,11 +1,9 @@
-﻿namespace Bookie.Data.Interfaces
-{
-    using Bookie.Common.Model;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bookie.Common.Model;
 
+namespace Bookie.Data.Interfaces
+{
     public interface ILogRepository : IGenericDataRepository<LogEntity>
     {
         void RemoveAll();

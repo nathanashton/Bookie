@@ -1,7 +1,7 @@
-﻿namespace Bookie.Common
-{
-    using System.ComponentModel;
+﻿using System.ComponentModel;
 
+namespace Bookie.Common
+{
     public class NotifyBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

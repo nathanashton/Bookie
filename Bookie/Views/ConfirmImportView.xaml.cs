@@ -1,11 +1,9 @@
 ﻿using System.Windows;
+using Bookie.ViewModels;
+using MahApps.Metro.Controls;
 
 namespace Bookie.Views
 {
-    using Bookie.ViewModels;
-
-    using MahApps.Metro.Controls;
-
     /// <summary>
     /// Interaction logic for ConfirmImportView.xaml
     /// </summary>

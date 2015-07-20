@@ -1,16 +1,16 @@
-﻿namespace Bookie.Data.Repositories
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.SqlServerCe;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using EntityState = System.Data.Entity.EntityState;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.SqlServerCe;
+using System.Linq;
+using System.Linq.Expressions;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Data.Interfaces;
+using EntityState = System.Data.Entity.EntityState;
 
+namespace Bookie.Data.Repositories
+{
     public class GenericDataRepository<T> : IGenericDataRepository<T> where T : class, IEntity
     {
         public virtual IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)

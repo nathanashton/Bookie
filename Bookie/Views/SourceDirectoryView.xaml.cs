@@ -1,9 +1,8 @@
-﻿namespace Bookie.Views
+﻿using Bookie.ViewModels;
+using MahApps.Metro.Controls;
+
+namespace Bookie.Views
 {
-    using Bookie.ViewModels;
-
-    using MahApps.Metro.Controls;
-
     /// <summary>
     /// Interaction logic for SourceDirectoryView.xaml
     /// </summary>

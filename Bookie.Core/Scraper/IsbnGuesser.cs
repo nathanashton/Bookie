@@ -17,15 +17,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 \***************************************************************************************/
 
+using System;
+using System.IO;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Web;
+using Bookie.Common;
+
 namespace Bookie.Core.Scraper
 {
-    using Bookie.Common;
-    using System;
-    using System.IO;
-    using System.Net;
-    using System.Text.RegularExpressions;
-    using System.Web;
-
     public class IsbnGuesser
     {
         protected string SimpleBrowseToPage(string uri)

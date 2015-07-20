@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Domains;
 
 namespace Bookie.ViewModels
 {
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Windows.Data;
-    using System.Windows.Forms;
-    using System.Windows.Input;
-
     public class LogViewModel : NotifyBase
     {
         private ICommand _deleteLogsCommand;

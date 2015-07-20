@@ -1,16 +1,15 @@
-﻿namespace Bookie.Core.Scraper
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
-    using Bookie.Core.Interfaces;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using Bookie.Common;
+using Bookie.Common.Model;
+using Bookie.Core.Domains;
+using Bookie.Core.Interfaces;
 
+namespace Bookie.Core.Scraper
+{
     public class Scraper : IProgressPublisher
     {
         private readonly IsbnGuesser _guesser = new IsbnGuesser();

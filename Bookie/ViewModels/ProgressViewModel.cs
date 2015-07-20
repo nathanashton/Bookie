@@ -1,8 +1,8 @@
-﻿namespace Bookie.ViewModels
-{
-    using Bookie.Common;
-    using System.Windows;
+﻿using System.Windows;
+using Bookie.Common;
 
+namespace Bookie.ViewModels
+{
     public class ProgressViewModel : NotifyBase
     {
         private string _progressText;

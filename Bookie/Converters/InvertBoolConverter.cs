@@ -1,9 +1,9 @@
-﻿namespace Bookie.Converters
-{
-    using System;
-    using System.Globalization;
-    using System.Windows.Data;
+﻿using System;
+using System.Globalization;
+using System.Windows.Data;
 
+namespace Bookie.Converters
+{
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InvertBoolConverter : IValueConverter
     {

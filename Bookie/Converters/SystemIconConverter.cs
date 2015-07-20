@@ -1,14 +1,14 @@
-﻿namespace Bookie.Converters
-{
-    using System;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Reflection;
-    using System.Windows;
-    using System.Windows.Data;
-    using System.Windows.Interop;
-    using System.Windows.Media.Imaging;
+﻿using System;
+using System.Drawing;
+using System.Globalization;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
+namespace Bookie.Converters
+{
     [ValueConversion(typeof(string), typeof(BitmapSource))]
     public class SystemIconConverter : IValueConverter
     {

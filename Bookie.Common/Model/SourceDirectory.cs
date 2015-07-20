@@ -1,9 +1,9 @@
-﻿namespace Bookie.Common.Model
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Bookie.Common.Model
+{
     public class SourceDirectory : ITrackableEntity, IEntity
     {
         public SourceDirectory()
@@ -41,10 +41,7 @@
                 {
                     return Books.Count;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
         }
 

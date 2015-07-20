@@ -1,9 +1,9 @@
-﻿namespace Bookie.Data
-{
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using System.Data.Entity;
+﻿using System.Data.Entity;
+using Bookie.Common;
+using Bookie.Common.Model;
 
+namespace Bookie.Data
+{
     public class Context : DbContext
     {
         public Context()
