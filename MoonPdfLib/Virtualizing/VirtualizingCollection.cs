@@ -18,95 +18,85 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 2013 - Modified and extended version of Paul McClean's code (see AUTHORS file)
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace MoonPdfLib.Virtualizing
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+
     /// <summary>
-    /// Specialized list implementation that provides data virtualization. The collection is divided up into pages,
-    /// and pages are dynamically fetched from the IItemsProvider when required. Stale pages are removed after a
-    /// configurable period of time.
-    /// Intended for use with large collections on a network or disk resource that cannot be instantiated locally
-    /// due to memory consumption or fetch latency.
+    ///     Specialized list implementation that provides data virtualization. The collection is divided up into pages,
+    ///     and pages are dynamically fetched from the IItemsProvider when required. Stale pages are removed after a
+    ///     configurable period of time.
+    ///     Intended for use with large collections on a network or disk resource that cannot be instantiated locally
+    ///     due to memory consumption or fetch latency.
     /// </summary>
     /// <remarks>
-    /// The IList implmentation is not fully complete, but should be sufficient for use as read only collection
-    /// data bound to a suitable ItemsControl.
+    ///     The IList implmentation is not fully complete, but should be sufficient for use as read only collection
+    ///     data bound to a suitable ItemsControl.
     /// </remarks>
     /// <typeparam name="T"></typeparam>
     internal class VirtualizingCollection<T> : IList<T>, IList
     {
+        private readonly TimeSpan _pageTimeout = TimeSpan.Zero;
+
+        #region ItemsProvider
+
+        /// <summary>
+        ///     Gets the items provider.
+        /// </summary>
+        /// <value>The items provider.</value>
+        public IItemsProvider<T> ItemsProvider { get; }
+
+        #endregion ItemsProvider
+
+        #region PageSize
+
+        /// <summary>
+        ///     Gets the size of the page.
+        /// </summary>
+        /// <value>The size of the page.</value>
+        public int PageSize { get; } = 100;
+
+        #endregion PageSize
+
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;"/> class.
+        ///     Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;" /> class.
         /// </summary>
         /// <param name="itemsProvider">The items provider.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="pageTimeout">The page timeout.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, TimeSpan pageTimeout)
         {
-            _itemsProvider = itemsProvider;
-            _pageSize = pageSize;
+            ItemsProvider = itemsProvider;
+            PageSize = pageSize;
             _pageTimeout = pageTimeout;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;"/> class.
+        ///     Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;" /> class.
         /// </summary>
         /// <param name="itemsProvider">The items provider.</param>
         /// <param name="pageSize">Size of the page.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize)
         {
-            _itemsProvider = itemsProvider;
-            _pageSize = pageSize;
+            ItemsProvider = itemsProvider;
+            PageSize = pageSize;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;"/> class.
+        ///     Initializes a new instance of the <see cref="VirtualizingCollection&lt;T&gt;" /> class.
         /// </summary>
         /// <param name="itemsProvider">The items provider.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider)
         {
-            _itemsProvider = itemsProvider;
+            ItemsProvider = itemsProvider;
         }
 
         #endregion Constructors
-
-        #region ItemsProvider
-
-        private readonly IItemsProvider<T> _itemsProvider;
-
-        /// <summary>
-        /// Gets the items provider.
-        /// </summary>
-        /// <value>The items provider.</value>
-        public IItemsProvider<T> ItemsProvider
-        {
-            get { return _itemsProvider; }
-        }
-
-        #endregion ItemsProvider
-
-        #region PageSize
-
-        private readonly int _pageSize = 100;
-
-        /// <summary>
-        /// Gets the size of the page.
-        /// </summary>
-        /// <value>The size of the page.</value>
-        public int PageSize
-        {
-            get { return _pageSize; }
-        }
-
-        #endregion PageSize
-
-        private readonly TimeSpan _pageTimeout = TimeSpan.Zero;
 
         #region IList<T>, IList
 
@@ -115,12 +105,12 @@ namespace MoonPdfLib.Virtualizing
         private int _count = -1;
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// The first time this property is accessed, it will fetch the count from the IItemsProvider.
+        ///     Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        ///     The first time this property is accessed, it will fetch the count from the IItemsProvider.
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        ///     The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </returns>
         public virtual int Count
         {
@@ -132,10 +122,7 @@ namespace MoonPdfLib.Virtualizing
                 }
                 return _count;
             }
-            protected set
-            {
-                _count = value;
-            }
+            protected set { _count = value; }
         }
 
         #endregion Count
@@ -143,8 +130,8 @@ namespace MoonPdfLib.Virtualizing
         #region Indexer
 
         /// <summary>
-        /// Gets the item at the specified index. This property will fetch
-        /// the corresponding page from the IItemsProvider if required.
+        ///     Gets the item at the specified index. This property will fetch
+        ///     the corresponding page from the IItemsProvider if required.
         /// </summary>
         /// <value></value>
         public T this[int index]
@@ -152,18 +139,18 @@ namespace MoonPdfLib.Virtualizing
             get
             {
                 // determine which page and offset within page
-                int pageIndex = index / PageSize;
-                int pageOffset = index % PageSize;
+                var pageIndex = index/PageSize;
+                var pageOffset = index%PageSize;
 
                 // request primary page
                 RequestPage(pageIndex);
 
                 // if accessing upper 50% then request next page
-                if (pageOffset > PageSize / 2 && pageIndex < Count / PageSize)
+                if (pageOffset > PageSize/2 && pageIndex < Count/PageSize)
                     RequestPage(pageIndex + 1);
 
                 // if accessing lower 50% then request prev page
-                if (pageOffset < PageSize / 2 && pageIndex > 0)
+                if (pageOffset < PageSize/2 && pageIndex > 0)
                     RequestPage(pageIndex - 1);
 
                 // remove stale pages
@@ -190,27 +177,27 @@ namespace MoonPdfLib.Virtualizing
         #region IEnumerator<T>, IEnumerator
 
         /// <summary>
-        /// Returns an enumerator that iterates through the collection.
+        ///     Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <remarks>
-        /// This method should be avoided on large collections due to poor performance.
+        ///     This method should be avoided on large collections due to poor performance.
         /// </remarks>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+        ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 yield return this[i];
             }
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through a collection.
+        ///     Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+        ///     An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -222,11 +209,11 @@ namespace MoonPdfLib.Virtualizing
         #region Add
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
-        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
         /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+        ///     The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </exception>
         public void Add(T item)
         {
@@ -244,15 +231,15 @@ namespace MoonPdfLib.Virtualizing
 
         bool IList.Contains(object value)
         {
-            return Contains((T)value);
+            return Contains((T) value);
         }
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
         /// <returns>
-        /// Always false.
+        ///     Always false.
         /// </returns>
         public bool Contains(T item)
         {
@@ -264,10 +251,10 @@ namespace MoonPdfLib.Virtualizing
         #region Clear
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
         /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+        ///     The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </exception>
         public void Clear()
         {
@@ -280,15 +267,15 @@ namespace MoonPdfLib.Virtualizing
 
         int IList.IndexOf(object value)
         {
-            return IndexOf((T)value);
+            return IndexOf((T) value);
         }
 
         /// <summary>
-        /// Not supported
+        ///     Not supported
         /// </summary>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
         /// <returns>
-        /// Always -1.
+        ///     Always -1.
         /// </returns>
         public int IndexOf(T item)
         {
@@ -300,15 +287,15 @@ namespace MoonPdfLib.Virtualizing
         #region Insert
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
-        /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
-        /// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
+        /// <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
+        /// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1" />.</param>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.
+        ///     <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.
         /// </exception>
         /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
+        ///     The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.
         /// </exception>
         public void Insert(int index, T item)
         {
@@ -317,7 +304,7 @@ namespace MoonPdfLib.Virtualizing
 
         void IList.Insert(int index, object value)
         {
-            Insert(index, (T)value);
+            Insert(index, (T) value);
         }
 
         #endregion Insert
@@ -325,14 +312,14 @@ namespace MoonPdfLib.Virtualizing
         #region Remove
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
         /// <param name="index">The zero-based index of the item to remove.</param>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.
+        ///     <paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.
         /// </exception>
         /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
+        ///     The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.
         /// </exception>
         public void RemoveAt(int index)
         {
@@ -345,14 +332,16 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
-        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
         /// <returns>
-        /// true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        ///     true if <paramref name="item" /> was successfully removed from the
+        ///     <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if
+        ///     <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </returns>
         /// <exception cref="T:System.NotSupportedException">
-        /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+        ///     The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </exception>
         public bool Remove(T item)
         {
@@ -364,24 +353,29 @@ namespace MoonPdfLib.Virtualizing
         #region CopyTo
 
         /// <summary>
-        /// Not supported.
+        ///     Not supported.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+        /// <param name="array">
+        ///     The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied
+        ///     from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have
+        ///     zero-based indexing.
+        /// </param>
+        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="array"/> is null.
+        ///     <paramref name="array" /> is null.
         /// </exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="arrayIndex"/> is less than 0.
+        ///     <paramref name="arrayIndex" /> is less than 0.
         /// </exception>
         /// <exception cref="T:System.ArgumentException">
-        /// 	<paramref name="array"/> is multidimensional.
-        /// -or-
-        /// <paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/>.
-        /// -or-
-        /// The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.
-        /// -or-
-        /// Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
+        ///     <paramref name="array" /> is multidimensional.
+        ///     -or-
+        ///     <paramref name="arrayIndex" /> is equal to or greater than the length of <paramref name="array" />.
+        ///     -or-
+        ///     The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1" /> is greater than the
+        ///     available space from <paramref name="arrayIndex" /> to the end of the destination <paramref name="array" />.
+        ///     -or-
+        ///     Type <paramref name="T" /> cannot be cast automatically to the type of the destination <paramref name="array" />.
         /// </exception>
         public void CopyTo(T[] array, int arrayIndex)
         {
@@ -398,11 +392,11 @@ namespace MoonPdfLib.Virtualizing
         #region Misc
 
         /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
+        ///     Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection" />.
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
+        ///     An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection" />.
         /// </returns>
         public object SyncRoot
         {
@@ -410,10 +404,12 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
+        ///     Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection" /> is synchronized
+        ///     (thread safe).
         /// </summary>
         /// <value></value>
-        /// <returns>Always false.
+        /// <returns>
+        ///     Always false.
         /// </returns>
         public bool IsSynchronized
         {
@@ -421,10 +417,11 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+        ///     Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </summary>
         /// <value></value>
-        /// <returns>Always true.
+        /// <returns>
+        ///     Always true.
         /// </returns>
         public bool IsReadOnly
         {
@@ -432,10 +429,11 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:System.Collections.IList"/> has a fixed size.
+        ///     Gets a value indicating whether the <see cref="T:System.Collections.IList" /> has a fixed size.
         /// </summary>
         /// <value></value>
-        /// <returns>Always false.
+        /// <returns>
+        ///     Always false.
         /// </returns>
         public bool IsFixedSize
         {
@@ -452,12 +450,12 @@ namespace MoonPdfLib.Virtualizing
         private readonly Dictionary<int, DateTime> _pageTouchTimes = new Dictionary<int, DateTime>();
 
         /// <summary>
-        /// Cleans up any stale pages that have not been accessed in the period dictated by PageTimeout.
+        ///     Cleans up any stale pages that have not been accessed in the period dictated by PageTimeout.
         /// </summary>
         public void CleanUpPages()
         {
-            List<int> keys = new List<int>(_pageTouchTimes.Keys);
-            foreach (int key in keys)
+            var keys = new List<int>(_pageTouchTimes.Keys);
+            foreach (var key in keys)
             {
                 // page 0 is a special case, since WPF ItemsControl access the first item frequently
                 if (key != 0 && (DateTime.UtcNow - _pageTouchTimes[key]) > _pageTimeout)
@@ -476,7 +474,7 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Populates the page within the dictionary.
+        ///     Populates the page within the dictionary.
         /// </summary>
         /// <param name="pageIndex">Index of the page.</param>
         /// <param name="page">The page.</param>
@@ -488,8 +486,8 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Makes a request for the specified page, creating the necessary slots in the dictionary,
-        /// and updating the page touch time.
+        ///     Makes a request for the specified page, creating the necessary slots in the dictionary,
+        ///     and updating the page touch time.
         /// </summary>
         /// <param name="pageIndex">Index of the page.</param>
         protected virtual void RequestPage(int pageIndex)
@@ -512,7 +510,7 @@ namespace MoonPdfLib.Virtualizing
         #region Load methods
 
         /// <summary>
-        /// Loads the count of items.
+        ///     Loads the count of items.
         /// </summary>
         protected virtual void LoadCount()
         {
@@ -520,7 +518,7 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Loads the page of items.
+        ///     Loads the page of items.
         /// </summary>
         /// <param name="pageIndex">Index of the page.</param>
         protected virtual void LoadPage(int pageIndex)
@@ -533,17 +531,17 @@ namespace MoonPdfLib.Virtualizing
         #region Fetch methods
 
         /// <summary>
-        /// Fetches the requested page from the IItemsProvider.
+        ///     Fetches the requested page from the IItemsProvider.
         /// </summary>
         /// <param name="pageIndex">Index of the page.</param>
         /// <returns></returns>
         protected IList<T> FetchPage(int pageIndex)
         {
-            return ItemsProvider.FetchRange(pageIndex * PageSize, PageSize);
+            return ItemsProvider.FetchRange(pageIndex*PageSize, PageSize);
         }
 
         /// <summary>
-        /// Fetches the count of itmes from the IItemsProvider.
+        ///     Fetches the count of itmes from the IItemsProvider.
         /// </summary>
         /// <returns></returns>
         protected int FetchCount()

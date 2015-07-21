@@ -15,23 +15,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-
 namespace MoonPdfLib.Helper
 {
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Windows;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using PixelFormat = System.Drawing.Imaging.PixelFormat;
+
     internal static class BitmapExtensionMethods
     {
         public static BitmapSource ToBitmapSource(this Bitmap bmp)
         {
             var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
             var bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppRgb);
-            int bufferSize = bmpData.Stride * bmp.Height;
-            var bms = new WriteableBitmap(bmp.Width, bmp.Height, bmp.HorizontalResolution, bmp.VerticalResolution, PixelFormats.Bgr32, null);
+            var bufferSize = bmpData.Stride*bmp.Height;
+            var bms = new WriteableBitmap(bmp.Width, bmp.Height, bmp.HorizontalResolution, bmp.VerticalResolution,
+                PixelFormats.Bgr32, null);
             bms.WritePixels(new Int32Rect(0, 0, bmp.Width, bmp.Height), bmpData.Scan0, bufferSize, bmpData.Stride);
             bmp.UnlockBits(bmpData);
 

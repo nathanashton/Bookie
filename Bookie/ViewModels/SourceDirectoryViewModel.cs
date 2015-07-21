@@ -1,43 +1,49 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
-using System.Windows.Input;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Core.Domains;
-using Bookie.Core.Importer;
-using Bookie.Core.Scraper;
-using Bookie.Views;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Forms;
+    using System.Windows.Input;
+    using Common;
+    using Common.Model;
+    using Core.Domains;
+    using Core.Importer;
+    using Core.Scraper;
+    using Views;
+
     public class SourceDirectoryViewModel : NotifyBase
     {
         private readonly SourceDirectoryDomain _domain;
-        private ObservableCollection<SourceDirectory> _sourceDirectories;
-        private SourceDirectory _selectedSourceDirectory;
-
+        private ICommand _addCommand;
         private Importer _importer;
+        private bool _progressReportingActive;
+        private ICommand _removeCommand;
+        private ICommand _scanCommand;
+        private ICommand _scrapeCOmmand;
+        private SourceDirectory _selectedSourceDirectory;
+        private ObservableCollection<SourceDirectory> _sourceDirectories;
         public MainViewModel MainViewModel;
 
-        private bool _progressReportingActive;
+        public SourceDirectoryViewModel(MainViewModel v)
+        {
+            MainViewModel = v;
+            _domain = new SourceDirectoryDomain();
+            SourceDirectories = new ObservableCollection<SourceDirectory>();
+
+            Refresh();
+        }
 
         public bool ProgressReportingActive
         {
-            get
-            {
-                return _progressReportingActive;
-            }
+            get { return _progressReportingActive; }
             set
             {
                 _progressReportingActive = value;
                 NotifyPropertyChanged("ProgressReportingActive");
             }
         }
-
-        private ICommand _removeCommand;
 
         public ICommand RemoveCommand
         {
@@ -48,44 +54,35 @@ namespace Bookie.ViewModels
             }
         }
 
-        private ICommand scanCommand;
-
         public ICommand ScanCommand
         {
             get
             {
-                return scanCommand
-                       ?? (scanCommand = new RelayCommand(p => Scan(), p => SelectedSourceDirectory != null));
+                return _scanCommand
+                       ?? (_scanCommand = new RelayCommand(p => Scan(), p => SelectedSourceDirectory != null));
             }
         }
-
-        private ICommand _addCommand;
 
         public ICommand AddCommand
         {
-            get
-            {
-                return _addCommand ?? (_addCommand = new RelayCommand(p => Add(), p => _domain != null));
-            }
+            get { return _addCommand ?? (_addCommand = new RelayCommand(p => Add(), p => _domain != null)); }
         }
-
-        private ICommand _scrapeCOmmand;
 
         public ICommand ScrapeCommand
         {
             get
             {
                 return _scrapeCOmmand
-                       ?? (_scrapeCOmmand = new RelayCommand(p => Scrape(), p => SelectedSourceDirectory != null && SelectedSourceDirectory.Books.Count > 0));
+                       ??
+                       (_scrapeCOmmand =
+                           new RelayCommand(p => Scrape(),
+                               p => SelectedSourceDirectory != null && SelectedSourceDirectory.Books.Count > 0));
             }
         }
 
         public SourceDirectory SelectedSourceDirectory
         {
-            get
-            {
-                return _selectedSourceDirectory;
-            }
+            get { return _selectedSourceDirectory; }
             set
             {
                 _selectedSourceDirectory = value;
@@ -95,24 +92,12 @@ namespace Bookie.ViewModels
 
         public ObservableCollection<SourceDirectory> SourceDirectories
         {
-            get
-            {
-                return _sourceDirectories;
-            }
+            get { return _sourceDirectories; }
             set
             {
                 _sourceDirectories = value;
                 NotifyPropertyChanged("SourceDirectories");
             }
-        }
-
-        public SourceDirectoryViewModel(MainViewModel v)
-        {
-            MainViewModel = v;
-            _domain = new SourceDirectoryDomain();
-            SourceDirectories = new ObservableCollection<SourceDirectory>();
-
-            Refresh();
         }
 
         public async void Refresh()
@@ -132,28 +117,18 @@ namespace Bookie.ViewModels
                 return;
             }
 
-            var source = new SourceDirectory { SourceDirectoryUrl = dialog.SelectedPath };
+            var source = new SourceDirectory {SourceDirectoryUrl = dialog.SelectedPath};
 
             if (_domain.Exists(source.SourceDirectoryUrl))
             {
-                // MessageBox.Show(Resources.Message_SourceDirectoryExists, Resources.Information, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Source directory already exists", "Information", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
                 return;
             }
             source.EntityState = EntityState.Added;
             _domain.AddSourceDirectory(source);
 
             Refresh();
-
-            var result = MessageBox.Show(
-            "Do you want to scan?", "c",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-            if (result != DialogResult.Yes)
-            {
-                return;
-            }
-            SelectedSourceDirectory = source;
-            Scan();
         }
 
         public void Remove()
@@ -165,13 +140,13 @@ namespace Bookie.ViewModels
 
         public void Scan()
         {
-            var covers = false;
-            var subdirectories = false;
-            var v = new ConfirmImportView();
-            if (v.ShowDialog() == true)
+            bool covers;
+            bool subdirectories;
+            var view = new ConfirmImportView();
+            if (view.ShowDialog() == true)
             {
-               covers = v._viewModel.GenerateCovers;
-               subdirectories = v._viewModel.SubDirectories;
+                covers = view._viewModel.GenerateCovers;
+                subdirectories = view._viewModel.SubDirectories;
             }
             else
             {
@@ -201,13 +176,13 @@ namespace Bookie.ViewModels
 
         public void Scrape()
         {
-            var covers = false;
-            var rescrape = false;
-            var v = new ConfirmScrapeView();
-            if (v.ShowDialog() == true)
+            bool covers;
+            bool rescrape;
+            var view = new ConfirmScrapeView();
+            if (view.ShowDialog() == true)
             {
-                covers = v._viewModel.GenerateCovers;
-                rescrape = v._viewModel.ReScrape;
+                covers = view._viewModel.GenerateCovers;
+                rescrape = view._viewModel.ReScrape;
             }
             else
             {

@@ -1,7 +1,7 @@
-﻿using Bookie.Common.Model;
-
-namespace Bookie.Data.Interfaces
+﻿namespace Bookie.Data.Interfaces
 {
+    using Common.Model;
+
     public interface IAuthorRepository : IGenericDataRepository<Author>
     {
     }

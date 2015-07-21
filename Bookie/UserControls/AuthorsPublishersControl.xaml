@@ -1,48 +1,55 @@
 ﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:core="clr-namespace:Bookie.Core;assembly=Bookie.Core"
-             xmlns:model="clr-namespace:Bookie.Common.Model;assembly=Bookie.Common"
-             xmlns:converters="clr-namespace:Bookie.Converters"
-             xmlns:Custom="http://metro.mahapps.com/winfx/xaml/shared" x:Class="Bookie.UserControls.AuthorsPublishersControl"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:core="clr-namespace:Bookie.Core;assembly=Bookie.Core"
+    xmlns:model="clr-namespace:Bookie.Common.Model;assembly=Bookie.Common"
+    xmlns:converters="clr-namespace:Bookie.Converters"
+    xmlns:Custom="http://metro.mahapps.com/winfx/xaml/shared" x:Class="Bookie.UserControls.AuthorsPublishersControl"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
-        <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
+        <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
         <converters:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
     </UserControl.Resources>
 
-    <Grid Visibility="{Binding LeftPane}" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}" DockPanel.Dock="Left" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#f1f2f4">
-        <ScrollViewer VerticalScrollBarVisibility=
-          "{Binding IsMouseOver,
+    <Grid Visibility="{Binding LeftPane}"
+          IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"
+          DockPanel.Dock="Left" Width="250" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+          Background="#f1f2f4">
+        <ScrollViewer
+            VerticalScrollBarVisibility="{Binding IsMouseOver,
                     RelativeSource={RelativeSource Self},
                     Converter={StaticResource MouseOverToScrollBarVisibility}}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                <Expander Background="Transparent" FontFamily="Calibri"   IsExpanded="True" BorderThickness="0" BorderBrush="Transparent"  HorizontalAlignment="Stretch">
+                <Expander Background="Transparent" FontFamily="Calibri" IsExpanded="True" BorderThickness="0"
+                          BorderBrush="Transparent" HorizontalAlignment="Stretch">
                     <Expander.Header>
-                        <TextBlock Foreground="{DynamicResource AccentColorBrush}" FontWeight="SemiBold" FontFamily="Calibri" FontSize="16">
-                                PUBLISHERS
+                        <TextBlock Foreground="{DynamicResource AccentColorBrush}" FontWeight="SemiBold"
+                                   FontFamily="Calibri" FontSize="16">
+                            PUBLISHERS
                         </TextBlock>
                     </Expander.Header>
 
                     <Border BorderBrush="#ced1d6" BorderThickness="0,1,0,0">
 
-                        <ListBox SelectedItem="{Binding PublisherFilter}" Background="Transparent" ItemsSource="{Binding PublishersList}">
-                        </ListBox>
+                        <ListBox SelectedItem="{Binding PublisherFilter}" Background="Transparent"
+                                 ItemsSource="{Binding PublishersList}" />
                     </Border>
                 </Expander>
-                <Expander FontFamily="Calibri" Background="Transparent" IsExpanded="True" BorderThickness="0" BorderBrush="Transparent">
+                <Expander FontFamily="Calibri" Background="Transparent" IsExpanded="True" BorderThickness="0"
+                          BorderBrush="Transparent">
                     <Expander.Header>
-                        <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource AccentColorBrush}" FontFamily="Calibri" FontSize="16">
-                                AUTHORS
+                        <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource AccentColorBrush}"
+                                   FontFamily="Calibri" FontSize="16">
+                            AUTHORS
                         </TextBlock>
                     </Expander.Header>
                     <Border BorderBrush="#ced1d6" BorderThickness="0,1,0,0">
-                        <ListBox SelectedItem="{Binding AuthorFilter}"  Background="Transparent" ItemsSource="{Binding AuthorsList}">
-                        </ListBox>
+                        <ListBox SelectedItem="{Binding AuthorFilter}" Background="Transparent"
+                                 ItemsSource="{Binding AuthorsList}" />
                     </Border>
                 </Expander>
             </StackPanel>

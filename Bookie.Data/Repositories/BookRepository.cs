@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Bookie.Common.Model;
-using Bookie.Data.Interfaces;
-
-namespace Bookie.Data.Repositories
+﻿namespace Bookie.Data.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading.Tasks;
+    using Common.Model;
+    using Interfaces;
+
     public class BookRepository : GenericDataRepository<Book>, IBookRepository
     {
         public bool Exists(string filePath)
@@ -20,7 +20,7 @@ namespace Bookie.Data.Repositories
             }
         }
 
-        public async virtual Task<IList<Book>> GetAllAsync(params Expression<Func<Book, object>>[] navigationProperties)
+        public virtual async Task<IList<Book>> GetAllAsync(params Expression<Func<Book, object>>[] navigationProperties)
         {
             List<Book> list;
 

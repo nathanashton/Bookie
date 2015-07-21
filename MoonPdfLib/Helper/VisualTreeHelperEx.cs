@@ -15,19 +15,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using System.Windows;
-using System.Windows.Media;
-
 namespace MoonPdfLib.Helper
 {
+    using System.Windows;
+    using System.Windows.Media;
+
     internal static class VisualTreeHelperEx
     {
         public static T FindChild<T>(DependencyObject o) where T : DependencyObject
         {
             if (o is T)
-                return (T)o;
+                return (T) o;
 
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(o); i++)
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(o); i++)
             {
                 var child = VisualTreeHelper.GetChild(o, i);
                 var result = FindChild<T>(child);

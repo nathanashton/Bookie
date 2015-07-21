@@ -15,24 +15,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using System.Windows;
-
 namespace MoonPdfLib
 {
+    using System.Windows;
+
     internal class PageRowBound
     {
-        public Size Size { get; }
-
-        public double VerticalOffset { get; }
-
-        public double HorizontalOffset { get; }
-
         public PageRowBound(Size size, double verticalOffset, double horizontalOffset)
         {
             Size = size;
             VerticalOffset = verticalOffset;
             HorizontalOffset = horizontalOffset;
         }
+
+        public Size Size { get; }
+        public double VerticalOffset { get; }
+        public double HorizontalOffset { get; }
 
         public Size SizeIncludingOffset
         {

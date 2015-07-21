@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bookie.Common.Model;
-using Bookie.Core.Interfaces;
-using Bookie.Data.Interfaces;
-using Bookie.Data.Repositories;
-
-namespace Bookie.Core.Domains
+﻿namespace Bookie.Core.Domains
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
+
     public class BookDomain : IBookDomain
     {
         private readonly IBookRepository _bookRepository;
@@ -20,18 +20,24 @@ namespace Bookie.Core.Domains
 
         public IList<Book> GetAllBooks()
         {
-            var s = _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g => g.Notes, h => h.SourceDirectory);
+            var s = _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers,
+                e => e.Authors, f => f.BookMarks, g => g.Notes, h => h.SourceDirectory);
             return s;
         }
 
         public Book GetBookByTitle(string title)
         {
-            return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g => g.Notes, h => h.SourceDirectory).Single(x => x.Title.Equals(title));
+            return
+                _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers,
+                    e => e.Authors, f => f.BookMarks, g => g.Notes, h => h.SourceDirectory)
+                    .Single(x => x.Title.Equals(title));
         }
 
         public Book GetBookById(int id)
         {
-            return _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers, e => e.Authors, f => f.BookMarks, g => g.Notes, h => h.SourceDirectory).Single(x => x.Id.Equals(id));
+            return
+                _bookRepository.GetAll(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.Publishers,
+                    e => e.Authors, f => f.BookMarks, g => g.Notes, h => h.SourceDirectory).Single(x => x.Id.Equals(id));
         }
 
         Book IBookDomain.SetUnchanged(Book book)
@@ -75,7 +81,8 @@ namespace Bookie.Core.Domains
 
         public async Task<IList<Book>> GetAllAsync()
         {
-            var s = _bookRepository.GetAllAsync(a => a.BookFile, b => b.CoverImage, c => c.BookHistory, d => d.SourceDirectory, e => e.Publishers, f => f.Authors, g => g.BookMarks, h => h.Notes);
+            var s = _bookRepository.GetAllAsync(a => a.BookFile, b => b.CoverImage, c => c.BookHistory,
+                d => d.SourceDirectory, e => e.Publishers, f => f.Authors, g => g.BookMarks, h => h.Notes);
             return await s;
         }
 

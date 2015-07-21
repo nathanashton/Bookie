@@ -1,53 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Core.Domains;
-using Bookie.Views;
-using MoonPdfLib;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Input;
+    using Common;
+    using Common.Model;
+    using Core.Domains;
+    using MoonPdfLib;
+    using Views;
+
     public class PdfViewerViewModel : NotifyBase
     {
-        //private void GotoPage_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    //if (gotopage.Text != "")
-        //    //{
-        //    //    PdfPanel.GotoPage(int.Parse(gotopage.Text));
-        //    //}
-        //}
-
-
-        //private void ButtonAddBookMark(object sender, RoutedEventArgs e)
-        //{
-        //    foreach (var x in Book.BookMarks)
-        //    {
-        //        x.EntityState = EntityState.Unchanged;
-        //    }
-        //    foreach (var publisher in Book.Publishers)
-        //    {
-        //        publisher.EntityState = EntityState.Unchanged;
-        //    }
-        //    foreach (var author in Book.Authors)
-        //    {
-        //        author.EntityState = EntityState.Unchanged;
-        //    }
-
-        //    var b = new BookMark
-        //    {
-        //        Book = Book,
-        //        BookMarkedPage = PdfPanel.GetCurrentPageNumber(),
-        //        EntityState = EntityState.Added
-        //    };
-        //    Book.BookMarks.Add(b);
-        //    new BookDomain().UpdateBook(Book);
-        //    Refresh();
-        //}
-
-
+        private ICommand _addBookMarkCommand;
         private ICommand _addNoteCommand;
         private Book _book;
         private ICommand _bookMarkButtonCommand;
@@ -169,6 +134,15 @@ namespace Bookie.ViewModels
             {
                 return _editNoteCommand
                        ?? (_editNoteCommand = new RelayCommand(EditNote, p => true));
+            }
+        }
+
+        public ICommand AddBookMarkCommand
+        {
+            get
+            {
+                return _addBookMarkCommand
+                       ?? (_addBookMarkCommand = new RelayCommand(AddBookMark, p => Book != null));
             }
         }
 
@@ -312,6 +286,41 @@ namespace Bookie.ViewModels
                 return _noteButtonCommand
                        ?? (_noteButtonCommand = new RelayCommand(p => NoteClick(), p => Book != null));
             }
+        }
+
+        //private void GotoPage_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    //if (gotopage.Text != "")
+        //    //{
+        //    //    PdfPanel.GotoPage(int.Parse(gotopage.Text));
+        //    //}
+        //}
+
+
+        private void AddBookMark(object sender)
+        {
+            foreach (var x in Book.BookMarks)
+            {
+                x.EntityState = EntityState.Unchanged;
+            }
+            foreach (var publisher in Book.Publishers)
+            {
+                publisher.EntityState = EntityState.Unchanged;
+            }
+            foreach (var author in Book.Authors)
+            {
+                author.EntityState = EntityState.Unchanged;
+            }
+
+            var b = new BookMark
+            {
+                Book = Book,
+                BookMarkedPage = PdfPanel.GetCurrentPageNumber(),
+                EntityState = EntityState.Added
+            };
+            Book.BookMarks.Add(b);
+            new BookDomain().UpdateBook(Book);
+            Refresh();
         }
 
         private void LeftPaneToggle()

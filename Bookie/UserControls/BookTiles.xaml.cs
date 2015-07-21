@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
-using Bookie.Common.Model;
-
-namespace Bookie.UserControls
+﻿namespace Bookie.UserControls
 {
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Input;
+    using Common.Model;
+
     public partial class BookTiles
     {
         public static List<Book> b = new List<Book>();

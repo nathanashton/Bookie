@@ -4,10 +4,7 @@
     {
         public static string PDF
         {
-            get
-            {
-                return "*.pdf";
-            }
+            get { return "*.pdf"; }
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿using System.Windows;
-using Bookie.ViewModels;
-using MahApps.Metro.Controls;
-
-namespace Bookie.Views
+﻿namespace Bookie.Views
 {
+    using System.Windows;
+    using ViewModels;
+
     /// <summary>
-    /// Interaction logic for ConfirmScrapeView.xaml
+    ///     Interaction logic for ConfirmScrapeView.xaml
     /// </summary>
     public partial class ConfirmScrapeView
     {

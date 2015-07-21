@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bookie.Common.Model;
-using Bookie.Core.Interfaces;
-using Bookie.Data.Interfaces;
-using Bookie.Data.Repositories;
-
-namespace Bookie.Core.Domains
+﻿namespace Bookie.Core.Domains
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
+
     public class SourceDirectoryDomain : ISourceDirectoryDomain
     {
         private readonly ISourceDirectoryRepository _sourceRepository;
@@ -30,7 +30,8 @@ namespace Bookie.Core.Domains
 
         public SourceDirectory GetSourceByUrlWithBooks(string sourceUrl)
         {
-            var p = _sourceRepository.GetSingle(d => d.SourceDirectoryUrl.Equals(sourceUrl), d => d.Books.Select(r => r.BookFile));
+            var p = _sourceRepository.GetSingle(d => d.SourceDirectoryUrl.Equals(sourceUrl),
+                d => d.Books.Select(r => r.BookFile));
             return p;
         }
 

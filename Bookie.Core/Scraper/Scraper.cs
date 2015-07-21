@@ -1,56 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Core.Domains;
-using Bookie.Core.Interfaces;
-
-namespace Bookie.Core.Scraper
+﻿namespace Bookie.Core.Scraper
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using Common;
+    using Common.Model;
+    using Domains;
+    using Interfaces;
+
     public class Scraper : IProgressPublisher
     {
-        private readonly IsbnGuesser _guesser = new IsbnGuesser();
-
         private readonly BookDomain _bookDomain = new BookDomain();
-
         private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
-
-        private SourceDirectory _sourceDirectory;
-
-        public ProgressWindowEventArgs ProgressArgs { get; set; }
-
-        private List<Book> _booksToScrape;
-
-        private bool _noInternet;
-
-        private bool _generateCovers;
-
-        private bool _rescrape;
-
-        public readonly BackgroundWorker Worker = new BackgroundWorker();
-
+        private readonly IsbnGuesser _guesser = new IsbnGuesser();
         private readonly IBookScraper _scraper = new GoogleScraper();
-
-        public event EventHandler<BookEventArgs> BookChanged;
-
+        public readonly BackgroundWorker Worker = new BackgroundWorker();
+        private List<Book> _booksToScrape;
+        private bool _generateCovers;
+        private bool _noInternet;
+        private bool _rescrape;
         private ObservableCollection<SearchResult> _results;
-
-        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
-
-        public event EventHandler<EventArgs> ProgressComplete;
-
-        public event EventHandler<EventArgs> ProgressStarted;
-
-        public void OnBookChanged(Book book, BookEventArgs.BookState bookState, int? progress)
-        {
-            if (BookChanged != null)
-            {
-                BookChanged(this, new BookEventArgs { Book = book, State = bookState, Progress = progress });
-            }
-        }
+        private SourceDirectory _sourceDirectory;
 
         public Scraper()
         {
@@ -61,6 +33,26 @@ namespace Bookie.Core.Scraper
             Worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
             Worker.WorkerReportsProgress = true;
             ProgressArgs = new ProgressWindowEventArgs();
+        }
+
+        public ProgressWindowEventArgs ProgressArgs { get; set; }
+        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
+        public event EventHandler<EventArgs> ProgressComplete;
+        public event EventHandler<EventArgs> ProgressStarted;
+
+        public void ProgressCancel()
+        {
+            if (Worker.IsBusy)
+            {
+                Worker.CancelAsync();
+            }
+        }
+
+        public event EventHandler<BookEventArgs> BookChanged;
+
+        public void OnBookChanged(Book book, BookEventArgs.BookState bookState, int? progress)
+        {
+            BookChanged?.Invoke(this, new BookEventArgs {Book = book, State = bookState, Progress = progress});
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -78,7 +70,7 @@ namespace Bookie.Core.Scraper
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var book = (Book)e.UserState;
+            var book = (Book) e.UserState;
             OnBookChanged(book, BookEventArgs.BookState.Updated, e.ProgressPercentage);
             ProgressArgs.OperationName = "Scraping Books";
             ProgressArgs.ProgressBarText = e.ProgressPercentage + "%";
@@ -101,10 +93,10 @@ namespace Bookie.Core.Scraper
                 if (_rescrape == false && book.Scraped)
                 {
                     continue;
-                } 
+                }
 
                 book.Isbn = _guesser.GuessBookIsbn(book.BookFile.FullPathAndFileNameWithExtension);
-                if (String.IsNullOrEmpty(book.Isbn))
+                if (string.IsNullOrEmpty(book.Isbn))
                 {
                     //Couldnt find valid isbn
                     continue;
@@ -148,7 +140,7 @@ namespace Bookie.Core.Scraper
                 else
                 {
                     book.Isbn = IsbnGuesser.Isbn13to10(book.Isbn);
-                    if (String.IsNullOrEmpty(book.Isbn))
+                    if (string.IsNullOrEmpty(book.Isbn))
                     {
                         book.Scraped = false;
                         continue;
@@ -223,34 +215,17 @@ namespace Bookie.Core.Scraper
 
         private void OnProgressComplete()
         {
-            if (ProgressComplete != null)
-            {
-                ProgressComplete(this, null);
-            }
+            ProgressComplete?.Invoke(this, null);
         }
 
         private void OnProgressStarted()
         {
-            if (ProgressStarted != null)
-            {
-                ProgressStarted(this, null);
-            }
+            ProgressStarted?.Invoke(this, null);
         }
 
         private void OnProgressChange(ProgressWindowEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
-        }
-
-        public void ProgressCancel()
-        {
-            if (Worker.IsBusy)
-            {
-                Worker.CancelAsync();
-            }
+            ProgressChanged?.Invoke(this, e);
         }
     }
 }

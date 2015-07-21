@@ -1,38 +1,39 @@
-﻿<Controls:MetroWindow x:Class="Bookie.Views.MainView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:strings="clr-namespace:Bookie.Common.Resources.Strings;assembly=Bookie.Common"
-        xmlns:converters="clr-namespace:Bookie.Converters"
-        xmlns:userControls="clr-namespace:Bookie.UserControls"
-        Icon="pack://application:,,,/Resources/Icons/bookie.ico"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        BorderBrush="{DynamicResource AccentColorBrush}"
+﻿<controls:MetroWindow x:Class="Bookie.Views.MainView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:strings="clr-namespace:Bookie.Common.Resources.Strings;assembly=Bookie.Common"
+                      xmlns:converters="clr-namespace:Bookie.Converters"
+                      xmlns:userControls="clr-namespace:Bookie.UserControls"
+                      Icon="pack://application:,,,/Resources/Icons/bookie.ico"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
                       BorderThickness="1"
+                      WindowTitleBrush="{Binding TitleBrush}"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-        Title="Bookie" Height="300" Width="1600" FontFamily="Calibri" MinWidth="830" MinHeight="300" WindowState="Maximized">
+                      Title="{Binding Title}" Height="300" Width="1600" FontFamily="Calibri" MinWidth="830" MinHeight="300"
+                      WindowState="Maximized">
 
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands>
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
             <StackPanel Orientation="Horizontal">
                 <Label Name="VersionNumber" Foreground="White" />
             </StackPanel>
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
 
-    <Controls:MetroWindow.Flyouts>
-        <Controls:FlyoutsControl>
-        </Controls:FlyoutsControl>
-    </Controls:MetroWindow.Flyouts>
+    <controls:MetroWindow.Flyouts>
+        <controls:FlyoutsControl />
+    </controls:MetroWindow.Flyouts>
 
     <Window.Resources>
         <converters:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
 
         <converters:CoverImageConverter x:Key="CoverImageConverter" />
-        <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
+        <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
         <Style BasedOn="{StaticResource MetroTabItem}" TargetType="{x:Type TabItem}">
-            <Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="18"></Setter>
-            <Setter Property="Controls:ControlsHelper.HeaderFontWeight" Value="Bold"></Setter>
+            <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="18" />
+            <Setter Property="controls:ControlsHelper.HeaderFontWeight" Value="Bold" />
         </Style>
     </Window.Resources>
 
@@ -48,7 +49,7 @@
                 </MenuItem>
             </Menu>-->
 
-            <Grid  x:Name="MainGrid" Background="Transparent">
+            <Grid x:Name="MainGrid" Background="Transparent">
                 <!-- Holder for Panes -->
                 <Grid.ColumnDefinitions>
                     <!--<ColumnDefinition Name="LeftColumn" MaxWidth="250" />-->
@@ -59,11 +60,16 @@
 
                     <DockPanel VerticalAlignment="Stretch" LastChildFill="True">
 
-                        <Grid IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}" Height="60">
+                        <Grid
+                            IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"
+                            DockPanel.Dock="Top" VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                            Background="{DynamicResource AccentColorBrush}" Height="60">
 
                             <Border BorderBrush="#ced1d6" BorderThickness="0,0,0,1">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SettingsViewCommand}">
+                                    <Button Margin="5" Height="40" Width="40"
+                                            Style="{DynamicResource MetroCircleButtonStyle}"
+                                            Command="{Binding SettingsViewCommand}">
                                         <Rectangle Height="20" Width="20" Fill="White">
                                             <Rectangle.OpacityMask>
                                                 <VisualBrush Visual="{StaticResource appbar_settings }" Stretch="Fill" />
@@ -71,7 +77,9 @@
                                         </Rectangle>
                                     </Button>
 
-                                    <Button Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshCommand}">
+                                    <Button Margin="5" Height="40" Width="40"
+                                            Style="{DynamicResource MetroCircleButtonStyle}"
+                                            Command="{Binding RefreshCommand}">
                                         <Rectangle Width="20" Height="20" Fill="White">
                                             <Rectangle.OpacityMask>
                                                 <VisualBrush Visual="{StaticResource appbar_refresh}" Stretch="Fill" />
@@ -79,7 +87,9 @@
                                         </Rectangle>
                                     </Button>
 
-                                    <Button Margin="5" Height="40" Width="40"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding TileViewCommand}">
+                                    <Button Margin="5" Height="40" Width="40"
+                                            Style="{DynamicResource MetroCircleButtonStyle}"
+                                            Command="{Binding TileViewCommand}">
                                         <Rectangle Width="20" Height="20" Fill="White">
                                             <Rectangle.OpacityMask>
                                                 <VisualBrush Visual="{StaticResource appbar_tiles_nine}" Stretch="Fill" />
@@ -87,33 +97,44 @@
                                         </Rectangle>
                                     </Button>
 
-                                    <Button Margin="5" Height="40" Width="40"  Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ListViewCommand}">
+                                    <Button Margin="5" Height="40" Width="40"
+                                            Style="{DynamicResource MetroCircleButtonStyle}"
+                                            Command="{Binding ListViewCommand}">
                                         <Rectangle Width="20" Height="20" Fill="White">
                                             <Rectangle.OpacityMask>
-                                                <VisualBrush Visual="{StaticResource appbar_text_align_justify}" Stretch="Fill" />
+                                                <VisualBrush Visual="{StaticResource appbar_text_align_justify}"
+                                                             Stretch="Fill" />
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
                                     </Button>
 
-                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding SourceViewCommand}">
-                                        <Image  Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill" Source="pack://application:,,,/Resources/Icons/folder.png" />
+                                    <Button Height="40" Style="{DynamicResource MetroCircleButtonStyle}"
+                                            Command="{Binding SourceViewCommand}">
+                                        <Image Width="20" Height="20" Margin="10,0,10,0" Stretch="Fill"
+                                               Source="pack://application:,,,/Resources/Icons/folder.png" />
                                     </Button>
                                 </StackPanel>
                             </Border>
 
-                            <Border Visibility="{Binding FilterBoxVisibility}" Name="FilterBox" Margin="10,5,10,5"  HorizontalAlignment="Right" BorderBrush="#ced1d6" BorderThickness="0,0,0,0">
+                            <Border Visibility="{Binding FilterBoxVisibility}" Name="FilterBox" Margin="10,5,10,5"
+                                    HorizontalAlignment="Right" BorderBrush="#ced1d6" BorderThickness="0,0,0,0">
 
-                                <StackPanel  Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
 
-                                    <ToggleButton ToolTip="Toggle Scraped" Width="40" Height="40" Margin="5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
+                                    <ToggleButton ToolTip="Toggle Scraped" Width="40" Height="40" Margin="5"
+                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                                  IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
                                         <Rectangle Width="20" Height="20" Fill="{Binding ScrapedColor}">
                                             <Rectangle.OpacityMask>
-                                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_open_writing}" />
+                                                <VisualBrush Stretch="Fill"
+                                                             Visual="{DynamicResource appbar_book_open_writing}" />
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
                                     </ToggleButton>
 
-                                    <ToggleButton ToolTip="Toggle Favourites" Width="40" Height="40" Margin="5,5,30,5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
+                                    <ToggleButton ToolTip="Toggle Favourites" Width="40" Height="40" Margin="5,5,30,5"
+                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                                  IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
                                         <Rectangle Width="20" Height="20" Fill="{Binding StarColor}">
                                             <Rectangle.OpacityMask>
                                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}" />
@@ -123,57 +144,81 @@
 
 
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Foreground="White" FontSize="14" Content="Sort" Margin="5,0,5,0" VerticalContentAlignment="Center" />
-                                        <ComboBox Margin="0,2,0,2" Height="25" Width="220" ItemsSource="{Binding SortList}" SelectedValue="{Binding SelectedSort}" />
-                                        <Label Foreground="White" FontSize="14" Content="Sources" Margin="5,0,5,0" VerticalContentAlignment="Center" />
-                                        <ComboBox SelectedItem="{Binding SourceDirectoryFilter}" ItemsSource="{Binding SourceDirectories}" Height="20" Width="150" />
-                                        <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0" VerticalContentAlignment="Center" />
-                                        <TextBox FontSize="12" Width="241" Height="20" Name="Filter" Controls:TextBoxHelper.ClearTextButton="True"  Controls:TextBoxHelper.Watermark="Search" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }" KeyUp="Filter_KeyUp" />
-                                        <ComboBox HorizontalContentAlignment="Left" HorizontalAlignment="Right" Margin="10"  Height="25" VerticalAlignment="Center" Width="20">
-                                            <RadioButton GroupName="t" IsChecked="{Binding FilterOnTitle, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5" Content="Title"/>
-                                            <RadioButton GroupName="t" IsChecked="{Binding FilterOnDescription, Mode=TwoWay}" HorizontalAlignment="Left" Margin="5" Content="Abstract"/>
+                                        <Label Foreground="White" FontSize="14" Content="Sort" Margin="5,0,5,0"
+                                               VerticalContentAlignment="Center" />
+                                        <ComboBox Margin="0,2,0,2" Height="25" Width="220"
+                                                  ItemsSource="{Binding SortList}"
+                                                  SelectedValue="{Binding SelectedSort}" />
+                                        <Label Foreground="White" FontSize="14" Content="Sources" Margin="5,0,5,0"
+                                               VerticalContentAlignment="Center" />
+                                        <ComboBox SelectedItem="{Binding SourceDirectoryFilter}"
+                                                  ItemsSource="{Binding SourceDirectories}" Height="20" Width="150" />
+                                        <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0"
+                                               VerticalContentAlignment="Center" />
+                                        <TextBox FontSize="12" Width="241" Height="20" Name="Filter"
+                                                 controls:TextBoxHelper.ClearTextButton="True"
+                                                 controls:TextBoxHelper.Watermark="Search"
+                                                 Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"
+                                                 KeyUp="Filter_KeyUp" />
+                                        <ComboBox HorizontalContentAlignment="Left" HorizontalAlignment="Right"
+                                                  Margin="10" Height="25" VerticalAlignment="Center" Width="20">
+                                            <RadioButton GroupName="t" IsChecked="{Binding FilterOnTitle, Mode=TwoWay}"
+                                                         HorizontalAlignment="Left" Margin="5" Content="Title" />
+                                            <RadioButton GroupName="t"
+                                                         IsChecked="{Binding FilterOnDescription, Mode=TwoWay}"
+                                                         HorizontalAlignment="Left" Margin="5" Content="Abstract" />
                                         </ComboBox>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
                         </Grid>
 
-                        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Height="23" Background="{DynamicResource AccentColorBrush}">
+                        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Height="23"
+                                   Background="{DynamicResource AccentColorBrush}">
 
                             <DockPanel
-                        Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}">
+                                Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StatusBar}}}">
 
-                                <Button Visibility="{Binding FilterBoxVisibility}" Margin="10,0,0,0" DockPanel.Dock="Left" VerticalAlignment="Top" Command="{Binding LeftPaneCommand}">
+                                <Button Visibility="{Binding FilterBoxVisibility}" Margin="10,0,0,0"
+                                        DockPanel.Dock="Left" VerticalAlignment="Top"
+                                        Command="{Binding LeftPaneCommand}">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Rectangle VerticalAlignment="Top" Width="15" Height="15" Fill="White">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_left }" Stretch="Fill" />
+                                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_left }"
+                                                                 Stretch="Fill" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
 
-                                <Label FontSize="12" Foreground="White" Content="{Binding BooksCount}" Margin="10,0,0,0"
-                               VerticalContentAlignment="Center" VerticalAlignment="Center" Height="33" />
+                                <Label FontSize="12" Foreground="White" Content="{Binding BooksCount}"
+                                       Margin="10,0,0,0"
+                                       VerticalContentAlignment="Center" VerticalAlignment="Center" Height="33" />
 
-                                <Button Visibility="{Binding FilterBoxVisibility}" Margin="0,0,10,0" DockPanel.Dock="Right" VerticalAlignment="Top" Command="{Binding RightPaneCommand}">
+                                <Button Visibility="{Binding FilterBoxVisibility}" Margin="0,0,10,0"
+                                        DockPanel.Dock="Right" VerticalAlignment="Top"
+                                        Command="{Binding RightPaneCommand}">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Rectangle VerticalAlignment="Top" Width="15" Height="15" Fill="White">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Visual="{StaticResource appbar_layout_collapse_right }" Stretch="Fill" />
+                                                    <VisualBrush
+                                                        Visual="{StaticResource appbar_layout_collapse_right }"
+                                                        Stretch="Fill" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
 
-                                <Slider DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,20,0" Foreground="DimGray"
-                                VerticalAlignment="Center"
-                                Value="{Binding TileWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                Minimum="100" Maximum="400" Width="200" TickFrequency="50" />
+                                <Slider DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,20,0"
+                                        Foreground="DimGray"
+                                        VerticalAlignment="Center"
+                                        Value="{Binding TileWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        Minimum="100" Maximum="400" Width="200" TickFrequency="50" />
                             </DockPanel>
                         </StatusBar>
 
@@ -181,31 +226,38 @@
 
                             <userControls:BookSummaryControl DockPanel.Dock="Right" />
 
-                            <Border  DockPanel.Dock="Left" BorderBrush="#ced1d6" BorderThickness="0,0,1,0">
+                            <Border DockPanel.Dock="Left" BorderBrush="#ced1d6" BorderThickness="0,0,1,0">
                                 <userControls:AuthorsPublishersControl />
                             </Border>
 
-                            <ContentControl Name="bookView" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Background="DimGray" Content="{Binding BookView}" BorderThickness="0">
-                            </ContentControl>
+                            <ContentControl Name="bookView"
+                                            IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"
+                                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                            Background="DimGray" Content="{Binding BookView}" BorderThickness="0" />
                         </DockPanel>
                     </DockPanel>
                 </Grid>
 
-                <Controls:Flyout IsModal="True" CloseCommand="{Binding CancelProgressCommand}"  Margin="0,0,0,0" IsOpen="{Binding ShowProgress}" Template="{StaticResource FlyoutTemplate}" Name="flyout" Position="Bottom" AnimateOpacity="False" AnimateOnPositionChange="True" Background="{DynamicResource AccentColorBrush}" Height="115" Width="500">
+                <controls:Flyout IsModal="True" CloseCommand="{Binding CancelProgressCommand}" Margin="0,0,0,0"
+                                 IsOpen="{Binding ShowProgress}" Template="{StaticResource FlyoutTemplate}"
+                                 Name="flyout" Position="Bottom" AnimateOpacity="False" AnimateOnPositionChange="True"
+                                 Background="{DynamicResource AccentColorBrush}" Height="115" Width="500">
                     <Grid Margin="10">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
                             <!--<Button Width="10" Height="5" Command="{Binding CancelProgressCommand}" />-->
-                            <Label FontSize="18" FontWeight="Bold" Content="{Binding OperationName}" Foreground="White" Margin="0,0,0,-5" />
-                            <Label  Content="{Binding ProgressText}" Foreground="White" Margin="0,0,0,5" />
+                            <Label FontSize="18" FontWeight="Bold" Content="{Binding OperationName}" Foreground="White"
+                                   Margin="0,0,0,-5" />
+                            <Label Content="{Binding ProgressText}" Foreground="White" Margin="0,0,0,5" />
                             <Grid Height="20">
                                 <ProgressBar Height="20" Value="{Binding ProgressPercentage}" />
-                                <TextBlock HorizontalAlignment="Center"  Text="{Binding ProgressBarText}" VerticalAlignment="Center" />
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding ProgressBarText}"
+                                           VerticalAlignment="Center" />
                             </Grid>
                         </StackPanel>
                     </Grid>
-                </Controls:Flyout>
+                </controls:Flyout>
             </Grid>
             <!--End of Main Holder-->
         </DockPanel>
     </Grid>
-</Controls:MetroWindow>
+</controls:MetroWindow>

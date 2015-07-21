@@ -1,11 +1,4 @@
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
-using MouseKeyboardActivityMonitor;
-using MouseKeyboardActivityMonitor.WinApi;
-using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
-/*! MoonPdfLib - Provides a WPF user control to display PDF files
+ /*! MoonPdfLib - Provides a WPF user control to display PDF files
 Copyright (C) 2013  (see AUTHORS file)
 
 This program is free software: you can redistribute it and/or modify
@@ -24,13 +17,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace MoonPdfLib
 {
+    using System.Windows;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using MouseKeyboardActivityMonitor;
+    using MouseKeyboardActivityMonitor.WinApi;
+    using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
+
     internal class MoonPdfPanelInputHandler
     {
-        private MouseHookListener mouseHookListener;
-        private MoonPdfPanel source;
+        private readonly MouseHookListener mouseHookListener;
+        private readonly MoonPdfPanel source;
+        private double lastMouseDownHorizontalOffset;
         private Point? lastMouseDownLocation;
         private double lastMouseDownVerticalOffset;
-        private double lastMouseDownHorizontalOffset;
 
         public MoonPdfPanelInputHandler(MoonPdfPanel source)
         {
@@ -62,7 +63,8 @@ namespace MoonPdfLib
             */
             //  source.ZoomIn();
 
-            if (IsScrollBarChild(e.OriginalSource as DependencyObject)) // if the mouse click comes from the scrollbar, then we do not scroll
+            if (IsScrollBarChild(e.OriginalSource as DependencyObject))
+                // if the mouse click comes from the scrollbar, then we do not scroll
                 lastMouseDownLocation = null;
             else
             {
@@ -79,7 +81,7 @@ namespace MoonPdfLib
 
         private static bool IsScrollBarChild(DependencyObject o)
         {
-            DependencyObject parent = o;
+            var parent = o;
 
             while (parent != null)
             {
@@ -105,7 +107,10 @@ namespace MoonPdfLib
 
                 e.Handled = true;
             }
-            else if (!ctrlDown && (source.ScrollViewer == null || source.ScrollViewer.ComputedVerticalScrollBarVisibility != Visibility.Visible) && source.PageRowDisplay == PageRowDisplayType.SinglePageRow)
+            else if (!ctrlDown &&
+                     (source.ScrollViewer == null ||
+                      source.ScrollViewer.ComputedVerticalScrollBarVisibility != Visibility.Visible) &&
+                     source.PageRowDisplay == PageRowDisplayType.SinglePageRow)
             {
                 if (e.Delta > 0)
                     source.GotoPreviousPage();
@@ -114,7 +119,8 @@ namespace MoonPdfLib
 
                 e.Handled = true;
             }
-            else if (source.ScrollViewer != null && (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
+            else if (source.ScrollViewer != null &&
+                     (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)))
             {
                 if (e.Delta > 0)
                     source.ScrollViewer.LineLeft();
@@ -136,7 +142,8 @@ namespace MoonPdfLib
             else if (e.Key == Key.Subtract || e.Key == Key.OemMinus)
                 source.ZoomOut();
 
-            if (source.ScrollViewer != null && source.ScrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
+            if (source.ScrollViewer != null &&
+                source.ScrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible)
                 return;
 
             if (e.Key == Key.Left)

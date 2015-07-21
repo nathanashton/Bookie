@@ -22,20 +22,22 @@
                 <DockPanel Margin="10" LastChildFill="True" Background="Transparent">
                     <StackPanel DockPanel.Dock="Bottom">
                         <Label Margin="0,5,0,0" Padding="0" Height="20" HorizontalAlignment="Left">
-                            <TextBlock FontSize="12" FontFamily="Calibri" FontWeight="SemiBold" TextAlignment="Left" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
+                            <TextBlock FontSize="12" FontFamily="Calibri" FontWeight="SemiBold" TextAlignment="Left"
+                                       TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
                         </Label>
 
                         <TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Left"
                                    Foreground="Black" TextTrimming="CharacterEllipsis"
-                                   FontFamily="Calibri" FontSize="12" Text="{Binding Path=DatePublished, StringFormat=yyyy}" />
+                                   FontFamily="Calibri" FontSize="12"
+                                   Text="{Binding Path=DatePublished, StringFormat=yyyy}" />
                     </StackPanel>
 
                     <Grid ToolTip="{Binding Path=Title}">
                         <Border BorderBrush="#FF00AADE" BorderThickness="1">
-                            <Image UseLayoutRounding="True" RenderOptions.BitmapScalingMode="Fant"  Stretch="Fill" StretchDirection="Both"
+                            <Image UseLayoutRounding="True" RenderOptions.BitmapScalingMode="Fant" Stretch="Fill"
+                                   StretchDirection="Both"
                                    Height="Auto" Width="Auto"
-                                   Source="{Binding Path=CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}">
-                            </Image>
+                                   Source="{Binding Path=CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" />
                         </Border>
                     </Grid>
                 </DockPanel>
@@ -45,24 +47,26 @@
 
     <Grid Name="MainGrid" VerticalAlignment="Stretch">
 
-        <DockPanel  LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
+        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
 
-            <ListBox Margin="5" ScrollViewer.VerticalScrollBarVisibility=
-          "{Binding IsMouseOver,
+            <ListBox Margin="5"
+                     ScrollViewer.VerticalScrollBarVisibility="{Binding IsMouseOver,
                     RelativeSource={RelativeSource Self},
-                    Converter={StaticResource MouseOverToScrollBarVisibility}}" SelectionMode="Extended" ScrollViewer.CanContentScroll="True" BorderThickness="0" Name="Lb" Background="Transparent"
+                    Converter={StaticResource MouseOverToScrollBarVisibility}}"
+                     SelectionMode="Extended" ScrollViewer.CanContentScroll="True" BorderThickness="0" Name="Lb"
+                     Background="Transparent"
                      VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
                      SelectedItem="{Binding Path=SelectedBook, Mode=TwoWay}"
-VirtualizingPanel.ScrollUnit="Pixel"
+                     VirtualizingPanel.ScrollUnit="Pixel"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch"
                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
                      ItemsSource="{Binding Path=Books, Mode=OneWay}" IsSynchronizedWithCurrentItem="True">
 
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Edit Details"></MenuItem>
-                        <MenuItem Header="Scrape"></MenuItem>
-                        <MenuItem Header="Remove"></MenuItem>
+                        <MenuItem Header="Edit Details" />
+                        <MenuItem Header="Scrape" />
+                        <MenuItem Header="Remove" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
 

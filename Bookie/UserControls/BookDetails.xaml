@@ -17,21 +17,24 @@
         <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
 
             <DataGrid RowHeaderWidth="0"
-        RowHeight="22" IsReadOnly="True" HorizontalAlignment="Stretch" GridLinesVisibility="None"
+                      RowHeight="22" IsReadOnly="True" HorizontalAlignment="Stretch" GridLinesVisibility="None"
                       AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single"
                       SelectedItem="{Binding SelectedBook}" ItemsSource="{Binding Books}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image RenderOptions.BitmapScalingMode="HighQuality"  Stretch="Fill" StretchDirection="Both" Height="16" Width="16" Source="pack://application:,,,/Resources/Icons/pdf.gif" />
+                                <Image RenderOptions.BitmapScalingMode="HighQuality" Stretch="Fill"
+                                       StretchDirection="Both" Height="16" Width="16"
+                                       Source="pack://application:,,,/Resources/Icons/pdf.gif" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Width="Auto" Header="Title" Binding="{Binding Title}" />
                     <DataGridTextColumn Width="*" Header="Abstract" Binding="{Binding Abstract}" />
                     <DataGridTextColumn Width="Auto" Header="Pages" Binding="{Binding Pages}" />
-                    <DataGridTextColumn Width="Auto" Header="Published" Binding="{Binding DatePublished, StringFormat=yyyy}" />
+                    <DataGridTextColumn Width="Auto" Header="Published"
+                                        Binding="{Binding DatePublished, StringFormat=yyyy}" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

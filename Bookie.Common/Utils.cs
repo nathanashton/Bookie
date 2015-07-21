@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Bookie.Common
+﻿namespace Bookie.Common
 {
+    using System;
+
     public static class Utils
     {
         public static int CalculatePercentage(int current, int startIndex, int endIndex)
@@ -11,14 +11,14 @@ namespace Bookie.Common
             {
                 range = 1;
             }
-            float percentage = ((current - startIndex) / range) * 100;
+            var percentage = ((current - startIndex)/range)*100;
             return Convert.ToInt32(percentage);
         }
 
-        public static int CalculatePercentage(Int64 current, Int64 startIndex, Int64 endIndex)
+        public static int CalculatePercentage(long current, long startIndex, long endIndex)
         {
             var range = endIndex - startIndex;
-            var percentage = ((current - startIndex) / range) * 100;
+            var percentage = ((current - startIndex)/range)*100;
             return Convert.ToInt32(percentage);
         }
     }

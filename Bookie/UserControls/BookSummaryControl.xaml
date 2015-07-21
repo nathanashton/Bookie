@@ -12,14 +12,17 @@
         <converters:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
 
         <converters:CoverImageConverter x:Key="CoverImageConverter" />
-        <converters:InvertBoolConverter  x:Key="InvertBoolConverter" />
+        <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
     </UserControl.Resources>
 
     <Border BorderBrush="#ced1d6" BorderThickness="1,0,0,0">
 
-        <Grid Background="#f1f2f4" Width="300" MinWidth="300"  Visibility="{Binding RightPane}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid Background="#f1f2f4" Width="300" MinWidth="300" Visibility="{Binding RightPane}"
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-            <Grid Margin="5" IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"  x:Name="Right" Background="Transparent">
+            <Grid Margin="5"
+                  IsEnabled="{Binding ProgressReportingActive, Converter={StaticResource InvertBoolConverter}}"
+                  x:Name="Right" Background="Transparent">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -30,30 +33,41 @@
 
                     <StackPanel VerticalAlignment="Stretch" Orientation="Vertical" Grid.Row="0">
 
-                        <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center" FontFamily="Calibri" FontSize="22" FontWeight="Bold">
-                            <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}" TextTrimming="CharacterEllipsis" />
+                        <Label Margin="10,10,10,10" Width="Auto" HorizontalContentAlignment="Center"
+                               FontFamily="Calibri" FontSize="22" FontWeight="Bold">
+                            <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{Binding SelectedBook.Title}"
+                                       TextTrimming="CharacterEllipsis" />
                         </Label>
 
-                        <Border MaxWidth="200" MinWidth="150" BorderBrush="#FF00AADE" BorderThickness="1" Height="Auto" Width="Auto" Margin="15,15,15,10" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+                        <Border MaxWidth="200" MinWidth="150" BorderBrush="#FF00AADE" BorderThickness="1" Height="Auto"
+                                Width="Auto" Margin="15,15,15,10" HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
 
-                            <Image  RenderOptions.BitmapScalingMode="Linear" Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" Stretch="Uniform" />
+                            <Image RenderOptions.BitmapScalingMode="Linear"
+                                   Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}"
+                                   Stretch="Uniform" />
                         </Border>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                            <Button ToolTip="View Book" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPdfCommand}">
+                            <Button ToolTip="View Book" Margin="5" Height="40" Width="40"
+                                    Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPdfCommand}">
                                 <Rectangle Width="20" Height="20" Fill="Black">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}" Stretch="Fill" />
+                                        <VisualBrush Visual="{StaticResource appbar_book_open_hardcover}"
+                                                     Stretch="Fill" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Button>
-                            <Button ToolTip="Edit Book Information" Margin="5" Height="40" Width="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPdfCommand}">
+                            <Button ToolTip="Edit Book Information" Margin="5" Height="40" Width="40"
+                                    Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding OpenPdfCommand}">
                                 <Rectangle Width="8" Height="20" Fill="Black">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Visual="{StaticResource appbar_information}" Stretch="Fill" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </Button>
-                            <ToggleButton ToolTip="Favourite" Width="40" Height="40" Margin="5,5,30,5" Style="{DynamicResource MetroCircleToggleButtonStyle}" IsChecked="{Binding ToggleFavouriteBook, Mode=TwoWay}">
+                            <ToggleButton ToolTip="Favourite" Width="40" Height="40" Margin="5,5,30,5"
+                                          Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                          IsChecked="{Binding ToggleFavouriteBook, Mode=TwoWay}">
                                 <Rectangle Width="20" Height="20" Fill="{Binding ToggleFavouriteColor}">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}" />
@@ -64,10 +78,11 @@
                     </StackPanel>
                 </Border>
 
-                <TabControl FontFamily="Calibri" Grid.Row="1" Margin="0,5,0,0" BorderThickness="0" VerticalAlignment="Stretch" Background="Transparent">
-                    <TabItem  Header="General" HorizontalAlignment="Stretch">
-                        <ScrollViewer VerticalScrollBarVisibility=
-          "{Binding IsMouseOver,
+                <TabControl FontFamily="Calibri" Grid.Row="1" Margin="0,5,0,0" BorderThickness="0"
+                            VerticalAlignment="Stretch" Background="Transparent">
+                    <TabItem Header="General" HorizontalAlignment="Stretch">
+                        <ScrollViewer
+                            VerticalScrollBarVisibility="{Binding IsMouseOver,
                     RelativeSource={RelativeSource Self},
                     Converter={StaticResource MouseOverToScrollBarVisibility}}">
                             <StackPanel Margin="7" Orientation="Vertical">
@@ -82,10 +97,11 @@
                                     <Label Content="{Binding SelectedBook.Isbn}" />
                                 </StackPanel>
                                 <Label FontWeight="Bold" Content="Abstract" />
-                                <TextBlock Text="{Binding SelectedBook.Abstract}" Margin="7" TextWrapping="Wrap">
-                                </TextBlock>
+                                <TextBlock Text="{Binding SelectedBook.Abstract}" Margin="7" TextWrapping="Wrap" />
                                 <Label FontWeight="Bold" Content="Publishers" />
-                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Publishers}" IsReadOnly="True" GridLinesVisibility="None">
+                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None"
+                                          AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Publishers}"
+                                          IsReadOnly="True" GridLinesVisibility="None">
                                     <DataGrid.Resources>
                                         <Style TargetType="{x:Type DataGridRow}">
                                             <Setter Property="IsHitTestVisible" Value="False" />
@@ -96,10 +112,12 @@
                                     </DataGrid.Columns>
                                 </DataGrid>
                                 <Label FontWeight="Bold" Content="Authors" />
-                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None" AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Authors}" IsReadOnly="True" GridLinesVisibility="None">
+                                <DataGrid IsHitTestVisible="False" RowBackground="#f1f2f4" HeadersVisibility="None"
+                                          AutoGenerateColumns="False" ItemsSource="{Binding SelectedBook.Authors}"
+                                          IsReadOnly="True" GridLinesVisibility="None">
 
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn  Width="Auto" Binding="{Binding FullName}" />
+                                        <DataGridTextColumn Width="Auto" Binding="{Binding FullName}" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>

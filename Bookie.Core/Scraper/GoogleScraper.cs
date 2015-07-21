@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Xml;
-using Bookie.Common;
-using Bookie.Common.Model;
-
-namespace Bookie.Core.Scraper
+﻿namespace Bookie.Core.Scraper
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Xml;
+    using Common;
+    using Common.Model;
+
     public class GoogleScraper : NotifyBase, IBookScraper
     {
         private static DateTime lastTimeIWasCalled = DateTime.Now;
-
         public SearchResult.Search SearchBy { get; set; }
-
         public object SearchQuery { get; set; }
 
         public ObservableCollection<SearchResult> SearchBooks(object searchQuery)
@@ -72,7 +70,7 @@ namespace Bookie.Core.Scraper
                     var dp = xmlDatePublished.InnerText;
                     if (dp.Length == 4)
                     {
-                        var dt = Convert.ToDateTime(String.Format("01/01/,{0}", dp));
+                        var dt = Convert.ToDateTime(string.Format("01/01/,{0}", dp));
                         book.DatePublished = dt;
                     }
                     else
@@ -90,7 +88,7 @@ namespace Bookie.Core.Scraper
                 {
                     // Remove ASCII Control Characters
                     book.Abstract = xmlDescription.InnerText.Replace("&#39;", "'");
-                    book.Abstract = xmlDescription.InnerText.Replace("&quot;", String.Empty);
+                    book.Abstract = xmlDescription.InnerText.Replace("&quot;", string.Empty);
                 }
 
                 var formatNodes = xndNode.SelectNodes("dc:format", ns);
@@ -121,7 +119,7 @@ namespace Bookie.Core.Scraper
                 var xmlPublisher = xndNode["dc:publisher"];
                 if (xmlPublisher != null)
                 {
-                    searchResult.Publishers.Add(new Publisher { Name = xmlPublisher.InnerText });
+                    searchResult.Publishers.Add(new Publisher {Name = xmlPublisher.InnerText});
                 }
 
                 var xmlAuthor = xndNode["dc:creator"];
@@ -130,7 +128,7 @@ namespace Bookie.Core.Scraper
                     var words = xmlAuthor.InnerText.Split(' ');
                     if (words.Length == 1)
                     {
-                        searchResult.Authors.Add(new Author { LastName = words[0] });
+                        searchResult.Authors.Add(new Author {LastName = words[0]});
                     }
                     else
                     {
@@ -155,7 +153,8 @@ namespace Bookie.Core.Scraper
         {
             SearchQuery = WebUtility.UrlEncode(SearchQuery.ToString());
 
-            return "http://books.google.com/books/feeds/volumes?q=isbn:" + SearchQuery + "&max-results=20&start-index=1&min-viewability=none";
+            return "http://books.google.com/books/feeds/volumes?q=isbn:" + SearchQuery +
+                   "&max-results=20&start-index=1&min-viewability=none";
         }
     }
 }

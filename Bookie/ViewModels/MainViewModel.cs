@@ -1,34 +1,150 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Core.Domains;
-using Bookie.Properties;
-using Bookie.UserControls;
-using Bookie.Views;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using Common;
+    using Common.Model;
+    using Core.Domains;
+    using Properties;
+    using UserControls;
+    using Views;
+
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {
-        private bool _filterOnTitle;
+        public delegate void CancelDelegate();
 
+        private readonly BookDomain _bookDomain;
+        private readonly SourceDirectoryDomain _sourceDomain = new SourceDirectoryDomain();
+        private List<Publisher> _allPublishers;
+        private Author _authorFilter;
+        private ObservableCollection<Author> _authorsTv;
+        private ICollectionView _books;
+        public UIElement _bookView;
+        private bool _cancelled;
+        private ICommand _cancelProgressCommand;
+        private string _filter;
+        private Visibility _filterBoxVisibility;
         private bool _filterOnDescription;
+        private bool _filterOnTitle;
+        private Visibility _leftPane;
+        private ICommand _leftPaneCommand;
+        private ICommand _listViewCommand;
+        private ICommand _openPdfCommand;
+        private string _operationName;
+        private string _progressBarText;
+        private int _progressPercentage;
+        private bool _progressReportingActive;
+        private string _progressText;
+        private Publisher _publisherFilter;
+        private ObservableCollection<Publisher> _publishersTv;
+        private ICommand _refreshCommand;
+        private Visibility _rightPane;
+        private ICommand _rightPaneCommand;
+        private Brush _scrapedColor;
+        private Book _selectedBook;
+        private string _selectedSort;
+        private ICommand _settingsViewCommand;
+        private bool _showProgress;
+        private ObservableCollection<string> _sortList;
+        private ObservableCollection<SourceDirectory> _sourceDirectories;
+        private SourceDirectory _sourceDirectoryFilter;
+        private ICommand _sourceViewCommand;
+        private Brush _starColor;
+        private int _tileHeight;
+        private ICommand _tileViewCommand;
+        private int _tileWidth;
+        private bool _toggleFavourite;
+        private Brush _toggleFavouriteColor;
+        private bool _toggleScraped;
+        private ICommand _viewLog;
+        public ObservableCollection<Book> AllBooks;
+        public BookDetails BookDetails;
+        public BookTiles BookTiles;
+        public PdfViewer PdfViewer;
+        public Window Window;
 
-        public bool FilterOnTitle
+        public MainViewModel()
+        {
+            SourceDirectories = new ObservableCollection<SourceDirectory>();
+            StarColor = new SolidColorBrush(Colors.White);
+            ScrapedColor = new SolidColorBrush(Colors.White);
+            ToggleFavouriteColor = new SolidColorBrush(Colors.Black);
+
+            _bookDomain = new BookDomain();
+            BookTiles = new BookTiles();
+            BookDetails = new BookDetails();
+            PdfViewer = new PdfViewer();
+            FilterOnTitle = true;
+            //  var savedView = AppConfig.LoadSetting("SavedView");
+            //switch (savedView)
+            //{
+            //    case "Tiles":
+            //        BookView = BookTiles;
+            //        break;
+
+            //    case "Details":
+            //        BookView = BookDetails;
+            //        break;
+
+            //    default:
+            //        BookView = new BookTiles();
+            //        break;
+            //}
+            BookView = BookTiles;
+            ProgressService.RegisterSubscriber(this);
+
+            var sortt = new List<string>
+            {
+                "Title [A-Z]",
+                "Title [Z-A]",
+                "Date Published [Newest]",
+                "Date Published [Oldest]",
+                "Date Added [Newest]",
+                "Date Added [Oldest]"
+            };
+
+            SortList = new ObservableCollection<string>(sortt);
+            RefreshAllBooks();
+            RefreshPublishersAndAuthors();
+            SelectedSort = "Title [A-Z]";
+        }
+
+        public string Title
         {
             get
             {
-                return _filterOnTitle;
+                if (Globals.DebugMode)
+                {
+                    return "Bookie - DEBUG";
+                }
+                return "Bookie";
             }
+        }
+
+        public Brush TitleBrush
+        {
+            get
+            {
+                if (Globals.InDebugMode())
+                {
+                    return new SolidColorBrush(Colors.Red);
+                }
+                var s = (SolidColorBrush) new BrushConverter().ConvertFromString("#09506E");
+                return s;
+            }
+        }
+
+        public bool FilterOnTitle
+        {
+            get { return _filterOnTitle; }
             set
             {
                 _filterOnTitle = value;
@@ -38,10 +154,7 @@ namespace Bookie.ViewModels
 
         public bool FilterOnDescription
         {
-            get
-            {
-                return _filterOnDescription;
-            }
+            get { return _filterOnDescription; }
             set
             {
                 _filterOnDescription = value;
@@ -49,14 +162,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private bool _toggleScraped;
-
         public bool ToggleScraped
         {
-            get
-            {
-                return _toggleScraped;
-            }
+            get { return _toggleScraped; }
             set
             {
                 _toggleScraped = value;
@@ -81,7 +189,9 @@ namespace Bookie.ViewModels
             {
                 if (SelectedBook != null)
                 {
-                    ToggleFavouriteColor = SelectedBook.Favourite ? new SolidColorBrush(Colors.Yellow) : new SolidColorBrush(Colors.Black);
+                    ToggleFavouriteColor = SelectedBook.Favourite
+                        ? new SolidColorBrush(Colors.Yellow)
+                        : new SolidColorBrush(Colors.Black);
                     return SelectedBook.Favourite;
                 }
                 return false;
@@ -103,14 +213,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private Brush _toggleFavouriteColor;
-
         public Brush ToggleFavouriteColor
         {
-            get
-            {
-                return _toggleFavouriteColor;
-            }
+            get { return _toggleFavouriteColor; }
             set
             {
                 _toggleFavouriteColor = value;
@@ -118,14 +223,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private Brush _starColor;
-
         public Brush StarColor
         {
-            get
-            {
-                return _starColor;
-            }
+            get { return _starColor; }
             set
             {
                 _starColor = value;
@@ -133,14 +233,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private Brush _scrapedColor;
-
         public Brush ScrapedColor
         {
-            get
-            {
-                return _scrapedColor;
-            }
+            get { return _scrapedColor; }
             set
             {
                 _scrapedColor = value;
@@ -148,14 +243,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private bool _toggleFavourite;
-
         public bool ToggleFavourite
         {
-            get
-            {
-                return _toggleFavourite;
-            }
+            get { return _toggleFavourite; }
             set
             {
                 _toggleFavourite = value;
@@ -174,57 +264,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private ICommand _viewLog;
-        private bool _showProgress;
-        private bool _progressReportingActive;
-        private string _progressText;
-        private bool _cancelled;
-
-        private int _progressPercentage;
-        private string _filter;
-
-        private int _tileWidth;
-
-        private int _tileHeight;
-        private string _operationName;
-
-        private string _progressBarText;
-        private Book _selectedBook;
-
-        private Visibility _leftPane;
-
-        private Visibility _filterBoxVisibility;
-        private Visibility _rightPane;
-        private ICollectionView _books;
-        private ICommand _openPdfCommand;
-        private ICommand _leftPaneCommand;
-        private ICommand _refreshCommand;
-        private ICommand _listViewCommand;
-
-        private ICommand _rightPaneCommand;
-
-        private ICommand _cancelProgressCommand;
-
-        private ICommand _settingsViewCommand;
-
-        private ICommand _tileViewCommand;
-
-        private ICommand _sourceViewCommand;
-        private List<Publisher> _allPublishers;
-        private readonly BookDomain _bookDomain;
-
-        private string _selectedSort;
-        private ObservableCollection<Author> _authorsTv;
-        private ObservableCollection<Publisher> _publishersTv;
-
-        private ObservableCollection<string> _sortList;
-
         public Visibility FilterBoxVisibility
         {
-            get
-            {
-                return _filterBoxVisibility;
-            }
+            get { return _filterBoxVisibility; }
             set
             {
                 _filterBoxVisibility = value;
@@ -234,10 +276,7 @@ namespace Bookie.ViewModels
 
         public ObservableCollection<string> SortList
         {
-            get
-            {
-                return _sortList;
-            }
+            get { return _sortList; }
             set
             {
                 _sortList = value;
@@ -247,10 +286,7 @@ namespace Bookie.ViewModels
 
         public string SelectedSort
         {
-            get
-            {
-                return _selectedSort;
-            }
+            get { return _selectedSort; }
             set
             {
                 _selectedSort = value;
@@ -263,24 +299,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        public Window Window;
-
-        public UIElement _bookView;
-
-        public ObservableCollection<Book> AllBooks;
-
-        public BookTiles BookTiles;
-
-        public BookDetails BookDetails;
-
-        public PdfViewer PdfViewer;
-
         public bool ShowProgress
         {
-            get
-            {
-                return _showProgress;
-            }
+            get { return _showProgress; }
             set
             {
                 _showProgress = value;
@@ -290,10 +311,7 @@ namespace Bookie.ViewModels
 
         public bool ProgressReportingActive
         {
-            get
-            {
-                return _progressReportingActive;
-            }
+            get { return _progressReportingActive; }
             set
             {
                 _progressReportingActive = value;
@@ -303,10 +321,7 @@ namespace Bookie.ViewModels
 
         public string ProgressBarText
         {
-            get
-            {
-                return _progressBarText;
-            }
+            get { return _progressBarText; }
             set
             {
                 _progressBarText = value;
@@ -316,10 +331,7 @@ namespace Bookie.ViewModels
 
         public string ProgressText
         {
-            get
-            {
-                return _progressText;
-            }
+            get { return _progressText; }
             set
             {
                 _progressText = value;
@@ -329,10 +341,7 @@ namespace Bookie.ViewModels
 
         public int ProgressPercentage
         {
-            get
-            {
-                return _progressPercentage;
-            }
+            get { return _progressPercentage; }
             set
             {
                 _progressPercentage = value;
@@ -342,10 +351,7 @@ namespace Bookie.ViewModels
 
         public string OperationName
         {
-            get
-            {
-                return _operationName;
-            }
+            get { return _operationName; }
             set
             {
                 _operationName = value;
@@ -355,10 +361,7 @@ namespace Bookie.ViewModels
 
         public Visibility LeftPane
         {
-            get
-            {
-                return _leftPane;
-            }
+            get { return _leftPane; }
             set
             {
                 _leftPane = value;
@@ -368,10 +371,7 @@ namespace Bookie.ViewModels
 
         public Visibility RightPane
         {
-            get
-            {
-                return _rightPane;
-            }
+            get { return _rightPane; }
             set
             {
                 _rightPane = value;
@@ -381,10 +381,7 @@ namespace Bookie.ViewModels
 
         public ICollectionView Books
         {
-            get
-            {
-                return _books;
-            }
+            get { return _books; }
             set
             {
                 _books = value;
@@ -394,10 +391,7 @@ namespace Bookie.ViewModels
 
         public ObservableCollection<Publisher> PublishersList
         {
-            get
-            {
-                return _publishersTv;
-            }
+            get { return _publishersTv; }
             set
             {
                 _publishersTv = value;
@@ -407,10 +401,7 @@ namespace Bookie.ViewModels
 
         public ObservableCollection<Author> AuthorsList
         {
-            get
-            {
-                return _authorsTv;
-            }
+            get { return _authorsTv; }
             set
             {
                 _authorsTv = value;
@@ -420,10 +411,7 @@ namespace Bookie.ViewModels
 
         public string Filter
         {
-            get
-            {
-                return String.IsNullOrEmpty(_filter) ? "" : _filter;
-            }
+            get { return string.IsNullOrEmpty(_filter) ? "" : _filter; }
             set
             {
                 _filter = value;
@@ -433,14 +421,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private Publisher _publisherFilter;
-
         public Publisher PublisherFilter
         {
-            get
-            {
-                return _publisherFilter;
-            }
+            get { return _publisherFilter; }
             set
             {
                 _publisherFilter = value;
@@ -450,14 +433,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private SourceDirectory _sourceDirectoryFilter;
-
         public SourceDirectory SourceDirectoryFilter
         {
-            get
-            {
-                return _sourceDirectoryFilter;
-            }
+            get { return _sourceDirectoryFilter; }
             set
             {
                 _sourceDirectoryFilter = value;
@@ -467,14 +445,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private Author _authorFilter;
-
         public Author AuthorFilter
         {
-            get
-            {
-                return _authorFilter;
-            }
+            get { return _authorFilter; }
             set
             {
                 _authorFilter = value;
@@ -486,10 +459,7 @@ namespace Bookie.ViewModels
 
         public UIElement BookView
         {
-            get
-            {
-                return _bookView;
-            }
+            get { return _bookView; }
             set
             {
                 _bookView = value;
@@ -498,20 +468,15 @@ namespace Bookie.ViewModels
             }
         }
 
-        private readonly SourceDirectoryDomain _sourceDomain = new SourceDirectoryDomain();
-
         public Book SelectedBook
         {
-            get
-            {
-                return _selectedBook;
-            }
+            get { return _selectedBook; }
             set
             {
                 _selectedBook = value;
                 if (value != null)
                 {
-                PdfViewer.ViewModel.Book = SelectedBook;
+                    PdfViewer.ViewModel.Book = SelectedBook;
                 }
                 NotifyPropertyChanged("SelectedBook");
                 NotifyPropertyChanged("SelectedBookEmpty");
@@ -521,10 +486,7 @@ namespace Bookie.ViewModels
 
         public int TileHeight
         {
-            get
-            {
-                return _tileHeight;
-            }
+            get { return _tileHeight; }
             set
             {
                 _tileHeight = value;
@@ -534,30 +496,21 @@ namespace Bookie.ViewModels
 
         public bool SelectedBookEmpty
         {
-            get
-            {
-                return SelectedBook != null;
-            }
+            get { return SelectedBook != null; }
         }
 
         public string BooksCount
         {
-            get
-            {
-                return "Found " + Books.Cast<Book>().Count() + " results";
-            }
+            get { return "Found " + Books.Cast<Book>().Count() + " results"; }
         }
 
         public int TileWidth
         {
-            get
-            {
-                return _tileWidth;
-            }
+            get { return _tileWidth; }
             set
             {
                 _tileWidth = value;
-                _tileHeight = Convert.ToInt32(value * 1.4);
+                _tileHeight = Convert.ToInt32(value*1.4);
                 NotifyPropertyChanged("TileWidth");
                 NotifyPropertyChanged("TileHeight");
                 NotifyPropertyChanged("StarSize");
@@ -567,18 +520,13 @@ namespace Bookie.ViewModels
 
         public bool Cancelled
         {
-            get
-            {
-                return _cancelled;
-            }
+            get { return _cancelled; }
             set
             {
                 _cancelled = value;
                 NotifyPropertyChanged("Cancelled");
             }
         }
-
-        public delegate void CancelDelegate();
 
         public CancelDelegate Cancel { get; set; }
 
@@ -672,14 +620,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private ObservableCollection<SourceDirectory> _sourceDirectories;
-
         public ObservableCollection<SourceDirectory> SourceDirectories
         {
-            get
-            {
-                return _sourceDirectories;
-            }
+            get { return _sourceDirectories; }
             set
             {
                 _sourceDirectories = value;
@@ -689,10 +632,7 @@ namespace Bookie.ViewModels
 
         public List<Publisher> AllPublishers
         {
-            get
-            {
-                return _allPublishers;
-            }
+            get { return _allPublishers; }
             set
             {
                 _allPublishers = value;
@@ -701,52 +641,6 @@ namespace Bookie.ViewModels
         }
 
         public List<Book> BooksFromSplash { get; set; }
-
-        public MainViewModel()
-        {
-            SourceDirectories = new ObservableCollection<SourceDirectory>();
-            StarColor = new SolidColorBrush(Colors.White);
-            ScrapedColor = new SolidColorBrush(Colors.White);
-            ToggleFavouriteColor = new SolidColorBrush(Colors.Black);
-
-            _bookDomain = new BookDomain();
-            BookTiles = new BookTiles();
-            BookDetails = new BookDetails();
-            PdfViewer = new PdfViewer();
-            FilterOnTitle = true;
-            //  var savedView = AppConfig.LoadSetting("SavedView");
-            //switch (savedView)
-            //{
-            //    case "Tiles":
-            //        BookView = BookTiles;
-            //        break;
-
-            //    case "Details":
-            //        BookView = BookDetails;
-            //        break;
-
-            //    default:
-            //        BookView = new BookTiles();
-            //        break;
-            //}
-            BookView = BookTiles;
-            ProgressService.RegisterSubscriber(this);
-
-            var sortt = new List<string>
-                            {
-                                "Title [A-Z]",
-                                "Title [Z-A]",
-                                "Date Published [Newest]",
-                                "Date Published [Oldest]",
-                                "Date Added [Newest]",
-                                "Date Added [Oldest]"
-                            };
-
-            SortList = new ObservableCollection<string>(sortt);
-            RefreshAllBooks();
-            RefreshPublishersAndAuthors();
-            SelectedSort = "Title [A-Z]";
-        }
 
         public void _progress_ProgressStarted(object sender, EventArgs e)
         {
@@ -791,8 +685,8 @@ namespace Bookie.ViewModels
             }
             LeftPane = Visibility.Collapsed;
             RightPane = Visibility.Collapsed;
-          PdfViewer.ViewModel.OpenPdf(SelectedBook.BookFile.FullPathAndFileNameWithExtension);
-         
+            PdfViewer.ViewModel.OpenPdf(SelectedBook.BookFile.FullPathAndFileNameWithExtension);
+
             BookView = PdfViewer;
         }
 
@@ -819,8 +713,8 @@ namespace Bookie.ViewModels
                     var bookExistsAdded =
                         AllBooks.Any(
                             b =>
-                            b.BookFile.FullPathAndFileNameWithExtension
-                            == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.BookFile.FullPathAndFileNameWithExtension
+                                == e.Book.BookFile.FullPathAndFileNameWithExtension);
                     if (!bookExistsAdded)
                     {
                         AllBooks.Add(e.Book);
@@ -832,8 +726,8 @@ namespace Bookie.ViewModels
                     var bookExistsRemoved =
                         AllBooks.Any(
                             b =>
-                            b.BookFile.FullPathAndFileNameWithExtension
-                            == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.BookFile.FullPathAndFileNameWithExtension
+                                == e.Book.BookFile.FullPathAndFileNameWithExtension);
                     if (bookExistsRemoved)
                     {
                         AllBooks.Remove(e.Book);
@@ -845,8 +739,8 @@ namespace Bookie.ViewModels
                     var bookExistsUpdated =
                         AllBooks.FirstOrDefault(
                             b =>
-                            b.BookFile.FullPathAndFileNameWithExtension
-                            == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.BookFile.FullPathAndFileNameWithExtension
+                                == e.Book.BookFile.FullPathAndFileNameWithExtension);
                     if (bookExistsUpdated != null)
                     {
                         var index = AllBooks.IndexOf(bookExistsUpdated);
@@ -871,7 +765,8 @@ namespace Bookie.ViewModels
                 {
                     return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
                 }
-                return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+                return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                       book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
             }
             if (FilterOnDescription)
             {
@@ -879,14 +774,16 @@ namespace Bookie.ViewModels
                 {
                     return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
                 }
-                return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+                return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                       book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
             }
-           
+
             if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
             {
                 return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
             }
-            return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+            return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                   book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
         }
 
         private bool ApplyPublisherFilter(object item)
@@ -915,7 +812,7 @@ namespace Bookie.ViewModels
             var book = item as Book;
             if (SourceDirectoryFilter == null)
             {
-                SourceDirectoryFilter = new SourceDirectory { SourceDirectoryUrl = "All Sources" };
+                SourceDirectoryFilter = new SourceDirectory {SourceDirectoryUrl = "All Sources"};
             }
             if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
             {
@@ -1006,8 +903,9 @@ namespace Bookie.ViewModels
             Books.CollectionChanged += Books_CollectionChanged;
 
             SourceDirectories.Clear();
-            SourceDirectories = new ObservableCollection<SourceDirectory>(_sourceDomain.GetAllSourceDirectories().ToList());
-            SourceDirectories.Insert(0, new SourceDirectory { SourceDirectoryUrl = "All Sources" });
+            SourceDirectories =
+                new ObservableCollection<SourceDirectory>(_sourceDomain.GetAllSourceDirectories().ToList());
+            SourceDirectories.Insert(0, new SourceDirectory {SourceDirectoryUrl = "All Sources"});
             SourceDirectoryFilter = SourceDirectories[0];
         }
 
@@ -1018,7 +916,7 @@ namespace Bookie.ViewModels
             if (all != null)
             {
                 all = all.GroupBy(r => r.Name).Select(y => y.First()).ToList();
-                all.Insert(0, new Publisher { Name = "All Publishers" });
+                all.Insert(0, new Publisher {Name = "All Publishers"});
                 if (Books != null)
                 {
                     PublishersList = new ObservableCollection<Publisher>(all);
@@ -1033,7 +931,7 @@ namespace Bookie.ViewModels
             }
 
             allAuthors = allAuthors.GroupBy(o => o.FullName).Select(g => g.First()).ToList();
-            allAuthors.Insert(0, new Author { FirstName = "All Authors" });
+            allAuthors.Insert(0, new Author {FirstName = "All Authors"});
 
             if (Books != null)
             {

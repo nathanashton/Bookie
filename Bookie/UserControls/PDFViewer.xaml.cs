@@ -1,16 +1,17 @@
 ﻿namespace Bookie.UserControls
 {
-    using Bookie.ViewModels;
+    using ViewModels;
+
     /// <summary>
     ///     Interaction logic for PDFViewer.xaml
     /// </summary>
     public partial class PdfViewer
     {
-        public PdfViewerViewModel ViewModel => (PdfViewerViewModel)Resources["ViewModel"];
-
         public PdfViewer()
         {
             InitializeComponent();
         }
+
+        public PdfViewerViewModel ViewModel => (PdfViewerViewModel) Resources["ViewModel"];
     }
 }

@@ -1,7 +1,7 @@
-﻿using Bookie.Data;
-
-namespace Bookie.Core.Domains
+﻿namespace Bookie.Core.Domains
 {
+    using Data;
+
     public class Db
     {
         public void ReCreateDB()

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Bookie.Common.Model;
-using Bookie.Data.Interfaces;
-
-namespace Bookie.Data.Repositories
+﻿namespace Bookie.Data.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading.Tasks;
+    using Common.Model;
+    using Interfaces;
+
     public class SourceDirectoryRepository : GenericDataRepository<SourceDirectory>, ISourceDirectoryRepository
     {
         public bool Exists(string sourceUrl)
@@ -24,7 +24,8 @@ namespace Bookie.Data.Repositories
             }
         }
 
-        public async virtual Task<IList<SourceDirectory>> GetAllAsync(params Expression<Func<SourceDirectory, object>>[] navigationProperties)
+        public virtual async Task<IList<SourceDirectory>> GetAllAsync(
+            params Expression<Func<SourceDirectory, object>>[] navigationProperties)
         {
             List<SourceDirectory> list;
 

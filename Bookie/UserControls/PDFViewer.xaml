@@ -247,7 +247,8 @@
                                 Background="Yellow" Content="Has BookMark" />
                         <Button Command="{Binding NoteButtonCommand}" Name="NoteLabel" Margin="5" Background="Yellow"
                                 Content="Has Note" />
-                        <Button ToolTip="Add BookMark" Margin="2" Height="35" Width="35"
+                        <Button ToolTip="Add BookMark" Command="{Binding AddBookMarkCommand}" Margin="2" Height="35"
+                                Width="35"
                                 Style="{DynamicResource MetroCircleButtonStyle}">
                             <Rectangle Width="16" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>
@@ -256,7 +257,8 @@
                             </Rectangle>
                         </Button>
 
-                        <Button ToolTip="Add Note" Margin="2,2,40,2" Height="35" Width="35"
+                        <Button Command="{Binding AddNoteCommand}" ToolTip="Add Note" Margin="2,2,40,2" Height="35"
+                                Width="35"
                                 Style="{DynamicResource MetroCircleButtonStyle}">
                             <Rectangle Width="16" Height="17" Fill="#595959">
                                 <Rectangle.OpacityMask>

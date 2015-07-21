@@ -1,21 +1,20 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using Bookie.Common;
-using Bookie.Core.Domains;
-using Bookie.Properties;
-using Bookie.ViewModels;
-using MahApps.Metro;
-
-namespace Bookie.Views
+﻿namespace Bookie.Views
 {
+    using System;
+    using System.IO;
+    using System.Threading;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Input;
+    using Common;
+    using Core.Domains;
+    using MahApps.Metro;
+    using Properties;
+    using ViewModels;
+
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    ///     Interaction logic for MainView.xaml
     /// </summary>
     public partial class MainView
     {
@@ -57,7 +56,7 @@ namespace Bookie.Views
             if (!File.Exists(Globals.ApplicationDatabaseFullPath))
             {
                 App.SplashScreen.AddMessage("Creating Database...");
-                Db d = new Db();
+                var d = new Db();
                 d.ReCreateDB();
                 Logger.Log.Info("Database doesn't exist so created it");
             }
@@ -102,7 +101,7 @@ namespace Bookie.Views
             {
                 return;
             }
-            var tBox = (TextBox)sender;
+            var tBox = (TextBox) sender;
             var prop = TextBox.TextProperty;
 
             var binding = BindingOperations.GetBindingExpression(tBox, prop);
@@ -111,6 +110,5 @@ namespace Bookie.Views
                 binding.UpdateSource();
             }
         }
-
     }
 }

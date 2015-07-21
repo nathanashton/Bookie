@@ -2,20 +2,19 @@
 {
     using System;
     using System.Globalization;
-    using System.Windows.Controls;
+    using System.Windows;
     using System.Windows.Data;
 
-    [ValueConversion(typeof (bool), typeof (ScrollBarVisibility))]
-    internal sealed class MouseOverToScrollBarVisibility : IValueConverter
+    public class BoolVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((bool) value) ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
+            return (bool)value == false ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            throw new NotImplementedException();
         }
     }
 }

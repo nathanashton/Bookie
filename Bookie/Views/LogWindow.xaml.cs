@@ -1,13 +1,12 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using Bookie.ViewModels;
-using MahApps.Metro.Controls;
-
-namespace Bookie.Views
+﻿namespace Bookie.Views
 {
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using ViewModels;
+
     /// <summary>
-    /// Interaction logic for LogWindow.xaml
+    ///     Interaction logic for LogWindow.xaml
     /// </summary>
     public partial class LogWindow
     {
@@ -20,13 +19,12 @@ namespace Bookie.Views
             DataContext = _viewModel;
             datePicker.Loaded += delegate
             {
-                var textBox1 = (TextBox)datePicker.Template.FindName("PART_TextBox", datePicker);
+                var textBox1 = (TextBox) datePicker.Template.FindName("PART_TextBox", datePicker);
                 textBox1.Background = datePicker.Background;
                 textBox1.BorderThickness = new Thickness(0, 0, 0, 0);
                 textBox1.BorderBrush = Brushes.Transparent;
             };
             _viewModel.RefreshLog();
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

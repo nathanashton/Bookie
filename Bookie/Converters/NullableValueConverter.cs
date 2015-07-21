@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-
-namespace Bookie.Converters
+﻿namespace Bookie.Converters
 {
-    [ValueConversion(typeof(object), typeof(bool))]
+    using System;
+    using System.Globalization;
+    using System.Windows.Data;
+
+    [ValueConversion(typeof (object), typeof (bool))]
     public class NullableValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         Icon="pack://application:,,,/Resources/Icons/bookie.ico" ShowInTaskbar="False"
-            WindowStartupLocation="CenterScreen"  Topmost="True" WindowStyle="None"
+        WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None"
         Title="SplashView" ResizeMode="NoResize" Height="216" Width="394" SizeToContent="WidthAndHeight">
     <Grid>
         <StackPanel Margin="10" Orientation="Horizontal">
@@ -12,9 +12,9 @@
 
             <StackPanel Width="250" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Stretch">
                 <Label FontSize="28" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Content="Bookie" />
-                <DockPanel  Background="Transparent"  Margin="0,-5,0,0">
-                    <Label  HorizontalAlignment="Left" Name="Message" Foreground="White" />
-                    <Label  HorizontalAlignment="Right" Name="VersionNumber" Foreground="White" />
+                <DockPanel Background="Transparent" Margin="0,-5,0,0">
+                    <Label HorizontalAlignment="Left" Name="Message" Foreground="White" />
+                    <Label HorizontalAlignment="Right" Name="VersionNumber" Foreground="White" />
                 </DockPanel>
                 <controls:MetroProgressBar Foreground="White" IsIndeterminate="True" />
             </StackPanel>

@@ -15,42 +15,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using System.Windows.Controls;
-using MoonPdfLib.MuPdf;
-
 namespace MoonPdfLib
 {
+    using System.Windows.Controls;
+    using MuPdf;
+
     /// <summary>
-    /// Common interface for the two different display types, single pages (SinglePageMoonPdfPanel) and continuous pages (ContinuousMoonPdfPanel)
+    ///     Common interface for the two different display types, single pages (SinglePageMoonPdfPanel) and continuous pages
+    ///     (ContinuousMoonPdfPanel)
     /// </summary>
     internal interface IMoonPdfPanel
     {
         ScrollViewer ScrollViewer { get; }
-
         UserControl Instance { get; }
-
         float CurrentZoom { get; }
-
         void Load(IPdfSource source, string password = null);
-
         void Unload();
-
         void Zoom(double zoomFactor);
-
         void ZoomIn();
-
         void ZoomOut();
-
         void ZoomToWidth();
-
         void ZoomToHeight();
-
         void GotoPage(int pageNumber);
-
         void GotoPreviousPage();
-
         void GotoNextPage();
-
         int GetCurrentPageIndex(ViewType viewType);
     }
 }

@@ -1,28 +1,22 @@
-﻿using System.Windows;
-using Bookie.Common;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using System.Windows;
+    using Common;
+
     public class ProgressViewModel : NotifyBase
     {
-        private string _progressText;
-
-        private int _progressPercentage;
-
-        private string _operationName;
-
-        private int _downloadProgress;
-
-        private string _progressBarText;
+        public delegate void CancelDelegate();
 
         private bool _cancelled;
+        private int _downloadProgress;
+        private string _operationName;
+        private string _progressBarText;
+        private int _progressPercentage;
+        private string _progressText;
 
         public bool Cancelled
         {
-            get
-            {
-                return _cancelled;
-            }
+            get { return _cancelled; }
             set
             {
                 _cancelled = value;
@@ -30,18 +24,12 @@ namespace Bookie.ViewModels
             }
         }
 
-        public delegate void CancelDelegate();
-
         public CancelDelegate Cancel { get; set; }
-
         public Window Window { get; set; }
 
         public string ProgressBarText
         {
-            get
-            {
-                return _progressBarText;
-            }
+            get { return _progressBarText; }
             set
             {
                 _progressBarText = value;
@@ -51,10 +39,7 @@ namespace Bookie.ViewModels
 
         public string ProgressText
         {
-            get
-            {
-                return _progressText;
-            }
+            get { return _progressText; }
             set
             {
                 _progressText = value;
@@ -64,10 +49,7 @@ namespace Bookie.ViewModels
 
         public int ProgressPercentage
         {
-            get
-            {
-                return _progressPercentage;
-            }
+            get { return _progressPercentage; }
             set
             {
                 _progressPercentage = value;
@@ -77,10 +59,7 @@ namespace Bookie.ViewModels
 
         public string OperationName
         {
-            get
-            {
-                return _operationName;
-            }
+            get { return _operationName; }
             set
             {
                 _operationName = value;
@@ -90,10 +69,7 @@ namespace Bookie.ViewModels
 
         public int DownloadProgress
         {
-            get
-            {
-                return _downloadProgress;
-            }
+            get { return _downloadProgress; }
             set
             {
                 _downloadProgress = value;

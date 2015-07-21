@@ -1,40 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Core.Domains;
-using Bookie.Core.Interfaces;
-
-namespace Bookie.Core.Importer
+﻿namespace Bookie.Core.Importer
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Linq;
+    using Common;
+    using Common.Model;
+    using Domains;
+    using Interfaces;
+
     public class Importer : IProgressPublisher
     {
-        private readonly SourceDirectory _source;
-        private List<string> _foundPdfFiles;
-        public readonly BackgroundWorker Worker;
-
-        private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
-
         private readonly BookDomain _bookDomain = new BookDomain();
-
-        public ProgressWindowEventArgs ProgressArgs { get; set; }
-
-        private bool _generateCovers;
-
-        public event EventHandler<BookEventArgs> BookChanged;
-
-        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
-
-        public event EventHandler<EventArgs> ProgressComplete;
-
-        public event EventHandler<EventArgs> ProgressStarted;
-
-        private int _booksImported;
-
+        private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
+        private readonly SourceDirectory _source;
+        public readonly BackgroundWorker Worker;
         private int _booksExisted;
+        private int _booksImported;
+        private List<string> _foundPdfFiles;
+        private bool _generateCovers;
 
         public Importer(SourceDirectory source)
         {
@@ -53,11 +38,27 @@ namespace Bookie.Core.Importer
             _booksExisted = 0;
         }
 
+        public ProgressWindowEventArgs ProgressArgs { get; set; }
+        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
+        public event EventHandler<EventArgs> ProgressComplete;
+        public event EventHandler<EventArgs> ProgressStarted;
+
+        public void ProgressCancel()
+        {
+            if (Worker.IsBusy)
+            {
+                Worker.CancelAsync();
+            }
+        }
+
+        public event EventHandler<BookEventArgs> BookChanged;
+
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             OnProgressComplete();
-            Logger.Log.Info(String.Format("Import Complete: Books Imported {0}: Already Existed {1}.", _booksImported, _booksExisted));
-            MessagingService.ShowMessage(String.Format("{0} Books imported.{1}{2} Books already existed.", _booksImported, Environment.NewLine, _booksExisted));
+            Logger.Log.Info($"Import Complete: Books Imported {_booksImported}: Already Existed {_booksExisted}.");
+            MessagingService.ShowMessage(
+                $"{_booksImported} Books imported.{Environment.NewLine}{_booksExisted} Books already existed.");
         }
 
         private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -72,7 +73,7 @@ namespace Bookie.Core.Importer
             }
             else
             {
-                var book = (Book)e.UserState;
+                var book = (Book) e.UserState;
                 OnBookChanged(book, BookEventArgs.BookState.Added, e.ProgressPercentage);
                 ProgressArgs.OperationName = "Importing Books";
                 ProgressArgs.ProgressBarText = e.ProgressPercentage + "%";
@@ -97,20 +98,27 @@ namespace Bookie.Core.Importer
                 var foundBook = _foundPdfFiles[index];
                 _source.EntityState = EntityState.Unchanged;
 
-                var book = new Book();
+                var book = new Book
+                {
+                    Title = Path.GetFileNameWithoutExtension(foundBook),
+                    Abstract = "",
+                    BookFile =
+                    {
+                        FileNameWithExtension = Path.GetFileName(foundBook),
+                        FullPathAndFileNameWithExtension = foundBook,
+                        FileExtension = Path.GetExtension(foundBook),
+                        FileSizeBytes = new FileInfo(foundBook).Length,
+                        EntityState = EntityState.Added
+                    },
+                    SourceDirectory = new SourceDirectory {Id = _source.Id, EntityState = EntityState.Unchanged},
+                    BookHistory =
+                    {
+                        DateImported = DateTime.Now,
+                        EntityState = EntityState.Added
+                    },
+                    CoverImage = new CoverImage()
+                };
 
-                book.Title = Path.GetFileNameWithoutExtension(foundBook);
-                book.Abstract = "";
-                book.BookFile.FileNameWithExtension = Path.GetFileName(foundBook);
-                book.BookFile.FullPathAndFileNameWithExtension = foundBook;
-                book.BookFile.FileExtension = Path.GetExtension(foundBook);
-                book.BookFile.FileSizeBytes = new FileInfo(foundBook).Length;
-                book.BookFile.EntityState = EntityState.Added;
-
-                book.SourceDirectory = new SourceDirectory { Id = _source.Id, EntityState = EntityState.Unchanged };
-                book.BookHistory.DateImported = DateTime.Now;
-                book.BookHistory.EntityState = EntityState.Added;
-                book.CoverImage = new CoverImage();
 
                 if (_generateCovers)
                 {
@@ -129,12 +137,12 @@ namespace Bookie.Core.Importer
                 if (_bookDomain.Exists(book.BookFile.FullPathAndFileNameWithExtension))
                 {
                     _booksExisted++;
-                    Logger.Log.Info("Importer Skipped: " + book.Title + " already exists.");
+                    Logger.Log.Debug("Importer Skipped: " + book.Title + " already exists.");
                 }
                 else
                 {
                     _bookDomain.AddBook(book);
-                    Logger.Log.Info("Imported: " + book.Title);
+                    Logger.Log.Debug("Imported: " + book.Title);
 
                     _booksImported++;
                     Worker.ReportProgress(percentage, book);
@@ -151,56 +159,32 @@ namespace Bookie.Core.Importer
             _generateCovers = generateCovers;
             var option = includeSubDirectories == false ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories;
             _foundPdfFiles = Directory.GetFiles(_source.SourceDirectoryUrl, FileTypes.PDF, option).ToList();
-            Logger.Log.Debug(String.Format("Found {0} files in {1} with an extension of {2}", _foundPdfFiles.Count(), _source.SourceDirectoryUrl, FileTypes.PDF));
-
-            Logger.Log.Info(
-                String.Format(
-                    "Importing from {0}: Subdirectories {1}: Generate Covers {2}",
-                    _source.SourceDirectoryUrl,
-                    includeSubDirectories,
-                    generateCovers));
+            Logger.Log.Debug(
+                $"Found {_foundPdfFiles.Count()} files in {_source.SourceDirectoryUrl} with an extension of {FileTypes.PDF}");
+            Logger.Log.Debug(
+                $"Importing from {_source.SourceDirectoryUrl}: Subdirectories {includeSubDirectories}: Generate Covers: {generateCovers}");
             OnProgressStarted();
             Worker.RunWorkerAsync();
         }
 
         public void OnBookChanged(Book book, BookEventArgs.BookState bookState, int? progress)
         {
-            if (BookChanged != null)
-            {
-                BookChanged(this, new BookEventArgs { Book = book, State = bookState, Progress = progress });
-            }
+            BookChanged?.Invoke(this, new BookEventArgs {Book = book, State = bookState, Progress = progress});
         }
 
         private void OnProgressComplete()
         {
-            if (ProgressComplete != null)
-            {
-                ProgressComplete(this, null);
-            }
+            ProgressComplete?.Invoke(this, null);
         }
 
         private void OnProgressStarted()
         {
-            if (ProgressStarted != null)
-            {
-                ProgressStarted(this, null);
-            }
+            ProgressStarted?.Invoke(this, null);
         }
 
         private void OnProgressChange(ProgressWindowEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
-        }
-
-        public void ProgressCancel()
-        {
-            if (Worker.IsBusy)
-            {
-                Worker.CancelAsync();
-            }
+            ProgressChanged?.Invoke(this, e);
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.SqlServerCe;
-using System.Linq;
-using System.Linq.Expressions;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Data.Interfaces;
-using EntityState = System.Data.Entity.EntityState;
-
-namespace Bookie.Data.Repositories
+﻿namespace Bookie.Data.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.SqlServerCe;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using Common;
+    using Common.Model;
+    using Interfaces;
+    using EntityState = System.Data.Entity.EntityState;
+
     public class GenericDataRepository<T> : IGenericDataRepository<T> where T : class, IEntity
     {
         public virtual IList<T> GetAll(params Expression<Func<T, object>>[] navigationProperties)
@@ -23,20 +23,21 @@ namespace Bookie.Data.Repositories
                     IQueryable<T> dbQuery = context.Set<T>();
 
                     //Apply eager loading
-                    foreach (var navigationProperty in navigationProperties) dbQuery = dbQuery.Include(navigationProperty);
+                    foreach (var navigationProperty in navigationProperties)
+                        dbQuery = dbQuery.Include(navigationProperty);
 
                     list = dbQuery.AsNoTracking().ToList();
                 }
             }
             catch (SqlCeException ex)
             {
-                throw new BookieException(String.Format("{0} - {1}", typeof(T), ex.Message), ex);
+                throw new BookieException(string.Format("{0} - {1}", typeof (T), ex.Message), ex);
             }
             return list;
         }
 
         public virtual IList<T> GetList(Func<T, bool> where,
-             params Expression<Func<T, object>>[] navigationProperties)
+            params Expression<Func<T, object>>[] navigationProperties)
         {
             List<T> list;
             try
@@ -46,21 +47,22 @@ namespace Bookie.Data.Repositories
                     IQueryable<T> dbQuery = context.Set<T>();
 
                     //Apply eager loading
-                    foreach (var navigationProperty in navigationProperties) dbQuery = dbQuery.Include(navigationProperty);
+                    foreach (var navigationProperty in navigationProperties)
+                        dbQuery = dbQuery.Include(navigationProperty);
 
                     list = dbQuery.AsNoTracking().Where(where).ToList();
                 }
             }
             catch (SqlCeException ex)
             {
-                throw new BookieException(String.Format("{0} - {1}", typeof(T), ex.Message), ex);
+                throw new BookieException(string.Format("{0} - {1}", typeof (T), ex.Message), ex);
             }
 
             return list;
         }
 
         public virtual T GetSingle(Func<T, bool> where,
-             params Expression<Func<T, object>>[] navigationProperties)
+            params Expression<Func<T, object>>[] navigationProperties)
         {
             T item;
             try
@@ -80,7 +82,7 @@ namespace Bookie.Data.Repositories
             }
             catch (SqlCeException ex)
             {
-                throw new BookieException(String.Format("{0} - {1}", typeof(T), ex.Message), ex);
+                throw new BookieException(string.Format("{0} - {1}", typeof (T), ex.Message), ex);
             }
 
             return item;
@@ -112,7 +114,7 @@ namespace Bookie.Data.Repositories
             }
             catch (SqlCeException ex)
             {
-                throw new BookieException(String.Format("{0} - {1}", typeof(T), ex.Message), ex);
+                throw new BookieException(string.Format("{0} - {1}", typeof (T), ex.Message), ex);
             }
         }
 

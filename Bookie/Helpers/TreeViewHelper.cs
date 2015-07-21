@@ -1,12 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-
-namespace Bookie.Helpers
+﻿namespace Bookie.Helpers
 {
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+
     public class TreeViewHelper
     {
-        private static Dictionary<DependencyObject, TreeViewSelectedItemBehavior> behaviors = new Dictionary<DependencyObject, TreeViewSelectedItemBehavior>();
+        private static readonly Dictionary<DependencyObject, TreeViewSelectedItemBehavior> behaviors =
+            new Dictionary<DependencyObject, TreeViewSelectedItemBehavior>();
+
+        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.RegisterAttached("SelectedItem", typeof (object), typeof (TreeViewHelper),
+                new UIPropertyMetadata(null, SelectedItemChanged));
 
         public static object GetSelectedItem(DependencyObject obj)
         {
@@ -18,10 +24,6 @@ namespace Bookie.Helpers
             obj.SetValue(SelectedItemProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.RegisterAttached("SelectedItem", typeof(object), typeof(TreeViewHelper), new UIPropertyMetadata(null, SelectedItemChanged));
-
         private static void SelectedItemChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             if (!(obj is TreeView))
@@ -30,13 +32,13 @@ namespace Bookie.Helpers
             if (!behaviors.ContainsKey(obj))
                 behaviors.Add(obj, new TreeViewSelectedItemBehavior(obj as TreeView));
 
-            TreeViewSelectedItemBehavior view = behaviors[obj];
+            var view = behaviors[obj];
             view.ChangeSelectedItem(e.NewValue);
         }
 
         private class TreeViewSelectedItemBehavior
         {
-            private TreeView view;
+            private readonly TreeView view;
 
             public TreeViewSelectedItemBehavior(TreeView view)
             {
@@ -46,7 +48,7 @@ namespace Bookie.Helpers
 
             internal void ChangeSelectedItem(object p)
             {
-                TreeViewItem item = (TreeViewItem)view.ItemContainerGenerator.ContainerFromItem(p);
+                var item = (TreeViewItem) view.ItemContainerGenerator.ContainerFromItem(p);
                 item.IsSelected = true;
             }
         }

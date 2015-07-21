@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Bookie.Common
+﻿namespace Bookie.Common
 {
+    using System;
+    using System.Runtime.Serialization;
+
     [Serializable]
     public class BookieException : Exception
     {
@@ -11,18 +11,28 @@ namespace Bookie.Common
         }
 
         public BookieException(string message)
-            : base(message) { }
+            : base(message)
+        {
+        }
 
         public BookieException(string format, params object[] args)
-            : base(string.Format(format, args)) { }
+            : base(string.Format(format, args))
+        {
+        }
 
         public BookieException(string message, Exception innerException)
-            : base(message, innerException) { }
+            : base(message, innerException)
+        {
+        }
 
         public BookieException(string format, Exception innerException, params object[] args)
-            : base(string.Format(format, args), innerException) { }
+            : base(string.Format(format, args), innerException)
+        {
+        }
 
         protected BookieException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+            : base(info, context)
+        {
+        }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using Bookie.Common;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-
-namespace Bookie.Core.Scraper
+﻿namespace Bookie.Core.Scraper
 {
+    using System;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using Common;
+    using iTextSharp.text.pdf;
+    using iTextSharp.text.pdf.parser;
+
     internal class PdfIsbnParser
     {
         private string _isbn = string.Empty;
@@ -35,7 +35,7 @@ namespace Bookie.Core.Scraper
                         }
                         catch (ArgumentException)
                         {
-                            Logger.Log.Error(String.Format("Can't parse PDF {0}, only images and no text.", url));
+                            Logger.Log.Error(string.Format("Can't parse PDF {0}, only images and no text.", url));
                         }
                     }
                 }

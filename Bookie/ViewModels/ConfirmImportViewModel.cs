@@ -1,20 +1,16 @@
-﻿using Bookie.Common;
-using Bookie.Core.Importer;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using Common;
+    using Core.Importer;
+
     public class ConfirmImportViewModel : NotifyBase
     {
         private bool _generateCovers;
-
         private bool _reScrape;
 
         public bool GenerateCovers
         {
-            get
-            {
-                return _generateCovers;
-            }
+            get { return _generateCovers; }
             set
             {
                 _generateCovers = value;
@@ -26,10 +22,7 @@ namespace Bookie.ViewModels
 
         public bool SubDirectories
         {
-            get
-            {
-                return _reScrape;
-            }
+            get { return _reScrape; }
             set
             {
                 _reScrape = value;
@@ -39,7 +32,6 @@ namespace Bookie.ViewModels
 
         public void OK()
         {
-            
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Bookie.UserControls
+﻿namespace Bookie.UserControls
 {
+    using System.Windows.Controls;
+
     /// <summary>
-    /// Interaction logic for BookSummaryControl.xaml
+    ///     Interaction logic for BookSummaryControl.xaml
     /// </summary>
     public partial class BookSummaryControl : UserControl
     {

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
-
-namespace Bookie.Converters
+﻿namespace Bookie.Converters
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Windows.Data;
+    using System.Windows.Media.Imaging;
+
     public class CoverImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string coverPath;
-            string v = "";
+            var v = "";
             try
             {
                 v = value.ToString();

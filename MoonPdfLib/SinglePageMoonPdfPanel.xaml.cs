@@ -15,21 +15,21 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using MoonPdfLib.Helper;
-using MoonPdfLib.MuPdf;
-
 namespace MoonPdfLib
 {
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using Helper;
+    using MuPdf;
+
     internal partial class SinglePageMoonPdfPanel : UserControl, IMoonPdfPanel
     {
-        private MoonPdfPanel parent;
-        private ScrollViewer scrollViewer;
-        private PdfImageProvider imageProvider;
+        private readonly MoonPdfPanel parent;
         private int currentPageIndex; // starting at 0
+        private PdfImageProvider imageProvider;
+        private ScrollViewer scrollViewer;
 
         public SinglePageMoonPdfPanel(MoonPdfPanel parent)
         {
@@ -38,16 +38,12 @@ namespace MoonPdfLib
             SizeChanged += SinglePageMoonPdfPanel_SizeChanged;
         }
 
-        private void SinglePageMoonPdfPanel_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            scrollViewer = VisualTreeHelperEx.FindChild<ScrollViewer>(this);
-        }
-
         public void Load(IPdfSource source, string password = null)
         {
             scrollViewer = VisualTreeHelperEx.FindChild<ScrollViewer>(this);
             imageProvider = new PdfImageProvider(source, parent.TotalPages,
-                new PageDisplaySettings(parent.GetPagesPerRow(), parent.ViewType, parent.HorizontalMargin, parent.Rotation), false, password);
+                new PageDisplaySettings(parent.GetPagesPerRow(), parent.ViewType, parent.HorizontalMargin,
+                    parent.Rotation), false, password);
 
             currentPageIndex = 0;
 
@@ -121,15 +117,24 @@ namespace MoonPdfLib
                 scrollViewer.ScrollToTop();
         }
 
+        public int GetCurrentPageIndex(ViewType viewType)
+        {
+            return currentPageIndex;
+        }
+
+        private void SinglePageMoonPdfPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            scrollViewer = VisualTreeHelperEx.FindChild<ScrollViewer>(this);
+        }
+
         private void SetItemsSource()
         {
             var startIndex = PageHelper.GetVisibleIndexFromPageIndex(currentPageIndex, parent.ViewType);
             itemsControl.ItemsSource = imageProvider.FetchRange(startIndex, parent.GetPagesPerRow()).FirstOrDefault();
         }
 
-        public int GetCurrentPageIndex(ViewType viewType)
+        private void ItemsControl_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            return currentPageIndex;
         }
 
         #region Zoom specific code
@@ -147,29 +152,39 @@ namespace MoonPdfLib
 
         public void ZoomToWidth()
         {
-            var scrollBarWidth = scrollViewer.ComputedVerticalScrollBarVisibility == Visibility.Visible ? SystemParameters.VerticalScrollBarWidth : 0;
-            var zoomFactor = (parent.ActualWidth - scrollBarWidth) / parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Width;
+            var scrollBarWidth = scrollViewer.ComputedVerticalScrollBarVisibility == Visibility.Visible
+                ? SystemParameters.VerticalScrollBarWidth
+                : 0;
+            var zoomFactor = (parent.ActualWidth - scrollBarWidth)/
+                             parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Width;
             var pageBound = parent.PageRowBounds[currentPageIndex];
 
-            if (scrollBarWidth == 0 && ((pageBound.Size.Height * zoomFactor) + pageBound.VerticalOffset) >= parent.ActualHeight)
+            if (scrollBarWidth == 0 &&
+                ((pageBound.Size.Height*zoomFactor) + pageBound.VerticalOffset) >= parent.ActualHeight)
                 scrollBarWidth += SystemParameters.VerticalScrollBarWidth;
 
             scrollBarWidth += 2; // Magic number, sorry :)
-            zoomFactor = (parent.ActualWidth - scrollBarWidth) / parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Width;
+            zoomFactor = (parent.ActualWidth - scrollBarWidth)/
+                         parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Width;
 
             ZoomInternal(zoomFactor);
         }
 
         public void ZoomToHeight()
         {
-            var scrollBarHeight = scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible ? SystemParameters.HorizontalScrollBarHeight : 0;
-            var zoomFactor = (parent.ActualHeight - scrollBarHeight) / parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Height;
+            var scrollBarHeight = scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible
+                ? SystemParameters.HorizontalScrollBarHeight
+                : 0;
+            var zoomFactor = (parent.ActualHeight - scrollBarHeight)/
+                             parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Height;
             var pageBound = parent.PageRowBounds[currentPageIndex];
 
-            if (scrollBarHeight == 0 && ((pageBound.Size.Width * zoomFactor) + pageBound.HorizontalOffset) >= parent.ActualWidth)
+            if (scrollBarHeight == 0 &&
+                ((pageBound.Size.Width*zoomFactor) + pageBound.HorizontalOffset) >= parent.ActualWidth)
                 scrollBarHeight += SystemParameters.HorizontalScrollBarHeight;
 
-            zoomFactor = (parent.ActualHeight - scrollBarHeight) / parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Height;
+            zoomFactor = (parent.ActualHeight - scrollBarHeight)/
+                         parent.PageRowBounds[currentPageIndex].SizeIncludingOffset.Height;
 
             ZoomInternal(zoomFactor);
         }
@@ -196,15 +211,11 @@ namespace MoonPdfLib
             else if (zoomFactor < parent.MinZoomFactor)
                 zoomFactor = parent.MinZoomFactor;
 
-            imageProvider.Settings.ZoomFactor = (float)zoomFactor;
+            imageProvider.Settings.ZoomFactor = (float) zoomFactor;
 
             SetItemsSource();
         }
 
         #endregion Zoom specific code
-
-        private void ItemsControl_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-        }
     }
 }

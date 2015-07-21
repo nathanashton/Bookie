@@ -1,12 +1,12 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using Bookie.Common;
-using Bookie.Common.Model;
-using Bookie.Core.Domains;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Input;
+    using Common;
+    using Common.Model;
+    using Core.Domains;
+
     public class NoteViewModel : NotifyBase
     {
         private readonly BookDomain _bookDomain;
