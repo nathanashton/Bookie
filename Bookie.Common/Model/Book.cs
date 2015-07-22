@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Book : ITrackableEntity, IEntity
+    public class Book : IEntity
     {
         public Book()
         {
@@ -38,8 +38,6 @@
         public EntityState EntityState { get; set; }
 
         public DateTime? CreatedDateTime { get; set; }
-        public int? CreatedUserId { get; set; }
         public DateTime? ModifiedDateTime { get; set; }
-        public int? ModifiedUserId { get; set; }
     }
 }

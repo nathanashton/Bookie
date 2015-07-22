@@ -47,10 +47,10 @@
 
         public void AddBook(params Book[] books)
         {
-            if (Exists(books[0].BookFile.FullPathAndFileNameWithExtension))
-            {
-                return;
-            }
+            //if (Exists(books[0].BookFile.FullPathAndFileNameWithExtension))
+            //{
+            //    return;
+            //}
             foreach (var bk in books)
             {
                 bk.CreatedDateTime = DateTime.Now;
@@ -76,7 +76,8 @@
 
         public bool Exists(string filePath)
         {
-            return _bookRepository.Exists(filePath);
+            //return _bookRepository.Exists(filePath);
+            return false;
         }
 
         public async Task<IList<Book>> GetAllAsync()

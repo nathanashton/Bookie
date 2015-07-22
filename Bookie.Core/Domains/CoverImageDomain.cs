@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Common;
+    using Common.Factories;
     using Common.Model;
     using Data.Interfaces;
     using Data.Repositories;
@@ -51,52 +51,29 @@
 
         public CoverImage GenerateCoverImageFromPdf(Book book)
         {
-
-
-
-
-
+            // If Book not found then return null;
             if (!File.Exists(book.BookFile.FullPathAndFileNameWithExtension))
             {
-                return EmptyCoverImage();
-            }
-            var outImageName = book.Title;
-            // Strip invalid characters
-            foreach (var c in Path.GetInvalidFileNameChars())
-            {
-                outImageName = outImageName.Replace(c.ToString(), string.Empty);
-            }
-            outImageName += ".jpg";
-            var savedImageUrl = Globals.CoverImageFolder + "\\" + outImageName;
-            var file = new FileSource(book.BookFile.FullPathAndFileNameWithExtension);
-
-            using (var img = MuPdfWrapper.ExtractPage(file, 1))
-            {
-                img.Save(savedImageUrl);
-
+                return CoverImageFactory.CreateEmpty();
             }
 
-            if (book.CoverImage == null)
+            var coverImage = CoverImageFactory.CreateNew();
+            using (var img = MuPdfWrapper.ExtractPage(new FileSource(book.BookFile.FullPathAndFileNameWithExtension), 1)
+                )
             {
-                book.CoverImage = new CoverImage();
+                img.Save(coverImage.FullPathAndFileNameWithExtension);
             }
 
             if (book.Id == 0)
             {
-                book.CoverImage.EntityState = EntityState.Added;
+                coverImage.EntityState = EntityState.Added;
             }
             else
             {
-                book.CoverImage.Id = book.CoverImage.Id;
-                book.CoverImage.EntityState = EntityState.Modified;
+                coverImage.Id = book.CoverImage.Id;
+                coverImage.EntityState = EntityState.Modified;
             }
-
-            book.CoverImage.FileNameWithExtension = Path.GetFileName(savedImageUrl);
-            book.CoverImage.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
-                                                               + Path.GetFileNameWithoutExtension(
-                                                                   savedImageUrl) + ".jpg";
-            book.CoverImage.FileExtension = ".jpg";
-            return book.CoverImage;
+            return coverImage;
         }
 
         CoverImage ICoverImageDomain.EmptyCoverImage()
@@ -108,11 +85,7 @@
         {
             var cover = new CoverImage
             {
-                FileNameWithExtension = Path.GetFileName(string.Empty),
-                FullPathAndFileNameWithExtension = Globals.CoverImageFolder
-                                                   + Path.GetFileNameWithoutExtension(
-                                                       string.Empty) + ".jpg",
-                FileExtension = ".jpg"
+                FileNameWithExtension = Path.GetFileName(string.Empty)
             };
             return cover;
         }

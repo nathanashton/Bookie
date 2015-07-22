@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class BookHistory : ITrackableEntity, IEntity
+    public class BookHistory : IEntity
     {
         public int Id { get; set; }
         public DateTime? DateImported { get; set; }
@@ -15,8 +15,6 @@
         public EntityState EntityState { get; set; }
 
         public DateTime? CreatedDateTime { get; set; }
-        public int? CreatedUserId { get; set; }
         public DateTime? ModifiedDateTime { get; set; }
-        public int? ModifiedUserId { get; set; }
     }
 }

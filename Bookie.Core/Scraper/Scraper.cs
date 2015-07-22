@@ -62,7 +62,7 @@
                 MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
             }
             _noInternet = false;
-            _sourceDirectory.DateLastScanned = DateTime.Now;
+            _sourceDirectory.DateLastScraped = DateTime.Now;
             _sourceDirectory.EntityState = EntityState.Modified;
             new SourceDirectoryDomain().UpdateSourceDirectory(_sourceDirectory);
             OnProgressComplete();

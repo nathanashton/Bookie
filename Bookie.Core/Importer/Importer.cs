@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using Common;
+    using Common.Factories;
     using Common.Model;
     using Domains;
     using Interfaces;
@@ -98,26 +99,12 @@
                 var foundBook = _foundPdfFiles[index];
                 _source.EntityState = EntityState.Unchanged;
 
-                var book = new Book
-                {
-                    Title = Path.GetFileNameWithoutExtension(foundBook),
-                    Abstract = "",
-                    BookFile =
-                    {
-                        FileNameWithExtension = Path.GetFileName(foundBook),
-                        FullPathAndFileNameWithExtension = foundBook,
-                        FileExtension = Path.GetExtension(foundBook),
-                        FileSizeBytes = new FileInfo(foundBook).Length,
-                        EntityState = EntityState.Added
-                    },
-                    SourceDirectory = new SourceDirectory {Id = _source.Id, EntityState = EntityState.Unchanged},
-                    BookHistory =
-                    {
-                        DateImported = DateTime.Now,
-                        EntityState = EntityState.Added
-                    },
-                    CoverImage = new CoverImage()
-                };
+
+                var book = BookFactory.CreateNew(_source, foundBook);
+
+                book.BookFile.EntityState = EntityState.Added;
+                book.SourceDirectory.EntityState = EntityState.Unchanged;
+                book.BookHistory.EntityState = EntityState.Added;
 
 
                 if (_generateCovers)
@@ -126,7 +113,6 @@
                 }
                 else
                 {
-                    book.CoverImage = CoverImageDomain.EmptyCoverImage();
                     book.CoverImage.EntityState = EntityState.Added;
                 }
 
@@ -134,19 +120,19 @@
 
                 book.EntityState = EntityState.Added;
 
-                if (_bookDomain.Exists(book.BookFile.FullPathAndFileNameWithExtension))
-                {
-                    _booksExisted++;
-                    Logger.Log.Debug("Importer Skipped: " + book.Title + " already exists.");
-                }
-                else
-                {
+                //if (_bookDomain.Exists(book.BookFile.FullPathAndFileNameWithExtension))
+                //{
+                //    _booksExisted++;
+                //    Logger.Log.Debug("Importer Skipped: " + book.Title + " already exists.");
+                //}
+                //else
+                //{
                     _bookDomain.AddBook(book);
                     Logger.Log.Debug("Imported: " + book.Title);
 
                     _booksImported++;
                     Worker.ReportProgress(percentage, book);
-                }
+                //}
             }
         }
 

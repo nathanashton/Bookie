@@ -60,23 +60,7 @@
                         var createdUserId = reader["CreatedUserId"].ToString();
                         var modifiedUserId = reader["ModifiedUserId"].ToString();
 
-                        if (string.IsNullOrEmpty(createdUserId))
-                        {
-                            log.CreatedUserId = null;
-                        }
-                        else
-                        {
-                            log.CreatedUserId = Convert.ToInt32(reader["CreatedUserId"].ToString());
-                        }
-
-                        if (string.IsNullOrEmpty(modifiedUserId))
-                        {
-                            log.ModifiedUserId = null;
-                        }
-                        else
-                        {
-                            log.ModifiedUserId = Convert.ToInt32(reader["ModifiedUserId"].ToString());
-                        }
+                   
 
 
                         Logs.Add(log);

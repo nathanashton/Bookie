@@ -62,11 +62,15 @@
     <Compile Include="BookEventArgs.cs" />
     <Compile Include="BookieException.cs" />
     <Compile Include="BookieMessageEventArgs.cs" />
+    <Compile Include="Factories\BookFactory.cs" />
+    <Compile Include="Factories\BookFileFactory.cs" />
+    <Compile Include="Factories\CoverImageFactory.cs" />
     <Compile Include="FileTypes.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="IProgressPublisher.cs" />
     <Compile Include="IProgressSubscriber.cs" />
     <Compile Include="ISplashScreen.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MessagingService.cs" />
     <Compile Include="Model\Author.cs" />
@@ -76,7 +80,6 @@
     <Compile Include="Model\BookMark.cs" />
     <Compile Include="Model\CoverImage.cs" />
     <Compile Include="Model\IEntity.cs" />
-    <Compile Include="Model\ITrackableEntity.cs" />
     <Compile Include="Model\LogEntity.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Model\Publisher.cs" />
