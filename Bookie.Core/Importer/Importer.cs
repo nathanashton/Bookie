@@ -97,18 +97,13 @@
                 }
 
                 var foundBook = _foundPdfFiles[index];
-                _source.EntityState = EntityState.Unchanged;
-
-
                 var book = BookFactory.CreateNew(_source, foundBook);
-
                 book.BookFile.EntityState = EntityState.Added;
-                book.SourceDirectory.EntityState = EntityState.Unchanged;
                 book.BookHistory.EntityState = EntityState.Added;
-
 
                 if (_generateCovers)
                 {
+                    //Download cover.
                     book.CoverImage = _coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
                 else
@@ -117,22 +112,20 @@
                 }
 
                 var percentage = Utils.CalculatePercentage(index + 1, 1, _foundPdfFiles.Count);
-
                 book.EntityState = EntityState.Added;
 
-                //if (_bookDomain.Exists(book.BookFile.FullPathAndFileNameWithExtension))
-                //{
-                //    _booksExisted++;
-                //    Logger.Log.Debug("Importer Skipped: " + book.Title + " already exists.");
-                //}
-                //else
-                //{
+                if (_bookDomain.Exists(book.BookFile.FullPathAndFileNameWithExtension))
+                {
+                    _booksExisted++;
+                    Logger.Log.Debug("Importer Skipped: " + book.Title + " already exists.");
+                }
+                else
+                {
                     _bookDomain.AddBook(book);
                     Logger.Log.Debug("Imported: " + book.Title);
-
                     _booksImported++;
                     Worker.ReportProgress(percentage, book);
-                //}
+                }
             }
         }
 

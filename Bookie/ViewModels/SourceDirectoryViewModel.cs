@@ -8,6 +8,7 @@
     using System.Windows.Input;
     using Common;
     using Common.Model;
+    using Core;
     using Core.Domains;
     using Core.Importer;
     using Core.Scraper;
@@ -16,6 +17,7 @@
     public class SourceDirectoryViewModel : NotifyBase
     {
         private readonly SourceDirectoryDomain _domain;
+        private readonly Library _library;
         private ICommand _addCommand;
         private Importer _importer;
         private bool _progressReportingActive;
@@ -28,6 +30,7 @@
 
         public SourceDirectoryViewModel(MainViewModel v)
         {
+            _library = new Library();
             MainViewModel = v;
             _domain = new SourceDirectoryDomain();
             SourceDirectories = new ObservableCollection<SourceDirectory>();
@@ -167,6 +170,7 @@
             _importer.ProgressComplete += delegate { ProgressReportingActive = false; };
 
             Refresh();
+            _library.CleanImages();
         }
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -199,6 +203,8 @@
             scraper.Scrape(SelectedSourceDirectory, MainViewModel.Books.Cast<Book>().ToList(), covers, rescrape);
             scraper.ProgressComplete += delegate { ProgressReportingActive = false; };
             Refresh();
+            _library.CleanImages();
+
         }
     }
 }

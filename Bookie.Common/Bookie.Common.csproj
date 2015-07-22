@@ -70,7 +70,6 @@
     <Compile Include="IProgressPublisher.cs" />
     <Compile Include="IProgressSubscriber.cs" />
     <Compile Include="ISplashScreen.cs" />
-    <Compile Include="Library.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MessagingService.cs" />
     <Compile Include="Model\Author.cs" />

@@ -18,10 +18,15 @@
         </StackPanel>-->
         <TabControl>
             <TabItem Header="General">
-                <Button Height="25" Width="60" Click="Button_Click" Content="View Log" />
-            </TabItem>
+                <StackPanel Orientation="Vertical">
 
+                    <Button Height="25" Width="60" Click="Button_Click" Content="View Log" />
+                <Button Content="Clean" Click="ButtonBase_OnClick"/>
+                </StackPanel>
+
+            </TabItem>
             <Button Content="View Log" />
+
             <TabItem Header="Appearance" />
             <TabItem Header="Advanced" />
         </TabControl>

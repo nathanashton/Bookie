@@ -21,12 +21,12 @@
 
         public IList<CoverImage> GetAllCoverImages()
         {
-            return _coverImageRepository.GetAll();
+            return _coverImageRepository.GetAll(x=> x.Book);
         }
 
         public CoverImage GetCoverImageByUrl(string coverImageUrl)
         {
-            return _coverImageRepository.GetSingle(x => x.FullPathAndFileNameWithExtension.Equals(coverImageUrl));
+            return _coverImageRepository.GetSingle(x => x.FileNameWithExtension.Equals(coverImageUrl));
         }
 
         public void AddCoverImage(params CoverImage[] coverimage)

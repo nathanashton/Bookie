@@ -1,6 +1,7 @@
 ﻿namespace Bookie.Views
 {
     using System.Windows;
+    using Core;
     using MahApps.Metro.Controls;
     using ViewModels;
 
@@ -18,6 +19,17 @@
         {
             var w = new LogWindow(new LogViewModel());
             w.ShowDialog();
+        }
+
+        private void CleanImages()
+        {
+            var l = new Library();
+            l.CleanImages();
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            CleanImages();
         }
     }
 }
