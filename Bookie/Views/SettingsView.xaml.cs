@@ -15,6 +15,8 @@
             InitializeComponent();
         }
 
+        public SettingsViewModel ViewModel => (SettingsViewModel) Resources["ViewModel"];
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var w = new LogWindow(new LogViewModel());

@@ -1,6 +1,5 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using System;
     using System.Collections.Generic;
     using Common.Model;
     using Data.Interfaces;
@@ -36,8 +35,6 @@
                 {
                     // Exists
                 }
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
             }
             _publisherRepository.Add(publisher);
         }

@@ -1,7 +1,7 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Common.Model;
@@ -51,33 +51,52 @@
             {
                 return;
             }
-            foreach (var bk in books)
-            {
-                bk.CreatedDateTime = DateTime.Now;
-                bk.ModifiedDateTime = DateTime.Now;
-            }
+
             _bookRepository.Add(books);
         }
 
         public void UpdateBook(params Book[] book)
         {
-            foreach (var b in book)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
             _bookRepository.Update(book);
         }
 
         public void RemoveBook(params Book[] book)
         {
+            var coverPath = book[0].CoverImage.FullPathAndFileNameWithExtension;
+            book[0].EntityState = EntityState.Deleted;
+            book[0].BookFile.EntityState = EntityState.Deleted;
+            book[0].BookHistory.EntityState = EntityState.Deleted;
+            book[0].CoverImage.EntityState = EntityState.Deleted;
+            book[0].SourceDirectory.EntityState = EntityState.Unchanged;
+            if (File.Exists(coverPath))
+            {
+                File.Delete(coverPath);
+            }
+
+            foreach (var b in book[0].BookMarks)
+            {
+                b.EntityState = EntityState.Deleted;
+            }
+            foreach (var b in book[0].Notes)
+            {
+                b.EntityState = EntityState.Deleted;
+            }
+            //foreach (var b in book[0].Authors)
+            //{
+            //    b.EntityState = EntityState.Deleted;
+            //}
+            //foreach (var b in book[0].Publishers)
+            //{
+            //    b.EntityState = EntityState.Deleted;
+            //}
+
+            book[0].EntityState = EntityState.Deleted;
             _bookRepository.Remove(book);
         }
 
         public bool Exists(string filePath)
         {
             return _bookRepository.Exists(filePath);
-            return false;
         }
 
         public async Task<IList<Book>> GetAllAsync()

@@ -6,9 +6,5 @@
     public static class Logger
     {
         public static ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-       
     }
-
-  
 }

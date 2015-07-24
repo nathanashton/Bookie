@@ -13,6 +13,7 @@
     using Core.Importer;
     using Core.Scraper;
     using Views;
+    using static System.String;
 
     public class SourceDirectoryViewModel : NotifyBase
     {
@@ -120,7 +121,24 @@
                 return;
             }
 
-            var source = new SourceDirectory {SourceDirectoryUrl = dialog.SelectedPath};
+            string nickname = "";
+            //NickName
+            NickNameView view = new NickNameView();
+            view.ViewModel.NickName = dialog.SelectedPath;
+            if (view.ShowDialog() == true)
+            {
+                if (IsNullOrEmpty(view.ViewModel.NickName))
+                {
+                    nickname = dialog.SelectedPath;
+                }
+                else
+                {
+                    nickname = view.ViewModel.NickName;
+                }
+            }
+
+
+            var source = new SourceDirectory {SourceDirectoryUrl = dialog.SelectedPath, NickName=nickname};
 
             if (_domain.Exists(source.SourceDirectoryUrl))
             {
@@ -204,7 +222,6 @@
             scraper.ProgressComplete += delegate { ProgressReportingActive = false; };
             Refresh();
             _library.CleanImages();
-
         }
     }
 }

@@ -7,7 +7,7 @@
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-                      Title="Source Directories" Height="235.667" Width="565" ResizeMode="NoResize"
+                      Title="Source Directories" Height="235.667" Width="654.859" ResizeMode="NoResize"
                       WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
 
     <Window.Resources>
@@ -38,6 +38,7 @@
             </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Header="Path" Binding="{Binding SourceDirectoryUrl}" />
+                <DataGridTextColumn Width="*" Header="NickName" Binding="{Binding NickName}" />
                 <DataGridTextColumn Width="Auto" Header="Imported"
                                     Binding="{Binding DateLastImported, StringFormat={}{0:dd/MM/yyyy}}" />
                 <DataGridTextColumn Width="Auto" Header="Scanned"

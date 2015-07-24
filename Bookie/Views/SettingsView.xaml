@@ -7,8 +7,13 @@
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False" ShowMinButton="False" ShowMaxRestoreButton="False"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:viewModels="clr-namespace:Bookie.ViewModels"
+                      xmlns:userControls="clr-namespace:Bookie.UserControls"
                       WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Window.Resources>
+        <viewModels:SettingsViewModel x:Key="ViewModel" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
         <!--<StackPanel Orientation="Vertical">
         <Label Content="Cover render quality" />
         <Label Content="Cover folder" />
@@ -21,14 +26,41 @@
                 <StackPanel Orientation="Vertical">
 
                     <Button Height="25" Width="60" Click="Button_Click" Content="View Log" />
-                <Button Content="Clean" Click="ButtonBase_OnClick"/>
+                    <Button Content="Clean" Click="ButtonBase_OnClick" />
                 </StackPanel>
 
             </TabItem>
             <Button Content="View Log" />
 
             <TabItem Header="Appearance" />
-            <TabItem Header="Advanced" />
+            <TabItem Header="Advanced">
+                <ListBox FontFamily="Calibri" ItemsSource="{Binding Excluded}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel LastChildFill="True">
+                                <Button Margin="5" DockPanel.Dock="Right" Content="X" Width="15"
+                                        Command="{Binding DeleteExcludedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type viewModels:SettingsViewModel}}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Visibility" Value="Hidden" />
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}"
+                                                    Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Label HorizontalAlignment="Center" Content="{Binding Url,Mode=TwoWay}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </TabItem>
         </TabControl>
     </Grid>
 </Controls:MetroWindow>

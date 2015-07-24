@@ -107,6 +107,15 @@
                         {
                             var entity = entry.Entity;
                             entry.State = GetEntityState(entity.EntityState);
+                            if (entry.State == EntityState.Added)
+                            {
+                                entry.Entity.CreatedDateTime = DateTime.Now;
+                                entry.Entity.ModifiedDateTime = DateTime.Now;
+                            }
+                            if (entry.State == EntityState.Modified)
+                            {
+                                entry.Entity.ModifiedDateTime = DateTime.Now;
+                            }
                         }
                     }
                     context.SaveChanges();

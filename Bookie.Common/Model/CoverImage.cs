@@ -7,19 +7,15 @@
 
     public class CoverImage : IEntity
     {
+        [NotMapped] private string _fileNameWithExtension;
+
         public int Id { get; set; }
 
-        [NotMapped]
-        private string _fileNameWithExtension ;
         public string FileNameWithExtension
         {
-            get
-            {
-                return IsNullOrEmpty(_fileNameWithExtension) ? Empty : _fileNameWithExtension;
-            }
+            get { return IsNullOrEmpty(_fileNameWithExtension) ? Empty : _fileNameWithExtension; }
             set { _fileNameWithExtension = value; }
         }
-
 
         [NotMapped]
         public string FullPathAndFileNameWithExtension
@@ -35,7 +31,8 @@
         }
 
         [NotMapped]
-        public string FileExtension => IsNullOrEmpty(FileNameWithExtension) ? Empty : Path.GetExtension(FileNameWithExtension);
+        public string FileExtension
+            => IsNullOrEmpty(FileNameWithExtension) ? Empty : Path.GetExtension(FileNameWithExtension);
 
         public virtual Book Book { get; set; }
 

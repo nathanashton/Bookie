@@ -17,6 +17,7 @@
         }
 
         public int Id { get; set; }
+        public int Rating { get; set; }
         public string Title { get; set; }
         public string Abstract { get; set; }
         public DateTime? DatePublished { get; set; }

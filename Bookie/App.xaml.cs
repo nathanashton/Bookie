@@ -1,22 +1,20 @@
 ﻿namespace Bookie
 {
-    using Common;
-    using log4net;
     using System;
     using System.Reflection;
     using System.Threading;
     using System.Windows;
     using System.Windows.Threading;
+    using Common;
+    using log4net;
     using log4net.Core;
     using Views;
 
     public partial class App
     {
         public static ISplashScreen SplashScreen;
-
         // ReSharper disable once UnusedMember.Local
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         private ManualResetEvent _resetSplashCreated;
         private Thread _splashThread;
 
@@ -61,7 +59,9 @@
             {
                 var args = e.Args[0];
                 if (args == "debug")
-                { Globals.DebugMode = true; }
+                {
+                    Globals.DebugMode = true;
+                }
             }
             var repository = LogManager.GetRepository();
             if (repository != null)

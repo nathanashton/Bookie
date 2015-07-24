@@ -11,7 +11,13 @@
         {
             var book = new Book
             {
-                SourceDirectory = new SourceDirectory {Id = sourceDirectory.Id, EntityState = EntityState.Unchanged, SourceDirectoryUrl = sourceDirectory.SourceDirectoryUrl},
+                SourceDirectory =
+                    new SourceDirectory
+                    {
+                        Id = sourceDirectory.Id,
+                        EntityState = EntityState.Unchanged,
+                        SourceDirectoryUrl = sourceDirectory.SourceDirectoryUrl
+                    },
                 CoverImage = CoverImageFactory.CreateEmpty(),
                 BookFile = BookFileFactory.CreateNew(file),
                 Title = Path.GetFileNameWithoutExtension(file),

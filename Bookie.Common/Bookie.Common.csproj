@@ -78,6 +78,7 @@
     <Compile Include="Model\BookHistory.cs" />
     <Compile Include="Model\BookMark.cs" />
     <Compile Include="Model\CoverImage.cs" />
+    <Compile Include="Model\Excluded.cs" />
     <Compile Include="Model\IEntity.cs" />
     <Compile Include="Model\LogEntity.cs" />
     <Compile Include="Model\Note.cs" />

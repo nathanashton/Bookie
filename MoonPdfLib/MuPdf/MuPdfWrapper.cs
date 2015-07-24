@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
- /*
+/*
  * 2013 - Modified and extended version of W. Jordan's code (see AUTHORS file)
  */
 
@@ -212,7 +212,7 @@ namespace MoonPdfLib.MuPdf
                 {
                     var fs = (FileSource) source;
                     Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT);
-                        // Creates the context
+                    // Creates the context
 
                     //TODO Following fails if file doesnt exist
                     Stream = NativeMethods.OpenFile(Context, fs.Filename); // opens file as a stream
@@ -222,7 +222,7 @@ namespace MoonPdfLib.MuPdf
                 {
                     var ms = (MemorySource) source;
                     Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT);
-                        // Creates the context
+                    // Creates the context
                     var pinnedArray = GCHandle.Alloc(ms.Bytes, GCHandleType.Pinned);
                     var pointer = pinnedArray.AddrOfPinnedObject();
                     Stream = NativeMethods.OpenStream(Context, pointer, ms.Bytes.Length); // opens file as a stream

@@ -15,8 +15,10 @@
     {
         private readonly BookDomain _bookDomain = new BookDomain();
         private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
+        private readonly ExcludedDomain _excludedDomain;
         private readonly SourceDirectory _source;
         public readonly BackgroundWorker Worker;
+        private int _booksExcluded;
         private int _booksExisted;
         private int _booksImported;
         private List<string> _foundPdfFiles;
@@ -24,6 +26,7 @@
 
         public Importer(SourceDirectory source)
         {
+            _excludedDomain = new ExcludedDomain();
             ProgressService.RegisterPublisher(this);
             _source = source;
             _source.Books = new HashSet<Book>();
@@ -37,6 +40,7 @@
             ProgressArgs = new ProgressWindowEventArgs();
             _booksImported = 0;
             _booksExisted = 0;
+            _booksExcluded = 0;
         }
 
         public ProgressWindowEventArgs ProgressArgs { get; set; }
@@ -57,9 +61,10 @@
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             OnProgressComplete();
-            Logger.Log.Info($"Import Complete: Books Imported {_booksImported}: Already Existed {_booksExisted}.");
+            Logger.Log.Info(
+                $"Import Complete: Books Imported {_booksImported}: Already Existed {_booksExisted}. Excluded {_booksExcluded}.");
             MessagingService.ShowMessage(
-                $"{_booksImported} Books imported.{Environment.NewLine}{_booksExisted} Books already existed.");
+                $"{_booksImported} Books imported.{Environment.NewLine}{_booksExisted} Books already existed.{Environment.NewLine}{_booksExcluded} Books on the Excluded List.");
         }
 
         private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -88,6 +93,7 @@
         {
             _booksImported = 0;
             _booksExisted = 0;
+            _booksExcluded = 0;
             for (var index = 0; index < _foundPdfFiles.Count; index++)
             {
                 if (Worker.CancellationPending)
@@ -97,6 +103,14 @@
                 }
 
                 var foundBook = _foundPdfFiles[index];
+                if (_excludedDomain.GetExcludedByUrl(foundBook) != null)
+                {
+                    Logger.Log.Debug("Importer Skipped: " + foundBook + " is on the exclude list.");
+                    _booksExcluded++;
+                    continue;
+                }
+
+
                 var book = BookFactory.CreateNew(_source, foundBook);
                 book.BookFile.EntityState = EntityState.Added;
                 book.BookHistory.EntityState = EntityState.Added;

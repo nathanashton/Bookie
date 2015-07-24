@@ -1,0 +1,32 @@
+﻿<controls:MetroWindow x:Class="Bookie.Views.RemoveBookView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:viewModels="clr-namespace:Bookie.ViewModels"
+                      mc:Ignorable="d"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="1"
+                      EnableDWMDropShadow="True"
+                      WindowTransitionsEnabled="False"
+                      Title="Remove" Height="300" Width="300" ResizeMode="NoResize"
+                      WindowStartupLocation="CenterScreen" WindowTitleBrush="Red" SizeToContent="Height"
+                      WindowStyle="ToolWindow" FontFamily="Calibri">
+    <Window.Resources>
+        <viewModels:RemoveBookViewModel x:Key="ViewModel" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Margin="10" TextWrapping="Wrap"
+                       Text="Warning. This will remove this book from the database, including all notes and bookmarks. This cannot be undone." />
+            <CheckBox IsChecked="{Binding DeleteFile}" FontFamily="Calibri" Margin="5" Content="Delete file" />
+            <CheckBox IsChecked="{Binding Exclude}" FontFamily="Calibri" Margin="5"
+                      Content="Exclude from future imports" />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Margin="5" Content="Remove" Command="{Binding RemoveCommand}" />
+                <Button Margin="5" Content="Cancel" Command="{Binding CancelCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</controls:MetroWindow>

@@ -57,10 +57,6 @@
                         log.Thread = reader["Thread"].ToString();
                         log.Message = reader["Message"].ToString();
                         log.Exception = reader["Exception"].ToString();
-                        var createdUserId = reader["CreatedUserId"].ToString();
-                        var modifiedUserId = reader["ModifiedUserId"].ToString();
-
-                   
 
 
                         Logs.Add(log);

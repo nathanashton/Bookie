@@ -1,6 +1,5 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using System;
     using System.Collections.Generic;
     using Common.Model;
     using Data.Interfaces;
@@ -28,11 +27,6 @@
 
         public void AddAuthor(params Author[] author)
         {
-            foreach (var b in author)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
             _authorRepository.Add(author);
         }
 

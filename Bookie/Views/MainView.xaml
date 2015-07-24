@@ -11,8 +11,9 @@
                       WindowTitleBrush="{Binding TitleBrush}"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-                      Title="{Binding Title}" Height="300" Width="1600" FontFamily="Calibri" MinWidth="830" MinHeight="300"
-                      WindowState="Maximized">
+                      Title="{Binding Title}" Height="300" Width="1600" FontFamily="Calibri" MinWidth="830"
+                      MinHeight="300"
+                      WindowState="Maximized" Loaded="MetroWindow_Loaded">
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
@@ -121,28 +122,6 @@
 
                                 <StackPanel Orientation="Horizontal">
 
-                                    <ToggleButton ToolTip="Toggle Scraped" Width="40" Height="40" Margin="5"
-                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                                                  IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
-                                        <Rectangle Width="20" Height="20" Fill="{Binding ScrapedColor}">
-                                            <Rectangle.OpacityMask>
-                                                <VisualBrush Stretch="Fill"
-                                                             Visual="{DynamicResource appbar_book_open_writing}" />
-                                            </Rectangle.OpacityMask>
-                                        </Rectangle>
-                                    </ToggleButton>
-
-                                    <ToggleButton ToolTip="Toggle Favourites" Width="40" Height="40" Margin="5,5,30,5"
-                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                                                  IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
-                                        <Rectangle Width="20" Height="20" Fill="{Binding StarColor}">
-                                            <Rectangle.OpacityMask>
-                                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}" />
-                                            </Rectangle.OpacityMask>
-                                        </Rectangle>
-                                    </ToggleButton>
-
-
                                     <StackPanel Orientation="Horizontal">
                                         <Label Foreground="White" FontSize="14" Content="Sort" Margin="5,0,5,0"
                                                VerticalContentAlignment="Center" />
@@ -152,7 +131,7 @@
                                         <Label Foreground="White" FontSize="14" Content="Sources" Margin="5,0,5,0"
                                                VerticalContentAlignment="Center" />
                                         <ComboBox SelectedItem="{Binding SourceDirectoryFilter}"
-                                                  ItemsSource="{Binding SourceDirectories}" Height="20" Width="150" />
+                                                  ItemsSource="{Binding SourceDirectories}" DisplayMemberPath="NickName" Height="20" Width="150" />
                                         <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0"
                                                VerticalContentAlignment="Center" />
                                         <TextBox FontSize="12" Width="241" Height="20" Name="Filter"
@@ -168,6 +147,26 @@
                                                          IsChecked="{Binding FilterOnDescription, Mode=TwoWay}"
                                                          HorizontalAlignment="Left" Margin="5" Content="Abstract" />
                                         </ComboBox>
+                                        <ToggleButton ToolTip="Toggle Scraped" Width="40" Height="40" Margin="5"
+                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                                  IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
+                                            <Rectangle Width="20" Height="20" Fill="{Binding ScrapedColor}">
+                                                <Rectangle.OpacityMask>
+                                                    <VisualBrush Stretch="Fill"
+                                                             Visual="{DynamicResource appbar_book_open_writing}" />
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                        </ToggleButton>
+
+                                        <ToggleButton ToolTip="Toggle Favourites" Width="40" Height="40" Margin="5"
+                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                                  IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
+                                            <Rectangle Width="20" Height="20" Fill="{Binding StarColor}">
+                                                <Rectangle.OpacityMask>
+                                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}" />
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                        </ToggleButton>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>

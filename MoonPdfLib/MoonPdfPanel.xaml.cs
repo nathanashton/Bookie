@@ -1,4 +1,4 @@
- /*! MoonPdfLib - Provides a WPF user control to display PDF files
+/*! MoonPdfLib - Provides a WPF user control to display PDF files
 Copyright (C) 2013  (see AUTHORS file)
 
 This program is free software: you can redistribute it and/or modify
@@ -190,7 +190,7 @@ namespace MoonPdfLib
         private PageRowBound[] CalculatePageRowBounds(Size[] singlePageBounds, ViewType viewType)
         {
             var pagesPerRow = Math.Min(GetPagesPerRow(), singlePageBounds.Length);
-                // if multiple page-view, but pdf contains less pages than the pages per row
+            // if multiple page-view, but pdf contains less pages than the pages per row
             var finalBounds = new List<PageRowBound>();
             var verticalBorderOffset = (PageMargin.Top + PageMargin.Bottom);
 

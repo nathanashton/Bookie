@@ -1,6 +1,5 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using Common.Factories;
@@ -21,7 +20,7 @@
 
         public IList<CoverImage> GetAllCoverImages()
         {
-            return _coverImageRepository.GetAll(x=> x.Book);
+            return _coverImageRepository.GetAll(x => x.Book);
         }
 
         public CoverImage GetCoverImageByUrl(string coverImageUrl)
@@ -31,11 +30,6 @@
 
         public void AddCoverImage(params CoverImage[] coverimage)
         {
-            foreach (var b in coverimage)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
             _coverImageRepository.Add(coverimage);
         }
 

@@ -71,6 +71,7 @@
     <Compile Include="Domains\BookMarkDomain.cs" />
     <Compile Include="Domains\CoverImageDomain.cs" />
     <Compile Include="Domains\Database.cs" />
+    <Compile Include="Domains\ExcludedDomain.cs" />
     <Compile Include="Domains\LogDomain.cs" />
     <Compile Include="Domains\NoteDomain.cs" />
     <Compile Include="Domains\PublisherDomain.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Interfaces\IBookHistoryDomain.cs" />
     <Compile Include="Interfaces\IBookMarkDomain.cs" />
     <Compile Include="Interfaces\ICoverImageDomain.cs" />
+    <Compile Include="Interfaces\IExcludedDomain.cs" />
     <Compile Include="Interfaces\ILogDomain.cs" />
     <Compile Include="Interfaces\INoteDomain.cs" />
     <Compile Include="Interfaces\IPublisherDomain.cs" />

@@ -1,0 +1,74 @@
+﻿<controls:MetroWindow x:Class="Bookie.Views.EditBookView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:viewModels="clr-namespace:Bookie.ViewModels"
+                      xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+                      xmlns:converters="clr-namespace:Bookie.Converters"
+                      mc:Ignorable="d"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="1"
+                      EnableDWMDropShadow="True"
+                      WindowTransitionsEnabled="False"
+                      Title="Edit" Height="326" Width="300" ResizeMode="NoResize"
+                      WindowStartupLocation="CenterScreen" SizeToContent="Height" WindowStyle="ToolWindow"
+                      FontFamily="Calibri">
+    <Window.Resources>
+        <viewModels:EditBookViewModel x:Key="ViewModel" />
+        <converters:CoverImageConverter x:Key="CoverImageConverter" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource ViewModel}">
+        <StackPanel Orientation="Vertical">
+            <DockPanel Margin="10"  LastChildFill="True">
+                <Border BorderBrush="#FF00AADE" BorderThickness="1"  Width="100" Height="130">
+                <Image RenderOptions.BitmapScalingMode="Fant"
+                                   Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}"
+                                   Stretch="Fill" />
+                </Border>
+                <StackPanel Margin="10"  Orientation="Vertical">
+                    <Button Margin="5"  Content="Scrape"/>
+                    <Button Margin="5"  Content="Change Cover"/>
+                </StackPanel>
+
+            </DockPanel>
+            <DockPanel Margin="5" LastChildFill="True" HorizontalAlignment="Stretch">
+                <Label DockPanel.Dock="Left" Content="Title" />
+                <TextBox FontFamily="Calibri" HorizontalAlignment="Stretch" Text="{Binding SelectedBook.Title}" />
+            </DockPanel>
+            <DockPanel Margin="5" LastChildFill="True" HorizontalAlignment="Stretch">
+                <Label DockPanel.Dock="Left" Content="Abstract" />
+                <TextBox TextWrapping="Wrap" AcceptsReturn="True" Height="100" FontFamily="Calibri"
+                         HorizontalAlignment="Stretch" Text="{Binding SelectedBook.Abstract}" />
+            </DockPanel>
+            <DockPanel Margin="5" LastChildFill="True" HorizontalAlignment="Stretch">
+                <Label DockPanel.Dock="Left" Content="Date" />
+                <TextBox FontFamily="Calibri" HorizontalAlignment="Stretch" Text="{Binding SelectedBook.DatePublished}" />
+            </DockPanel>
+            <DockPanel Margin="5" LastChildFill="True" HorizontalAlignment="Stretch">
+                <Label DockPanel.Dock="Left" Content="ISBN" />
+                <TextBox FontFamily="Calibri" HorizontalAlignment="Stretch" Text="{Binding SelectedBook.Isbn}" />
+            </DockPanel>
+         
+            <syncfusion:SfRating Value="{Binding SelectedBook.Rating, Mode=TwoWay}" Margin="5,10,5,10" Width="150" ItemsCount="5" HorizontalAlignment="Center" Precision="Standard">
+                <syncfusion:SfRating.ItemContainerStyle>
+
+                    <Style TargetType="syncfusion:SfRatingItem">
+                        <Setter Property="RatedStroke" Value="Black"/>
+                        <Setter Property="PointerOverFill" Value="{DynamicResource AccentColorBrush}"/>
+                        <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}"/>
+                        <Setter Property="Height" Value="20"/>
+
+                    </Style>
+
+                </syncfusion:SfRating.ItemContainerStyle>
+
+            </syncfusion:SfRating>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Margin="5" Content="Save" Command="{Binding SaveCommand}" />
+                <Button Margin="5" Content="Cancel" Command="{Binding CancelCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</controls:MetroWindow>

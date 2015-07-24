@@ -1,6 +1,7 @@
 ﻿namespace Bookie.Views
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading;
     using System.Windows;
@@ -12,6 +13,7 @@
     using MahApps.Metro;
     using Properties;
     using ViewModels;
+    using static System.String;
 
     /// <summary>
     ///     Interaction logic for MainView.xaml
@@ -49,6 +51,7 @@
             ViewModel.TileWidth = 130;
 
             App.SplashScreen.LoadComplete();
+
         }
 
         private void ApplySettings()
@@ -64,6 +67,24 @@
             if (!Directory.Exists(Globals.CoverImageFolder))
             {
                 Directory.CreateDirectory(Globals.CoverImageFolder);
+            }
+        }
+
+        private void CheckSources()
+        {
+            var notexist = new List<string>();
+            var sources = new SourceDirectoryDomain().GetAllSourceDirectories();
+            foreach (var source in sources)
+            {
+                if (!Directory.Exists(source.SourceDirectoryUrl))
+                {
+                    notexist.Add(source.SourceDirectoryUrl);
+                }
+            }
+            if (notexist.Count > 0)
+            {
+                Logger.Log.Error("Missing source directories " + Join(",", notexist));
+                MessageBox.Show("The following source directories cannot be found:" + Environment.NewLine + Join(Environment.NewLine, notexist), "Error");
             }
         }
 
@@ -109,6 +130,12 @@
             {
                 binding.UpdateSource();
             }
+        }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            CheckSources();
+
         }
     }
 }

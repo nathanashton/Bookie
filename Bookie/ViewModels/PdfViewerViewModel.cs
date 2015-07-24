@@ -19,10 +19,12 @@
         private int _currentPage;
         private ICommand _deleteBookmarkCommand;
         private ICommand _editNoteCommand;
+        private ICommand _fullScreenCommand;
         private ICommand _gotoFirstPageCommand;
         private ICommand _gotoLastPageCommand;
         private ICommand _gotoNextPageCommand;
         private ICommand _gotoPreviousPageCommand;
+        private bool _isFullScreen;
         private Visibility _leftPane;
         private ICommand _leftPaneCommand;
         private ICommand _noteButtonCommand;
@@ -49,6 +51,27 @@
             SelectedBookMark = null;
             SelectedNote = null;
             PdfPanel.PageChangedEvent += moonPdfPanel_PageChangedEvent;
+        }
+
+        public bool IsFullScreen
+        {
+            get { return _isFullScreen; }
+            set
+            {
+                _isFullScreen = value;
+                NotifyPropertyChanged("IsFullScreen");
+            }
+        }
+
+        public Window Window { get; set; }
+
+        public ICommand FullScreenCommand
+        {
+            get
+            {
+                return _fullScreenCommand
+                       ?? (_leftPaneCommand = new RelayCommand(p => ToggleFullScreen(), p => true));
+            }
         }
 
         public MoonPdfPanel PdfPanel
@@ -296,6 +319,25 @@
         //    //}
         //}
 
+        private void ToggleFullScreen()
+        {
+            var oldWindowState = new WindowState();
+            if (IsFullScreen)
+            {
+                Window.ResizeMode = ResizeMode.CanResize;
+                Window.WindowStyle = WindowStyle.SingleBorderWindow;
+                Window.WindowState = oldWindowState;
+                IsFullScreen = false;
+            }
+            else
+            {
+                oldWindowState = Window.WindowState;
+                Window.ResizeMode = ResizeMode.NoResize;
+                Window.WindowStyle = WindowStyle.None;
+                Window.WindowState = WindowState.Maximized;
+                IsFullScreen = true;
+            }
+        }
 
         private void AddBookMark(object sender)
         {

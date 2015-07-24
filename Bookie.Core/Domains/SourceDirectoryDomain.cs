@@ -1,6 +1,5 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -41,11 +40,7 @@
             {
                 return;
             }
-            foreach (var b in sourceDirectory)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
+
             _sourceRepository.Add(sourceDirectory);
         }
 

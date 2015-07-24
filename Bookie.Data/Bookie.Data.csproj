@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Context.cs" />
     <Compile Include="Interfaces\IBookMarkRepository.cs" />
+    <Compile Include="Interfaces\IExcludedRepository.cs" />
     <Compile Include="Interfaces\ILogRepository.cs" />
     <Compile Include="Interfaces\INoteRepository.cs" />
     <Compile Include="Repositories\BookFileRepository.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Repositories\BookMarkRepository.cs" />
     <Compile Include="Repositories\BookRepository.cs" />
     <Compile Include="Repositories\CoverImageRepository.cs" />
+    <Compile Include="Repositories\ExcludedRepository.cs" />
     <Compile Include="Repositories\GenericDataRepository.cs" />
     <Compile Include="Interfaces\IGenericDataRepository.cs" />
     <Compile Include="Interfaces\ISourceDirectoryRepository.cs" />

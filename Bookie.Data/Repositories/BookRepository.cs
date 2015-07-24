@@ -15,8 +15,9 @@
         {
             using (var context = new Context())
             {
-
-                var found = GetAll(x => x.BookFile, d=> d.SourceDirectory).Where(p => p.BookFile.FullPathAndFileNameWithExtension == filePath);
+                var found =
+                    GetAll(x => x.BookFile, d => d.SourceDirectory)
+                        .Where(p => p.BookFile.FullPathAndFileNameWithExtension == filePath);
                 return found.Any();
             }
         }

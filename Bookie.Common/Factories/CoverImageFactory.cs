@@ -9,7 +9,7 @@
         {
             var coverImage = new CoverImage
             {
-                FileNameWithExtension = Guid.NewGuid() + ".jpg",
+                FileNameWithExtension = Guid.NewGuid() + ".jpg"
             };
             return coverImage;
         }

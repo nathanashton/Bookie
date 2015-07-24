@@ -3,19 +3,18 @@
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Windows;
     using System.Windows.Data;
     using System.Windows.Forms;
     using System.Windows.Input;
     using Common;
     using Common.Model;
     using Core.Domains;
-    using MessageBox = System.Windows.Forms.MessageBox;
 
     public class LogViewModel : NotifyBase
     {
         private readonly LogDomain _logDomain;
         private ObservableCollection<LogEntity> _allLogEntries;
+        private bool _debugMode;
         private ICommand _deleteLogsCommand;
         private DateTime? _filterDate;
         private bool _filterDebug;
@@ -25,17 +24,14 @@
         private bool _filterNone;
         private ICollectionView _log;
 
-
-        private bool _debugMode;
+        public LogViewModel()
+        {
+            _logDomain = new LogDomain();
+        }
 
         public bool DebugMode
         {
             get { return Globals.DebugMode; }
-   }
-
-        public LogViewModel()
-        {
-            _logDomain = new LogDomain();
         }
 
         public ICommand DeleteLogsCommand

@@ -243,6 +243,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="FulLScreen" Command="{Binding FullScreenCommand}" />
                         <Button Command="{Binding BookMarkButtonCommand}" Name="BookMarkLabel" Margin="5"
                                 Background="Yellow" Content="Has BookMark" />
                         <Button Command="{Binding NoteButtonCommand}" Name="NoteLabel" Margin="5" Background="Yellow"

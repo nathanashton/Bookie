@@ -1,4 +1,4 @@
- /*! MoonPdfLib - Provides a WPF user control to display PDF files
+/*! MoonPdfLib - Provides a WPF user control to display PDF files
 Copyright (C) 2013  (see AUTHORS file)
 
 This program is free software: you can redistribute it and/or modify

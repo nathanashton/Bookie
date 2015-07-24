@@ -1,5 +1,6 @@
 ﻿namespace Bookie.UserControls
 {
+    using System.Windows;
     using ViewModels;
 
     /// <summary>
@@ -10,6 +11,8 @@
         public PdfViewer()
         {
             InitializeComponent();
+            var w = Application.Current.MainWindow;
+            ViewModel.Window = w;
         }
 
         public PdfViewerViewModel ViewModel => (PdfViewerViewModel) Resources["ViewModel"];

@@ -28,6 +28,7 @@
         public DbSet<BookHistory> BookHistories { get; set; }
         public DbSet<BookMark> BookMarks { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<Excluded> Excluded { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -38,6 +39,10 @@
             modelBuilder.Entity<Book>()
                 .HasOptional(s => s.BookFile)
                 .WithRequired(ad => ad.Book).WillCascadeOnDelete(true);
+
+
+            modelBuilder.Entity<Excluded>()
+                .HasKey(e => e.Id);
 
             //CoverImage
             modelBuilder.Entity<CoverImage>()

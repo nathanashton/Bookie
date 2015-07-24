@@ -30,6 +30,7 @@
         public UIElement _bookView;
         private bool _cancelled;
         private ICommand _cancelProgressCommand;
+        private ICommand _editDetailsCommand;
         private string _filter;
         private Visibility _filterBoxVisibility;
         private bool _filterOnDescription;
@@ -46,6 +47,7 @@
         private Publisher _publisherFilter;
         private ObservableCollection<Publisher> _publishersTv;
         private ICommand _refreshCommand;
+        private ICommand _removeBookCommand;
         private Visibility _rightPane;
         private ICommand _rightPaneCommand;
         private Brush _scrapedColor;
@@ -539,6 +541,24 @@
             }
         }
 
+        public ICommand EditDetailsCommand
+        {
+            get
+            {
+                return _editDetailsCommand
+                       ?? (_editDetailsCommand = new RelayCommand(p => EditBook(), p => SelectedBook != null));
+            }
+        }
+
+        public ICommand RemoveBookCommand
+        {
+            get
+            {
+                return _removeBookCommand
+                       ?? (_removeBookCommand = new RelayCommand(p => RemoveBook(), p => SelectedBook != null));
+            }
+        }
+
         public ICommand ViewLog
         {
             get
@@ -713,8 +733,8 @@
                     var bookExistsAdded =
                         AllBooks.Any(
                             b =>
-                                b.BookFile.FullPathAndFileNameWithExtension
-                                == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.Id
+                                == e.Book.Id);
                     if (!bookExistsAdded)
                     {
                         AllBooks.Add(e.Book);
@@ -726,8 +746,8 @@
                     var bookExistsRemoved =
                         AllBooks.Any(
                             b =>
-                                b.BookFile.FullPathAndFileNameWithExtension
-                                == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.Id
+                                == e.Book.Id);
                     if (bookExistsRemoved)
                     {
                         AllBooks.Remove(e.Book);
@@ -766,7 +786,7 @@
                     return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
                 }
                 return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                       book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+                       book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
             }
             if (FilterOnDescription)
             {
@@ -775,7 +795,7 @@
                     return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
                 }
                 return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                       book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+                       book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
             }
 
             if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
@@ -783,7 +803,7 @@
                 return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                   book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+                   book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
         }
 
         private bool ApplyPublisherFilter(object item)
@@ -812,13 +832,13 @@
             var book = item as Book;
             if (SourceDirectoryFilter == null)
             {
-                SourceDirectoryFilter = new SourceDirectory {SourceDirectoryUrl = "All Sources"};
+                SourceDirectoryFilter = new SourceDirectory {SourceDirectoryUrl = "All Sources", NickName="All Source"};
             }
-            if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+            if (SourceDirectoryFilter.NickName == "All Sources")
             {
                 return true;
             }
-            return book != null && book.SourceDirectory.SourceDirectoryUrl == SourceDirectoryFilter.SourceDirectoryUrl;
+            return book != null && book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
         }
 
         private void SwitchToTilesView()
@@ -905,7 +925,7 @@
             SourceDirectories.Clear();
             SourceDirectories =
                 new ObservableCollection<SourceDirectory>(_sourceDomain.GetAllSourceDirectories().ToList());
-            SourceDirectories.Insert(0, new SourceDirectory {SourceDirectoryUrl = "All Sources"});
+            SourceDirectories.Insert(0, new SourceDirectory { SourceDirectoryUrl = "All Sources", NickName = "All Sources" });
             SourceDirectoryFilter = SourceDirectories[0];
         }
 
@@ -937,6 +957,22 @@
             {
                 AuthorsList = new ObservableCollection<Author>(allAuthors);
             }
+        }
+
+        private void EditBook()
+        {
+            var view = new EditBookView();
+            view.ViewModel.SelectedBook = _bookDomain.GetBookById(SelectedBook.Id);
+            view.ViewModel.BookChanged += i_BookChanged;
+            view.ShowDialog();
+        }
+
+        private void RemoveBook()
+        {
+            var view = new RemoveBookView();
+            view.ViewModel.SelectedBook = SelectedBook;
+            view.ViewModel.BookChanged += i_BookChanged;
+            view.ShowDialog();
         }
 
         private void SourceDirectoryView()

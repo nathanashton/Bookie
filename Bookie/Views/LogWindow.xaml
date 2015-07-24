@@ -30,7 +30,8 @@
                 <DockPanel HorizontalAlignment="Right" VerticalAlignment="Center">
                     <RadioButton Margin="5" VerticalAlignment="Center" GroupName="Filter" Content="All"
                                  IsChecked="{Binding FilterNone}" />
-                    <RadioButton Visibility="{Binding DebugMode, Converter={StaticResource BoolVisibilityConverter}}" Margin="5" VerticalAlignment="Center" GroupName="Filter" Content="DEBUG"
+                    <RadioButton Visibility="{Binding DebugMode, Converter={StaticResource BoolVisibilityConverter}}"
+                                 Margin="5" VerticalAlignment="Center" GroupName="Filter" Content="DEBUG"
                                  IsChecked="{Binding FilterDebug}" />
                     <RadioButton Margin="5" VerticalAlignment="Center" GroupName="Filter" Content="INFO"
                                  IsChecked="{Binding FilterInfo}" />
