@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Bookie.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="1200"
              BorderThickness="0" HorizontalAlignment="Stretch"
@@ -13,6 +14,7 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <UserControl.Resources>
+        <converters:BoolVisibilityConverter x:Key="BoolConverter" />
         <Style x:Key="SimpleListBoxItem" TargetType="ListBoxItem">
 
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -20,16 +22,17 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
                         <Border
-           Name="Border"
-           Padding="2"
-           SnapsToDevicePixels="true">
+                            Name="Border"
+                            Padding="2"
+                            SnapsToDevicePixels="true">
                             <ContentPresenter />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#ACCDDB"/>
-                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResourceExtension AccentColorBrush}"/>
-                                <Setter TargetName="Border" Property="BorderThickness" Value="0"/>
+                                <Setter TargetName="Border" Property="Background" Value="#ACCDDB" />
+                                <Setter TargetName="Border" Property="BorderBrush"
+                                        Value="{DynamicResourceExtension AccentColorBrush}" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0" />
 
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -45,32 +48,45 @@
             <Grid Margin="8">
                 <DockPanel Margin="10" LastChildFill="True" Background="Transparent">
                     <StackPanel DockPanel.Dock="Bottom">
-                        <Label Margin="0,5,0,0" Padding="0" Height="20" HorizontalAlignment="Center">
-                            <TextBlock FontSize="12" FontFamily="Calibri" FontWeight="SemiBold" TextAlignment="Center"
-                                       TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
-                        </Label>
+                        <StackPanel Margin="0,5,0,0" Height="20" Orientation="Horizontal">
+                            <Rectangle Visibility="{Binding Favourite, Converter={StaticResource BoolConverter}}"
+                                       VerticalAlignment="Center" Width="10" Height="10" Margin="0,0,5,0" Fill="{DynamicResource AccentColorBrush}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill"
+                                                 Visual="{DynamicResource appbar_check}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <Label VerticalAlignment="Center" Padding="0" HorizontalAlignment="Center">
+                                <TextBlock FontSize="12" FontFamily="Calibri" FontWeight="SemiBold"
+                                           TextAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
+                            </Label>
 
-                        <syncfusion:SfRating ShowToolTip="False" Value="{Binding Rating}" ItemsCount="5" HorizontalAlignment="Center" Precision="Standard" IsReadOnly="True">
+
+                        </StackPanel>
+
+
+                        <syncfusion:SfRating ShowToolTip="False" Value="{Binding Rating}" ItemsCount="5"
+                                             HorizontalAlignment="Center" Precision="Standard" IsReadOnly="True">
                             <syncfusion:SfRating.ItemContainerStyle>
 
                                 <Style TargetType="syncfusion:SfRatingItem">
-                                    <Setter Property="Width" Value="12"/>
-                                    <Setter Property="UnratedStrokeThickness" Value="0"/>
-                                    <Setter Property="RatedStrokeThickness" Value="0"/>
-                                    <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}"/>
-                                    <Setter Property="Height" Value="10"/>
-
+                                    <Setter Property="Width" Value="12" />
+                                    <Setter Property="UnratedStrokeThickness" Value="0" />
+                                    <Setter Property="RatedStrokeThickness" Value="0" />
+                                    <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}" />
+                                    <Setter Property="Height" Value="10" />
                                 </Style>
-
                             </syncfusion:SfRating.ItemContainerStyle>
-
                         </syncfusion:SfRating>
+                    </StackPanel>
 
-                        <!--<TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Left"
+
+                    <!--<TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Left"
                                    Foreground="Black" TextTrimming="CharacterEllipsis"
                                    FontFamily="Calibri" FontSize="12"
                                    Text="{Binding Path=DatePublished, StringFormat=yyyy}" />-->
-                    </StackPanel>
+
 
                     <Grid ToolTip="{Binding Path=Title}">
                         <Border BorderBrush="#FF00AADE" BorderThickness="1">
@@ -89,7 +105,7 @@
 
         <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
 
-            <ListBox Margin="5" ItemContainerStyle="{StaticResource SimpleListBoxItem}" 
+            <ListBox Margin="5" ItemContainerStyle="{StaticResource SimpleListBoxItem}"
                      ScrollViewer.VerticalScrollBarVisibility="{Binding IsMouseOver,
                     RelativeSource={RelativeSource Self},
                     Converter={StaticResource MouseOverToScrollBarVisibility}}"
@@ -101,7 +117,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch"
                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
                      ItemsSource="{Binding Path=Books, Mode=OneWay}" IsSynchronizedWithCurrentItem="True">
-            
+
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Edit Details" Command="{Binding EditDetailsCommand}" />

@@ -12,7 +12,7 @@
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
-                      Title="Edit" Height="326" Width="300" ResizeMode="NoResize"
+                      Title="Edit" Height="460.964" Width="300" ResizeMode="NoResize"
                       WindowStartupLocation="CenterScreen" SizeToContent="Height" WindowStyle="ToolWindow"
                       FontFamily="Calibri">
     <Window.Resources>
@@ -21,15 +21,15 @@
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <StackPanel Orientation="Vertical">
-            <DockPanel Margin="10"  LastChildFill="True">
-                <Border BorderBrush="#FF00AADE" BorderThickness="1"  Width="100" Height="130">
-                <Image RenderOptions.BitmapScalingMode="Fant"
-                                   Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}"
-                                   Stretch="Fill" />
+            <DockPanel Margin="10" LastChildFill="True">
+                <Border BorderBrush="#FF00AADE" BorderThickness="1" Width="100" Height="130">
+                    <Image RenderOptions.BitmapScalingMode="Fant"
+                           Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}"
+                           Stretch="Fill" />
                 </Border>
-                <StackPanel Margin="10"  Orientation="Vertical">
-                    <Button Margin="5"  Content="Scrape"/>
-                    <Button Margin="5"  Content="Change Cover"/>
+                <StackPanel Margin="10" Orientation="Vertical">
+                    <Button Margin="5" Content="Scrape" />
+                    <Button Margin="5" Content="Change Cover" />
                 </StackPanel>
 
             </DockPanel>
@@ -50,21 +50,23 @@
                 <Label DockPanel.Dock="Left" Content="ISBN" />
                 <TextBox FontFamily="Calibri" HorizontalAlignment="Stretch" Text="{Binding SelectedBook.Isbn}" />
             </DockPanel>
-         
-            <syncfusion:SfRating Value="{Binding SelectedBook.Rating, Mode=TwoWay}" Margin="5,10,5,10" Width="150" ItemsCount="5" HorizontalAlignment="Center" Precision="Standard">
+
+            <syncfusion:SfRating Value="{Binding SelectedBook.Rating, Mode=TwoWay}" Margin="5,10,5,10" Width="150"
+                                 ItemsCount="5" HorizontalAlignment="Center" Precision="Standard">
                 <syncfusion:SfRating.ItemContainerStyle>
 
                     <Style TargetType="syncfusion:SfRatingItem">
-                        <Setter Property="RatedStroke" Value="Black"/>
-                        <Setter Property="PointerOverFill" Value="{DynamicResource AccentColorBrush}"/>
-                        <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}"/>
-                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="RatedStroke" Value="Black" />
+                        <Setter Property="PointerOverFill" Value="{DynamicResource AccentColorBrush}" />
+                        <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}" />
+                        <Setter Property="Height" Value="20" />
 
                     </Style>
 
                 </syncfusion:SfRating.ItemContainerStyle>
 
             </syncfusion:SfRating>
+            <CheckBox IsChecked="{Binding SelectedBook.Favourite, Mode=TwoWay}" Content="Favourite" />
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button Margin="5" Content="Save" Command="{Binding SaveCommand}" />
                 <Button Margin="5" Content="Cancel" Command="{Binding CancelCommand}" />

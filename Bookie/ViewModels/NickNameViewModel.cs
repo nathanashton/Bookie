@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
     using Common;
 
@@ -15,7 +9,9 @@ namespace Bookie.ViewModels
         public string NickName
         {
             get { return _nickName; }
-            set { _nickName = value;
+            set
+            {
+                _nickName = value;
                 NotifyPropertyChanged("NickName");
             }
         }

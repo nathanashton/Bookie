@@ -1,18 +1,29 @@
 ﻿namespace Bookie.ViewModels
 {
     using System.Windows;
+    using System.Windows.Input;
     using Common;
 
     public class ProgressViewModel : NotifyBase
     {
         public delegate void CancelDelegate();
 
+        private ICommand _cancelCommand;
         private bool _cancelled;
         private int _downloadProgress;
         private string _operationName;
         private string _progressBarText;
         private int _progressPercentage;
         private string _progressText;
+
+        public ICommand CancelCommand
+        {
+            get
+            {
+                return _cancelCommand
+                       ?? (_cancelCommand = new RelayCommand(p => CancelOperation(), p => true));
+            }
+        }
 
         public bool Cancelled
         {
@@ -79,13 +90,14 @@
 
         public void CancelOperation()
         {
-            // run deletage
-            if (Cancel == null)
-            {
-                return;
-            }
-            Cancelled = true;
-            Cancel();
+            ProgressService.Cancel();
+            //// run deletage
+            //if (Cancel == null)
+            //{
+            //    return;
+            //}
+            //Cancelled = true;
+            //Cancel();
             Window.Close();
         }
     }

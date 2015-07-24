@@ -121,9 +121,9 @@
                 return;
             }
 
-            string nickname = "";
+            var nickname = "";
             //NickName
-            NickNameView view = new NickNameView();
+            var view = new NickNameView();
             view.ViewModel.NickName = dialog.SelectedPath;
             if (view.ShowDialog() == true)
             {
@@ -138,7 +138,7 @@
             }
 
 
-            var source = new SourceDirectory {SourceDirectoryUrl = dialog.SelectedPath, NickName=nickname};
+            var source = new SourceDirectory {SourceDirectoryUrl = dialog.SelectedPath, NickName = nickname};
 
             if (_domain.Exists(source.SourceDirectoryUrl))
             {

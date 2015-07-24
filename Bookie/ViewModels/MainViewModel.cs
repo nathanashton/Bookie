@@ -44,6 +44,7 @@
         private int _progressPercentage;
         private bool _progressReportingActive;
         private string _progressText;
+        private ProgressView _progressView;
         private Publisher _publisherFilter;
         private ObservableCollection<Publisher> _publishersTv;
         private ICommand _refreshCommand;
@@ -664,30 +665,33 @@
 
         public void _progress_ProgressStarted(object sender, EventArgs e)
         {
-            OperationName = "Starting...";
-            ProgressText = "";
-            ProgressPercentage = 0;
-            ProgressBarText = "";
+            _progressView = new ProgressView();
+            _progressView.ViewModel.OperationName = "Starting...";
+            _progressView.ViewModel.ProgressText = "";
+            _progressView.ViewModel.ProgressPercentage = 0;
+            _progressView.ViewModel.ProgressBarText = "";
             ProgressReportingActive = true;
             ShowProgress = true;
+            _progressView.Show();
         }
 
         public void _progress_ProgressCompleted(object sender, EventArgs e)
         {
-            OperationName = "Starting...";
-            ProgressPercentage = 0;
-            ProgressText = "";
-            ProgressBarText = "";
+            _progressView.ViewModel.OperationName = "Starting...";
+            _progressView.ViewModel.ProgressPercentage = 0;
+            _progressView.ViewModel.ProgressText = "";
+            _progressView.ViewModel.ProgressBarText = "";
             ProgressReportingActive = false;
             ShowProgress = false;
+            _progressView.Close();
         }
 
         public void _progress_ProgressChanged(object sender, ProgressWindowEventArgs e)
         {
-            OperationName = e.OperationName;
-            ProgressBarText = e.ProgressBarText;
-            ProgressText = e.ProgressText;
-            ProgressPercentage = e.ProgressPercentage;
+            _progressView.ViewModel.OperationName = e.OperationName;
+            _progressView.ViewModel.ProgressBarText = e.ProgressBarText;
+            _progressView.ViewModel.ProgressText = e.ProgressText;
+            _progressView.ViewModel.ProgressPercentage = e.ProgressPercentage;
         }
 
         private void Books_CollectionChanged(
@@ -832,7 +836,11 @@
             var book = item as Book;
             if (SourceDirectoryFilter == null)
             {
-                SourceDirectoryFilter = new SourceDirectory {SourceDirectoryUrl = "All Sources", NickName="All Source"};
+                SourceDirectoryFilter = new SourceDirectory
+                {
+                    SourceDirectoryUrl = "All Sources",
+                    NickName = "All Source"
+                };
             }
             if (SourceDirectoryFilter.NickName == "All Sources")
             {
@@ -925,7 +933,8 @@
             SourceDirectories.Clear();
             SourceDirectories =
                 new ObservableCollection<SourceDirectory>(_sourceDomain.GetAllSourceDirectories().ToList());
-            SourceDirectories.Insert(0, new SourceDirectory { SourceDirectoryUrl = "All Sources", NickName = "All Sources" });
+            SourceDirectories.Insert(0,
+                new SourceDirectory {SourceDirectoryUrl = "All Sources", NickName = "All Sources"});
             SourceDirectoryFilter = SourceDirectories[0];
         }
 
@@ -978,7 +987,7 @@
         private void SourceDirectoryView()
         {
             var sourceDirectoryView = new SourceDirectoryView(this);
-            sourceDirectoryView.Show();
+            sourceDirectoryView.ShowDialog();
         }
 
         public void ShowSettingsView()

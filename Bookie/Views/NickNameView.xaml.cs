@@ -1,33 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-namespace Bookie.Views
+﻿namespace Bookie.Views
 {
+    using System.Windows;
     using MahApps.Metro.Controls;
     using ViewModels;
 
     /// <summary>
-    /// Interaction logic for NickNameView.xaml
+    ///     Interaction logic for NickNameView.xaml
     /// </summary>
     public partial class NickNameView : MetroWindow
     {
-        public NickNameViewModel ViewModel => (NickNameViewModel)Resources["ViewModel"];
-
         public NickNameView()
         {
             InitializeComponent();
         }
+
+        public NickNameViewModel ViewModel => (NickNameViewModel) Resources["ViewModel"];
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

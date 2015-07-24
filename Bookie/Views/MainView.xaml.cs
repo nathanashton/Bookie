@@ -51,7 +51,6 @@
             ViewModel.TileWidth = 130;
 
             App.SplashScreen.LoadComplete();
-
         }
 
         private void ApplySettings()
@@ -84,7 +83,9 @@
             if (notexist.Count > 0)
             {
                 Logger.Log.Error("Missing source directories " + Join(",", notexist));
-                MessageBox.Show("The following source directories cannot be found:" + Environment.NewLine + Join(Environment.NewLine, notexist), "Error");
+                MessageBox.Show(
+                    "The following source directories cannot be found:" + Environment.NewLine +
+                    Join(Environment.NewLine, notexist), "Error");
             }
         }
 
@@ -135,7 +136,6 @@
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             CheckSources();
-
         }
     }
 }

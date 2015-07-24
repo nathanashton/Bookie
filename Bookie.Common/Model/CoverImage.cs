@@ -8,7 +8,6 @@
     public class CoverImage : IEntity
     {
         [NotMapped] private string _fileNameWithExtension;
-
         public int Id { get; set; }
 
         public string FileNameWithExtension

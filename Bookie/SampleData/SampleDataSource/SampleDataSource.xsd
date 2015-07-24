@@ -20,9 +20,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="Item">
-    <xs:sequence>
-      <xs:element name="Collection" type="tns:ItemCollection" />
-    </xs:sequence>
-    <xs:attribute name="Property1" type="xs:string" />
+    <xs:attribute name="OperationName" type="xs:string" />
   </xs:complexType>
 </xs:schema>

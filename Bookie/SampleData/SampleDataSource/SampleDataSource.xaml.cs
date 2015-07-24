@@ -9,8 +9,8 @@ namespace Expression.Blend.SampleData.SampleDataSource
     using System.ComponentModel;
     using System.Windows;
 
-    // To significantly reduce the sample data footprint in your production application, you can set
-    // the DISABLE_SAMPLE_DATA conditional compilation constant and disable sample data at runtime.
+// To significantly reduce the sample data footprint in your production application, you can set
+// the DISABLE_SAMPLE_DATA conditional compilation constant and disable sample data at runtime.
 #if DISABLE_SAMPLE_DATA
 	internal class SampleDataSource { }
 #else
@@ -44,23 +44,22 @@ namespace Expression.Blend.SampleData.SampleDataSource
 
     public class Item : INotifyPropertyChanged
     {
-        private string _Property1 = string.Empty;
+        private string _OperationName = string.Empty;
 
-        public string Property1
+        public string OperationName
         {
-            get { return _Property1; }
+            get { return _OperationName; }
 
             set
             {
-                if (_Property1 != value)
+                if (_OperationName != value)
                 {
-                    _Property1 = value;
-                    OnPropertyChanged("Property1");
+                    _OperationName = value;
+                    OnPropertyChanged("OperationName");
                 }
             }
         }
 
-        public ItemCollection Collection { get; } = new ItemCollection();
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -75,6 +74,5 @@ namespace Expression.Blend.SampleData.SampleDataSource
     public class ItemCollection : ObservableCollection<Item>
     {
     }
-
 #endif
 }

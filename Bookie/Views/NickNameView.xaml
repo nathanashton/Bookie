@@ -1,13 +1,13 @@
 ﻿<controls:MetroWindow x:Class="Bookie.Views.NickNameView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:local="clr-namespace:Bookie.Views"
-        xmlns:viewModels="clr-namespace:Bookie.ViewModels"
-        mc:Ignorable="d"
-         BorderBrush="{DynamicResource AccentColorBrush}"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:local="clr-namespace:Bookie.Views"
+                      xmlns:viewModels="clr-namespace:Bookie.ViewModels"
+                      mc:Ignorable="d"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
                       BorderThickness="1"
                       EnableDWMDropShadow="True"
                       WindowTransitionsEnabled="False"
@@ -19,11 +19,11 @@
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <StackPanel Orientation="Vertical">
-        <DockPanel Margin="10"  Height="25"  LastChildFill="True" >
-            <Label DockPanel.Dock="Left"  Content="NickName"/>
-            <TextBox FontFamily="Calibri" Height="23"  Text="{Binding NickName, Mode=TwoWay}"/>
-        </DockPanel>
-            <Button Margin="5"  Width="50" Content="OK" Click="Button_Click"/>
+            <DockPanel Margin="10" Height="28" LastChildFill="True">
+                <Label VerticalAlignment="Center" DockPanel.Dock="Left" Content="NickName" />
+                <TextBox FontFamily="Calibri" Height="23" Text="{Binding NickName, Mode=TwoWay}" />
+            </DockPanel>
+            <Button Margin="5" Width="50" Content="OK" Click="Button_Click" />
         </StackPanel>
     </Grid>
 </controls:MetroWindow>

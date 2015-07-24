@@ -131,7 +131,8 @@
                                         <Label Foreground="White" FontSize="14" Content="Sources" Margin="5,0,5,0"
                                                VerticalContentAlignment="Center" />
                                         <ComboBox SelectedItem="{Binding SourceDirectoryFilter}"
-                                                  ItemsSource="{Binding SourceDirectories}" DisplayMemberPath="NickName" Height="20" Width="150" />
+                                                  ItemsSource="{Binding SourceDirectories}"
+                                                  DisplayMemberPath="NickName" Height="20" Width="150" />
                                         <Label Foreground="White" FontSize="14" Content="Filter" Margin="5,0,5,0"
                                                VerticalContentAlignment="Center" />
                                         <TextBox FontSize="12" Width="241" Height="20" Name="Filter"
@@ -148,22 +149,22 @@
                                                          HorizontalAlignment="Left" Margin="5" Content="Abstract" />
                                         </ComboBox>
                                         <ToggleButton ToolTip="Toggle Scraped" Width="40" Height="40" Margin="5"
-                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                                                  IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
+                                                      Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                                      IsChecked="{Binding ToggleScraped, Mode=TwoWay}">
                                             <Rectangle Width="20" Height="20" Fill="{Binding ScrapedColor}">
                                                 <Rectangle.OpacityMask>
                                                     <VisualBrush Stretch="Fill"
-                                                             Visual="{DynamicResource appbar_book_open_writing}" />
+                                                                 Visual="{DynamicResource appbar_book_open_writing}" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </ToggleButton>
 
                                         <ToggleButton ToolTip="Toggle Favourites" Width="40" Height="40" Margin="5"
-                                                  Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                                                  IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
+                                                      Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                                      IsChecked="{Binding ToggleFavourite, Mode=TwoWay}">
                                             <Rectangle Width="20" Height="20" Fill="{Binding StarColor}">
                                                 <Rectangle.OpacityMask>
-                                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_star}" />
+                                                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_check}" />
                                                 </Rectangle.OpacityMask>
                                             </Rectangle>
                                         </ToggleButton>
@@ -237,24 +238,7 @@
                     </DockPanel>
                 </Grid>
 
-                <controls:Flyout IsModal="True" CloseCommand="{Binding CancelProgressCommand}" Margin="0,0,0,0"
-                                 IsOpen="{Binding ShowProgress}" Template="{StaticResource FlyoutTemplate}"
-                                 Name="flyout" Position="Bottom" AnimateOpacity="False" AnimateOnPositionChange="True"
-                                 Background="{DynamicResource AccentColorBrush}" Height="115" Width="500">
-                    <Grid Margin="10">
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
-                            <!--<Button Width="10" Height="5" Command="{Binding CancelProgressCommand}" />-->
-                            <Label FontSize="18" FontWeight="Bold" Content="{Binding OperationName}" Foreground="White"
-                                   Margin="0,0,0,-5" />
-                            <Label Content="{Binding ProgressText}" Foreground="White" Margin="0,0,0,5" />
-                            <Grid Height="20">
-                                <ProgressBar Height="20" Value="{Binding ProgressPercentage}" />
-                                <TextBlock HorizontalAlignment="Center" Text="{Binding ProgressBarText}"
-                                           VerticalAlignment="Center" />
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </controls:Flyout>
+
             </Grid>
             <!--End of Main Holder-->
         </DockPanel>
