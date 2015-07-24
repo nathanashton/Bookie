@@ -1,11 +1,11 @@
 ﻿namespace Bookie.Core.Scraper
 {
-    using Bookie.Common;
-    using iTextSharp.text.pdf;
-    using iTextSharp.text.pdf.parser;
     using System;
     using System.Text;
     using System.Text.RegularExpressions;
+    using Common;
+    using iTextSharp.text.pdf;
+    using iTextSharp.text.pdf.parser;
 
     internal class PdfIsbnParser
     {
@@ -35,7 +35,7 @@
                         }
                         catch (ArgumentException)
                         {
-                            Logger.Log.Error(String.Format("Can't parse PDF {0}, only images and no text.", url));
+                            Logger.Log.Error(string.Format("Can't parse PDF {0}, only images and no text.", url));
                         }
                     }
                 }

@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B2CA261A-F166-44E2-8131-F910FCEAC75A}</ProjectGuid>
+    <ProjectGuid>{4D23D955-2C3B-4513-A87B-56F17F8C2233}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bookie.Reporting</RootNamespace>
     <AssemblyName>Bookie.Reporting</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>15188.66.0.0</AssemblyVersion>
+    <AssemblyVersion>15195.11.0.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,27 +43,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AllBooks.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Bookie.Common\Bookie.Common.csproj">
       <Project>{e2e98231-07da-47d4-b41f-60f6c4b87dd6}</Project>
       <Name>Bookie.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\DataSources\Bookie.Common.Model.Author.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.Book.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.BookFile.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.BookHistory.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.BookMark.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.CoverImage.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.IEntity.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.ITrackableEntity.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.LogEntity.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.Note.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.Publisher.datasource" />
-    <None Include="Properties\DataSources\Bookie.Common.Model.SourceDirectory.datasource" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Report1.rdlc" />
+    <None Include="Bookie.Common.Model.Book.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

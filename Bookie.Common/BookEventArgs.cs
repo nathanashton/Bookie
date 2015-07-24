@@ -1,7 +1,7 @@
 ﻿namespace Bookie.Common
 {
-    using Bookie.Common.Model;
     using System;
+    using Model;
 
     public class BookEventArgs : EventArgs
     {
@@ -14,9 +14,7 @@
         }
 
         public Book Book { get; set; }
-
         public BookState State { get; set; }
-
         public int? Progress { get; set; }
     }
 }

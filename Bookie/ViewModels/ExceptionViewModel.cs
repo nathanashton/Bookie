@@ -1,24 +1,21 @@
-﻿using System;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
-    using Bookie.Common;
+    using System;
+    using Common;
 
     public class ExceptionViewModel : NotifyBase
     {
-        private string _message;
-
         private bool _fatal;
+        private string _message;
+        private string _moreDetails;
 
         public string Message
         {
             get
             {
-                if (Fatal)
-                {
-                    _message += String.Format("{0}{1}{2}", Environment.NewLine, Environment.NewLine, "This is a fatal error. The application will now close.");
-                    return _message;
-                }
+                if (!Fatal) return _message;
+                _message += string.Format("{0}{1}{2}", Environment.NewLine, Environment.NewLine,
+                    "This is a fatal error. The application will now close.");
                 return _message;
             }
             set
@@ -28,14 +25,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private string _moreDetails;
-
         public string MoreDetails
         {
-            get
-            {
-                return _moreDetails;
-            }
+            get { return _moreDetails; }
             set
             {
                 _moreDetails = value;
@@ -45,10 +37,7 @@ namespace Bookie.ViewModels
 
         public bool Fatal
         {
-            get
-            {
-                return _fatal;
-            }
+            get { return _fatal; }
             set
             {
                 _fatal = value;

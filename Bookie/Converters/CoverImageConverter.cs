@@ -11,7 +11,7 @@
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string coverPath;
-            string v = "";
+            var v = "";
             try
             {
                 v = value.ToString();

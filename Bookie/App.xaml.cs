@@ -1,23 +1,25 @@
 ﻿namespace Bookie
 {
-    using Bookie.Common;
-    using Bookie.Views;
-    using log4net;
     using System;
+    using System.Reflection;
     using System.Threading;
     using System.Windows;
+    using System.Windows.Threading;
+    using Common;
+    using log4net;
+    using log4net.Core;
+    using Views;
 
     public partial class App
     {
         public static ISplashScreen SplashScreen;
+        // ReSharper disable once UnusedMember.Local
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private ManualResetEvent _resetSplashCreated;
         private Thread _splashThread;
-        // ReSharper disable once UnusedMember.Local
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public App()
         {
-
             //    System.Threading.Thread.CurrentThread.CurrentUICulture =
             //                new System.Globalization.CultureInfo("de-DE");
 
@@ -34,10 +36,11 @@
             Logger.Log.Info("Application terminated");
         }
 
-        private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             Logger.Log.Error("Unhandled exception", e.Exception);
-            MessagingService.ShowErrorMessage(Common.Resources.Strings.Resources.UnhandledException, e.Exception.ToString(), false);
+            MessagingService.ShowErrorMessage(Common.Resources.Strings.Resources.UnhandledException,
+                e.Exception.ToString(), false);
             e.Handled = true;
         }
 
@@ -47,13 +50,28 @@
             SplashScreen = splashScreenWindow;
             splashScreenWindow.Show();
             _resetSplashCreated.Set();
-            System.Windows.Threading.Dispatcher.Run();
+            Dispatcher.Run();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (e != null && e.Args.Length > 0)
+            {
+                var args = e.Args[0];
+                if (args == "debug")
+                {
+                    Globals.DebugMode = true;
+                }
+            }
+            var repository = LogManager.GetRepository();
+            if (repository != null)
+            {
+                repository.Threshold = Globals.InDebugMode() ? Level.Debug : Level.Info;
+            }
+
             _resetSplashCreated = new ManualResetEvent(false);
-            _splashThread = new Thread(ShowSplash); _splashThread.SetApartmentState(ApartmentState.STA); 
+            _splashThread = new Thread(ShowSplash);
+            _splashThread.SetApartmentState(ApartmentState.STA);
             _splashThread.IsBackground = true;
             _splashThread.Name = "Splash Screen";
             _splashThread.Start();

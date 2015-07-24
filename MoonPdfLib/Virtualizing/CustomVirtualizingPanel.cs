@@ -18,26 +18,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 2013 - Modified version of Paul McClean's code (see AUTHORS file)
  */
 
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
-
 namespace MoonPdfLib.Virtualizing
 {
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
+    using System.Windows.Media;
+
     internal class CustomVirtualizingPanel : VirtualizingPanel, IScrollInfo
     {
         public CustomVirtualizingPanel()
         {
             // For use in the IScrollInfo implementation
-            this.RenderTransform = _trans;
+            RenderTransform = _trans;
         }
 
         /// <summary>
-        /// the bounds are a combination of all pages from the same row (plus the offset borders, if not ViewType.SinglePage)
+        ///     the bounds are a combination of all pages from the same row (plus the offset borders, if not ViewType.SinglePage)
         /// </summary>
         public Size[] PageRowBounds { get; set; }
 
@@ -45,7 +45,7 @@ namespace MoonPdfLib.Virtualizing
         {
             var sum = 0.0;
 
-            for (int i = 0; i < PageRowBounds.Length; i++)
+            for (var i = 0; i < PageRowBounds.Length; i++)
             {
                 sum += PageRowBounds[i].Height;
 
@@ -63,11 +63,11 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Measure the children
+        ///     Measure the children
         /// </summary>
         /// <param name="availableSize">Size available</param>
         /// <returns>Size desired</returns>
-        protected override System.Windows.Size MeasureOverride(System.Windows.Size availableSize)
+        protected override Size MeasureOverride(Size availableSize)
         {
             UpdateScrollInfo(availableSize);
 
@@ -82,35 +82,37 @@ namespace MoonPdfLib.Virtualizing
                 return availableSize;
 
             // We need to access InternalChildren before the generator to work around a bug
-            UIElementCollection children = this.InternalChildren;
-            IItemContainerGenerator generator = this.ItemContainerGenerator;
+            var children = InternalChildren;
+            var generator = ItemContainerGenerator;
 
             // Get the generator position of the first visible data item
-            GeneratorPosition startPos = generator.GeneratorPositionFromIndex(firstVisibleItemIndex);
+            var startPos = generator.GeneratorPositionFromIndex(firstVisibleItemIndex);
 
             // Get index where we'd insert the child for this position. If the item is realized
             // (position.Offset == 0), it's just position.Index, otherwise we have to add one to
             // insert after the corresponding child
-            int childIndex = (startPos.Offset == 0) ? startPos.Index : startPos.Index + 1;
+            var childIndex = (startPos.Offset == 0) ? startPos.Index : startPos.Index + 1;
 
             using (generator.StartAt(startPos, GeneratorDirection.Forward, true))
             {
-                for (int itemIndex = firstVisibleItemIndex; itemIndex <= lastVisibleItemIndex; ++itemIndex, ++childIndex)
+                for (var itemIndex = firstVisibleItemIndex;
+                    itemIndex <= lastVisibleItemIndex;
+                    ++itemIndex, ++childIndex)
                 {
                     bool newlyRealized;
 
                     // Get or create the child
-                    UIElement child = generator.GenerateNext(out newlyRealized) as UIElement;
+                    var child = generator.GenerateNext(out newlyRealized) as UIElement;
                     if (newlyRealized)
                     {
                         // Figure out if we need to insert the child at the end or somewhere in the middle
                         if (childIndex >= children.Count)
                         {
-                            base.AddInternalChild(child);
+                            AddInternalChild(child);
                         }
                         else
                         {
-                            base.InsertInternalChild(childIndex, child);
+                            InsertInternalChild(childIndex, child);
                         }
                         generator.PrepareItemContainer(child);
                     }
@@ -132,22 +134,22 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Arrange the children
+        ///     Arrange the children
         /// </summary>
         /// <param name="finalSize">Size available</param>
         /// <returns>Size used</returns>
-        protected override System.Windows.Size ArrangeOverride(System.Windows.Size finalSize)
+        protected override Size ArrangeOverride(Size finalSize)
         {
-            IItemContainerGenerator generator = this.ItemContainerGenerator;
+            var generator = ItemContainerGenerator;
 
             UpdateScrollInfo(finalSize);
 
-            for (int i = 0; i < this.Children.Count; i++)
+            for (var i = 0; i < Children.Count; i++)
             {
-                UIElement child = this.Children[i];
+                var child = Children[i];
 
                 // Map the child offset to an item offset
-                int itemIndex = generator.IndexFromGeneratorPosition(new GeneratorPosition(i, 0));
+                var itemIndex = generator.IndexFromGeneratorPosition(new GeneratorPosition(i, 0));
 
                 ArrangeChild(itemIndex, child, finalSize);
             }
@@ -156,19 +158,19 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Revirtualize items that are no longer visible
+        ///     Revirtualize items that are no longer visible
         /// </summary>
         /// <param name="minDesiredGenerated">first item index that should be visible</param>
         /// <param name="maxDesiredGenerated">last item index that should be visible</param>
         private void CleanUpItems(int minDesiredGenerated, int maxDesiredGenerated)
         {
-            UIElementCollection children = this.InternalChildren;
-            IItemContainerGenerator generator = this.ItemContainerGenerator;
+            var children = InternalChildren;
+            var generator = ItemContainerGenerator;
 
-            for (int i = children.Count - 1; i >= 0; i--)
+            for (var i = children.Count - 1; i >= 0; i--)
             {
-                GeneratorPosition childGeneratorPos = new GeneratorPosition(i, 0);
-                int itemIndex = generator.IndexFromGeneratorPosition(childGeneratorPos);
+                var childGeneratorPos = new GeneratorPosition(i, 0);
+                var itemIndex = generator.IndexFromGeneratorPosition(childGeneratorPos);
 
                 if (itemIndex < minDesiredGenerated || itemIndex > maxDesiredGenerated)
                 {
@@ -184,12 +186,12 @@ namespace MoonPdfLib.Virtualizing
         // If you want to do something other than tiling, this is where you'll make your changes
 
         /// <summary>
-        /// Calculate the extent of the view based on the available size
+        ///     Calculate the extent of the view based on the available size
         /// </summary>
         /// <param name="availableSize">available size</param>
         /// <param name="itemCount">number of data items</param>
         /// <returns></returns>
-        private System.Windows.Size CalculateExtent(System.Windows.Size availableSize, int itemCount)
+        private Size CalculateExtent(Size availableSize, int itemCount)
         {
             if (PageRowBounds == null || PageRowBounds.Length == 0)
                 return new Size(availableSize.Width, _extent.Height);
@@ -204,7 +206,7 @@ namespace MoonPdfLib.Virtualizing
         }
 
         /// <summary>
-        /// Get the range of children that are visible
+        ///     Get the range of children that are visible
         /// </summary>
         /// <param name="firstVisibleItemIndex">The item index of the first visible item</param>
         /// <param name="lastVisibleItemIndex">The item index of the last visible item</param>
@@ -216,11 +218,11 @@ namespace MoonPdfLib.Virtualizing
             if (PageRowBounds == null || PageRowBounds.Length == 0)
                 return;
 
-            double sum = 0.0;
+            var sum = 0.0;
             var bottom = _offset.Y + _viewport.Height;
 
             // we iterate through all the items and add the height of them to "sum"
-            for (int i = 0; i < PageRowBounds.Length; i++)
+            for (var i = 0; i < PageRowBounds.Length; i++)
             {
                 sum += PageRowBounds[i].Height;
 
@@ -232,7 +234,7 @@ namespace MoonPdfLib.Virtualizing
                     lastVisibleItemIndex = i;
 
                     // used to determine the lastVisibleItemIndex
-                    for (int k = i + 1; k < PageRowBounds.Length; k++)
+                    for (var k = i + 1; k < PageRowBounds.Length; k++)
                     {
                         sum += PageRowBounds[k].Height;
 
@@ -247,8 +249,8 @@ namespace MoonPdfLib.Virtualizing
                 }
             }
 
-            ItemsControl itemsControl = ItemsControl.GetItemsOwner(this);
-            int itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
+            var itemsControl = ItemsControl.GetItemsOwner(this);
+            var itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
 
             if (lastVisibleItemIndex >= itemCount)
                 lastVisibleItemIndex = itemCount - 1;
@@ -258,23 +260,24 @@ namespace MoonPdfLib.Virtualizing
         {
             base.OnRenderSizeChanged(sizeInfo);
 
-            if (sizeInfo.WidthChanged && sizeInfo.NewSize.Width > sizeInfo.PreviousSize.Width) // only necessary when width was increased
+            if (sizeInfo.WidthChanged && sizeInfo.NewSize.Width > sizeInfo.PreviousSize.Width)
+                // only necessary when width was increased
             {
                 var widthOffset = sizeInfo.NewSize.Width - sizeInfo.PreviousSize.Width;
-                this.ScrollOwner.ScrollToHorizontalOffset(this.ScrollOwner.HorizontalOffset - widthOffset);
+                ScrollOwner.ScrollToHorizontalOffset(ScrollOwner.HorizontalOffset - widthOffset);
             }
         }
 
         /// <summary>
-        /// Position a child
+        ///     Position a child
         /// </summary>
         /// <param name="itemIndex">The data item index of the child</param>
         /// <param name="child">The element to position</param>
         /// <param name="finalSize">The size of the panel</param>
-        private void ArrangeChild(int itemIndex, UIElement child, System.Windows.Size finalSize)
+        private void ArrangeChild(int itemIndex, UIElement child, Size finalSize)
         {
             var size = PageRowBounds[itemIndex];
-            var x = Math.Max(0, (finalSize.Width / 2) - (size.Width / 2)); // used to center the content horizontally
+            var x = Math.Max(0, (finalSize.Width/2) - (size.Width/2)); // used to center the content horizontally
             var y = GetVerticalOffsetByItemIndex(itemIndex);
 
             child.Arrange(new Rect(x, y, size.Width, size.Height));
@@ -289,44 +292,32 @@ namespace MoonPdfLib.Virtualizing
         private void UpdateScrollInfo(Size availableSize)
         {
             // See how many items there are
-            ItemsControl itemsControl = ItemsControl.GetItemsOwner(this);
-            int itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
+            var itemsControl = ItemsControl.GetItemsOwner(this);
+            var itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
 
-            Size extent = CalculateExtent(availableSize, itemCount);
+            var extent = CalculateExtent(availableSize, itemCount);
             // Update extent
             if (extent != _extent)
             {
                 _extent = extent;
-                if (_owner != null)
-                    _owner.InvalidateScrollInfo();
+                if (ScrollOwner != null)
+                    ScrollOwner.InvalidateScrollInfo();
             }
 
             // Update viewport
             if (availableSize != _viewport)
             {
                 _viewport = availableSize;
-                if (_owner != null)
-                    _owner.InvalidateScrollInfo();
+                if (ScrollOwner != null)
+                    ScrollOwner.InvalidateScrollInfo();
             }
         }
 
-        public ScrollViewer ScrollOwner
-        {
-            get { return _owner; }
-            set { _owner = value; }
-        }
+        public ScrollViewer ScrollOwner { get; set; }
 
-        public bool CanHorizontallyScroll
-        {
-            get { return _canHScroll; }
-            set { _canHScroll = value; }
-        }
+        public bool CanHorizontallyScroll { get; set; }
 
-        public bool CanVerticallyScroll
-        {
-            get { return _canVScroll; }
-            set { _canVScroll = value; }
-        }
+        public bool CanVerticallyScroll { get; set; }
 
         public double HorizontalOffset
         {
@@ -360,52 +351,52 @@ namespace MoonPdfLib.Virtualizing
 
         private double CalculateVerticalScrollOffset()
         {
-            return ViewportHeight * 0.06;
+            return ViewportHeight*0.06;
         }
 
         private double CalculateHorizontalScrollOffset()
         {
-            return ViewportWidth * 0.06;
+            return ViewportWidth*0.06;
         }
 
         public void LineUp()
         {
-            SetVerticalOffset(this.VerticalOffset - CalculateVerticalScrollOffset());
+            SetVerticalOffset(VerticalOffset - CalculateVerticalScrollOffset());
         }
 
         public void LineDown()
         {
-            SetVerticalOffset(this.VerticalOffset + CalculateVerticalScrollOffset());
+            SetVerticalOffset(VerticalOffset + CalculateVerticalScrollOffset());
         }
 
         public void PageUp()
         {
-            SetVerticalOffset(this.VerticalOffset - _viewport.Height);
+            SetVerticalOffset(VerticalOffset - _viewport.Height);
         }
 
         public void PageDown()
         {
-            SetVerticalOffset(this.VerticalOffset + _viewport.Height);
+            SetVerticalOffset(VerticalOffset + _viewport.Height);
         }
 
         public void MouseWheelUp()
         {
-            SetVerticalOffset(this.VerticalOffset - (3 * CalculateVerticalScrollOffset()));
+            SetVerticalOffset(VerticalOffset - (3*CalculateVerticalScrollOffset()));
         }
 
         public void MouseWheelDown()
         {
-            SetVerticalOffset(this.VerticalOffset + (3 * CalculateVerticalScrollOffset()));
+            SetVerticalOffset(VerticalOffset + (3*CalculateVerticalScrollOffset()));
         }
 
         public void LineLeft()
         {
-            SetHorizontalOffset(this.HorizontalOffset - CalculateHorizontalScrollOffset());
+            SetHorizontalOffset(HorizontalOffset - CalculateHorizontalScrollOffset());
         }
 
         public void LineRight()
         {
-            SetHorizontalOffset(this.HorizontalOffset + CalculateHorizontalScrollOffset());
+            SetHorizontalOffset(HorizontalOffset + CalculateHorizontalScrollOffset());
         }
 
         public Rect MakeVisible(Visual visual, Rect rectangle)
@@ -415,22 +406,22 @@ namespace MoonPdfLib.Virtualizing
 
         public void MouseWheelLeft()
         {
-            this.LineLeft();
+            LineLeft();
         }
 
         public void MouseWheelRight()
         {
-            this.LineRight();
+            LineRight();
         }
 
         public void PageLeft()
         {
-            SetHorizontalOffset(this.HorizontalOffset - _viewport.Width);
+            SetHorizontalOffset(HorizontalOffset - _viewport.Width);
         }
 
         public void PageRight()
         {
-            SetHorizontalOffset(this.HorizontalOffset + _viewport.Width);
+            SetHorizontalOffset(HorizontalOffset + _viewport.Width);
         }
 
         public void SetHorizontalOffset(double offset)
@@ -446,8 +437,8 @@ namespace MoonPdfLib.Virtualizing
 
             _offset.X = offset;
 
-            if (_owner != null)
-                _owner.InvalidateScrollInfo();
+            if (ScrollOwner != null)
+                ScrollOwner.InvalidateScrollInfo();
 
             _trans.X = -offset;
 
@@ -468,8 +459,8 @@ namespace MoonPdfLib.Virtualizing
 
             _offset.Y = offset;
 
-            if (_owner != null)
-                _owner.InvalidateScrollInfo();
+            if (ScrollOwner != null)
+                ScrollOwner.InvalidateScrollInfo();
 
             _trans.Y = -offset;
 
@@ -477,10 +468,7 @@ namespace MoonPdfLib.Virtualizing
             InvalidateMeasure();
         }
 
-        private TranslateTransform _trans = new TranslateTransform();
-        private ScrollViewer _owner;
-        private bool _canHScroll = false;
-        private bool _canVScroll = false;
+        private readonly TranslateTransform _trans = new TranslateTransform();
         private Size _extent = new Size(0, 0);
         private Size _viewport = new Size(0, 0);
         private Point _offset;

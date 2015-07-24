@@ -1,11 +1,10 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using System;
     using System.Collections.Generic;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
 
     public class BookHistoryDomain : IBookHistoryDomain
     {
@@ -28,11 +27,6 @@
 
         public void AddBookHistory(params BookHistory[] bookhistory)
         {
-            foreach (var b in bookhistory)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
             _bookHistoryRepository.Add(bookhistory);
         }
 

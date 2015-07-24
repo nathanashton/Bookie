@@ -18,24 +18,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 2013 - Modified version of Paul McClean's code (see AUTHORS file)
  */
 
-using System.Collections.Generic;
-
 namespace MoonPdfLib.Virtualizing
 {
+    using System.Collections.Generic;
+
     /// <summary>
-    /// Represents a provider of collection details.
+    ///     Represents a provider of collection details.
     /// </summary>
     /// <typeparam name="T">The type of items in the collection.</typeparam>
     internal interface IItemsProvider<T>
     {
         /// <summary>
-        /// Fetches the total number of items available.
+        ///     Fetches the total number of items available.
         /// </summary>
         /// <returns></returns>
         int FetchCount();
 
         /// <summary>
-        /// Fetches a range of items.
+        ///     Fetches a range of items.
         /// </summary>
         /// <param name="startIndex">The start index.</param>
         /// <param name="count">The number of items to fetch.</param>

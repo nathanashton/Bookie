@@ -1,17 +1,24 @@
-﻿<Application x:Class="Bookie.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="Views/MainView.xaml">
+﻿<Application
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:SampleData="clr-namespace:Expression.Blend.SampleData.SampleDataSource"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    x:Class="Bookie.App"
+    StartupUri="Views/MainView.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Themes/FlyoutOverride.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Themes/Fonts.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SampleData:SampleDataSource x:Key="SampleDataSource" d:IsDataSource="True" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,13 +1,13 @@
 ﻿namespace Bookie.Data.Repositories
 {
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
+    using Common.Model;
+    using Interfaces;
 
     public class BookRepository : GenericDataRepository<Book>, IBookRepository
     {
@@ -15,12 +15,14 @@
         {
             using (var context = new Context())
             {
-                var found = context.BookFiles.FirstOrDefault(x => x.FullPathAndFileNameWithExtension == filePath);
-                return found != null;
+                var found =
+                    GetAll(x => x.BookFile, d => d.SourceDirectory)
+                        .Where(p => p.BookFile.FullPathAndFileNameWithExtension == filePath);
+                return found.Any();
             }
         }
 
-        public async virtual Task<IList<Book>> GetAllAsync(params Expression<Func<Book, object>>[] navigationProperties)
+        public virtual async Task<IList<Book>> GetAllAsync(params Expression<Func<Book, object>>[] navigationProperties)
         {
             List<Book> list;
 

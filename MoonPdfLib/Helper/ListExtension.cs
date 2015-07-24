@@ -15,16 +15,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using System;
-using System.Collections.Generic;
-
 namespace MoonPdfLib.Helper
 {
+    using System;
+    using System.Collections.Generic;
+
     internal static class ListExtension
     {
         public static IEnumerable<T> Take<T>(this IList<T> list, int start, int length)
         {
-            for (int i = start; i < Math.Min(list.Count, start + length); i++)
+            for (var i = start; i < Math.Min(list.Count, start + length); i++)
             {
                 yield return list[i];
             }

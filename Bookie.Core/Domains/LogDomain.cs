@@ -1,14 +1,15 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
 
     public class LogDomain : ILogDomain
     {
-        private ILogRepository _logRepository;
+        private readonly ILogRepository _logRepository;
 
         public LogDomain()
         {
@@ -33,6 +34,11 @@
         public void RemoveAllEntrys()
         {
             _logRepository.RemoveAll();
+        }
+
+        public async Task<IList<LogEntity>> GetAllAsync()
+        {
+            return await _logRepository.GetAllAsync();
         }
     }
 }

@@ -1,43 +1,32 @@
 ﻿namespace Bookie.Core.Importer
 {
-    using Bookie.Common.Model;
-    using global::Bookie.Common;
-    using global::Bookie.Core.Domains;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-
-    using Bookie.Core.Interfaces;
+    using Common;
+    using Common.Factories;
+    using Common.Model;
+    using Domains;
+    using Interfaces;
 
     public class Importer : IProgressPublisher
     {
-        private readonly SourceDirectory _source;
-        private List<string> _foundPdfFiles;
-        public readonly BackgroundWorker Worker;
         private readonly BookDomain _bookDomain = new BookDomain();
-
-        public ProgressWindowEventArgs ProgressArgs { get; set; }
-
-        private bool _generateCovers;
-
-        private ICoverImageDomain coverImageDomain = new CoverImageDomain();
-
-        public event EventHandler<BookEventArgs> BookChanged;
-
-        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
-
-        public event EventHandler<EventArgs> ProgressComplete;
-
-        public event EventHandler<EventArgs> ProgressStarted;
-
-        private int _booksImported;
-
+        private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
+        private readonly ExcludedDomain _excludedDomain;
+        private readonly SourceDirectory _source;
+        public readonly BackgroundWorker Worker;
+        private int _booksExcluded;
         private int _booksExisted;
+        private int _booksImported;
+        private List<string> _foundPdfFiles;
+        private bool _generateCovers;
 
         public Importer(SourceDirectory source)
         {
+            _excludedDomain = new ExcludedDomain();
             ProgressService.RegisterPublisher(this);
             _source = source;
             _source.Books = new HashSet<Book>();
@@ -51,13 +40,31 @@
             ProgressArgs = new ProgressWindowEventArgs();
             _booksImported = 0;
             _booksExisted = 0;
+            _booksExcluded = 0;
         }
+
+        public ProgressWindowEventArgs ProgressArgs { get; set; }
+        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
+        public event EventHandler<EventArgs> ProgressComplete;
+        public event EventHandler<EventArgs> ProgressStarted;
+
+        public void ProgressCancel()
+        {
+            if (Worker.IsBusy)
+            {
+                Worker.CancelAsync();
+            }
+        }
+
+        public event EventHandler<BookEventArgs> BookChanged;
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             OnProgressComplete();
-            Logger.Log.Info(String.Format("Import Complete: Books Imported {0}: Already Existed {1}.", _booksImported, _booksExisted));
-            MessagingService.ShowMessage(String.Format("{0} Books imported.{1}{2} Books already existed.", _booksImported, Environment.NewLine, _booksExisted));
+            Logger.Log.Info(
+                $"Import Complete: Books Imported {_booksImported}: Already Existed {_booksExisted}. Excluded {_booksExcluded}.");
+            MessagingService.ShowMessage(
+                $"{_booksImported} Books imported.{Environment.NewLine}{_booksExisted} Books already existed.{Environment.NewLine}{_booksExcluded} Books on the Excluded List.");
         }
 
         private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -72,7 +79,7 @@
             }
             else
             {
-                var book = (Book)e.UserState;
+                var book = (Book) e.UserState;
                 OnBookChanged(book, BookEventArgs.BookState.Added, e.ProgressPercentage);
                 ProgressArgs.OperationName = "Importing Books";
                 ProgressArgs.ProgressBarText = e.ProgressPercentage + "%";
@@ -86,6 +93,7 @@
         {
             _booksImported = 0;
             _booksExisted = 0;
+            _booksExcluded = 0;
             for (var index = 0; index < _foundPdfFiles.Count; index++)
             {
                 if (Worker.CancellationPending)
@@ -95,47 +103,40 @@
                 }
 
                 var foundBook = _foundPdfFiles[index];
-                _source.EntityState = EntityState.Unchanged;
+                if (_excludedDomain.GetExcludedByUrl(foundBook) != null)
+                {
+                    Logger.Log.Debug("Importer Skipped: " + foundBook + " is on the exclude list.");
+                    _booksExcluded++;
+                    continue;
+                }
 
-                var book = new Book();
 
-                book.Title = Path.GetFileNameWithoutExtension(foundBook);
-                book.BookFile.FileNameWithExtension = Path.GetFileName(foundBook);
-                book.BookFile.FullPathAndFileNameWithExtension = foundBook;
-                book.BookFile.FileExtension = Path.GetExtension(foundBook);
-                book.BookFile.FileSizeBytes = new FileInfo(foundBook).Length;
+                var book = BookFactory.CreateNew(_source, foundBook);
                 book.BookFile.EntityState = EntityState.Added;
-
-                book.SourceDirectory = new SourceDirectory { Id = _source.Id, EntityState = EntityState.Unchanged };
-                book.BookHistory.DateImported = DateTime.Now;
                 book.BookHistory.EntityState = EntityState.Added;
-                book.CoverImage = new CoverImage();
-
 
                 if (_generateCovers)
                 {
-                    book.CoverImage = coverImageDomain.GenerateCoverImageFromPdf(book);
+                    //Download cover.
+                    book.CoverImage = _coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
                 else
                 {
-                    book.CoverImage = CoverImageDomain.EmptyCoverImage();
                     book.CoverImage.EntityState = EntityState.Added;
                 }
 
                 var percentage = Utils.CalculatePercentage(index + 1, 1, _foundPdfFiles.Count);
-
                 book.EntityState = EntityState.Added;
 
                 if (_bookDomain.Exists(book.BookFile.FullPathAndFileNameWithExtension))
                 {
                     _booksExisted++;
-                    Logger.Log.Info("Importer Skipped: " + book.Title + " already exists.");
+                    Logger.Log.Debug("Importer Skipped: " + book.Title + " already exists.");
                 }
                 else
                 {
                     _bookDomain.AddBook(book);
-                    Logger.Log.Info("Imported: " + book.Title);
-
+                    Logger.Log.Debug("Imported: " + book.Title);
                     _booksImported++;
                     Worker.ReportProgress(percentage, book);
                 }
@@ -151,56 +152,32 @@
             _generateCovers = generateCovers;
             var option = includeSubDirectories == false ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories;
             _foundPdfFiles = Directory.GetFiles(_source.SourceDirectoryUrl, FileTypes.PDF, option).ToList();
-            Logger.Log.Debug(String.Format("Found {0} files in {1} with an extension of {2}", _foundPdfFiles.Count(),_source.SourceDirectoryUrl , FileTypes.PDF));
-  
-            Logger.Log.Info(
-                String.Format(
-                    "Importing from {0}: Subdirectories {1}: Generate Covers {2}",
-                    _source.SourceDirectoryUrl,
-                    includeSubDirectories,
-                    generateCovers));
+            Logger.Log.Debug(
+                $"Found {_foundPdfFiles.Count()} files in {_source.SourceDirectoryUrl} with an extension of {FileTypes.PDF}");
+            Logger.Log.Debug(
+                $"Importing from {_source.SourceDirectoryUrl}: Subdirectories {includeSubDirectories}: Generate Covers: {generateCovers}");
             OnProgressStarted();
             Worker.RunWorkerAsync();
         }
 
         public void OnBookChanged(Book book, BookEventArgs.BookState bookState, int? progress)
         {
-            if (BookChanged != null)
-            {
-                BookChanged(this, new BookEventArgs { Book = book, State = bookState, Progress = progress });
-            }
+            BookChanged?.Invoke(this, new BookEventArgs {Book = book, State = bookState, Progress = progress});
         }
 
         private void OnProgressComplete()
         {
-            if (ProgressComplete != null)
-            {
-                ProgressComplete(this, null);
-            }
+            ProgressComplete?.Invoke(this, null);
         }
 
         private void OnProgressStarted()
         {
-            if (ProgressStarted != null)
-            {
-                ProgressStarted(this, null);
-            }
+            ProgressStarted?.Invoke(this, null);
         }
 
         private void OnProgressChange(ProgressWindowEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
-        }
-
-        public void ProgressCancel()
-        {
-            if (Worker.IsBusy)
-            {
-                Worker.CancelAsync();
-            }
+            ProgressChanged?.Invoke(this, e);
         }
     }
 }

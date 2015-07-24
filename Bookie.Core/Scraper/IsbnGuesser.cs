@@ -19,29 +19,28 @@
 
 namespace Bookie.Core.Scraper
 {
-    using Bookie.Common;
     using System;
     using System.IO;
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Web;
+    using Common;
 
     public class IsbnGuesser
     {
         protected string SimpleBrowseToPage(string uri)
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
+            var request = (HttpWebRequest) WebRequest.Create(uri);
             request.Method = WebRequestMethods.Http.Get;
             WebResponse response;
             try
             {
-                response = (HttpWebResponse)request.GetResponse();
-
+                response = (HttpWebResponse) request.GetResponse();
             }
             catch (WebException)
             {
                 Logger.Log.Error("No internet connection while scraping");
-                return String.Empty;
+                return string.Empty;
             }
             var reader = new StreamReader(response.GetResponseStream());
             var documentText = reader.ReadToEnd();
@@ -49,25 +48,24 @@ namespace Bookie.Core.Scraper
             return documentText;
         }
 
-        public static String Isbn13to10(String isbn13)
+        public static string Isbn13to10(string isbn13)
         {
-            if (String.IsNullOrEmpty(isbn13))
+            if (string.IsNullOrEmpty(isbn13))
                 throw new ArgumentNullException("isbn13");
             isbn13 = isbn13.Replace("-", "").Replace(" ", "");
-            if (isbn13.Length != 13)
-                throw new ArgumentException("The ISBN doesn't contain 13 characters.", "isbn13");
+            if (isbn13.Length != 13) return null;
 
-            String isbn10 = isbn13.Substring(3, 9);
-            int checksum = 0;
-            int weight = 10;
+            var isbn10 = isbn13.Substring(3, 9);
+            var checksum = 0;
+            var weight = 10;
 
-            foreach (Char c in isbn10)
+            foreach (var c in isbn10)
             {
-                checksum += (int)Char.GetNumericValue(c) * weight;
+                checksum += (int) char.GetNumericValue(c)*weight;
                 weight--;
             }
 
-            checksum = 11 - (checksum % 11);
+            checksum = 11 - (checksum%11);
             if (checksum == 10)
                 isbn10 += "X";
             else if (checksum == 11)
@@ -82,7 +80,7 @@ namespace Bookie.Core.Scraper
         {
             string isbn;
             var fileName = Path.GetFileName(fullPath);
-            if (String.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName))
             {
                 return null;
             }
@@ -141,7 +139,7 @@ namespace Bookie.Core.Scraper
             var searchUrl = "http://www.google.com/search?hl=en&q=" + HttpUtility.UrlEncode(bookTitle);
             var documentText = SimpleBrowseToPage(searchUrl);
             var r1 = Regex.Match(documentText,
-                                   @"www.amazon.com/.*?/(\d{9}X|\d{10,13})");
+                @"www.amazon.com/.*?/(\d{9}X|\d{10,13})");
             if (r1.Success)
             {
                 isbn = r1.Groups[1].ToString();
@@ -152,7 +150,7 @@ namespace Bookie.Core.Scraper
             searchUrl += "%22+amazon";
             documentText = SimpleBrowseToPage(searchUrl);
             var r2 = Regex.Match(documentText,
-                                   @"www.amazon.com/.*?/(\d{9}X|\d{10,13})");
+                @"www.amazon.com/.*?/(\d{9}X|\d{10,13})");
             if (!r2.Success)
             {
                 return string.Empty;

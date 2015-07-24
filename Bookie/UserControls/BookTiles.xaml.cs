@@ -1,7 +1,9 @@
 ﻿namespace Bookie.UserControls
 {
-    using Bookie.Common.Model;
     using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Input;
+    using Common.Model;
 
     public partial class BookTiles
     {
@@ -12,11 +14,11 @@
             InitializeComponent();
         }
 
-        private void Path_65_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Path_65_MouseUp(object sender, MouseButtonEventArgs e)
         {
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             foreach (Book item in Lb.SelectedItems)
             {

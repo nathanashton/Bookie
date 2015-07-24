@@ -1,14 +1,13 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using System;
     using System.Collections.Generic;
     using System.IO;
-
-    using Bookie.Common;
+    using Common.Factories;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
+    using MoonPdfLib.MuPdf;
 
     public class CoverImageDomain : ICoverImageDomain
     {
@@ -21,23 +20,17 @@
 
         public IList<CoverImage> GetAllCoverImages()
         {
-            return _coverImageRepository.GetAll();
+            return _coverImageRepository.GetAll(x => x.Book);
         }
 
         public CoverImage GetCoverImageByUrl(string coverImageUrl)
         {
-            return _coverImageRepository.GetSingle(x => x.FullPathAndFileNameWithExtension.Equals(coverImageUrl));
+            return _coverImageRepository.GetSingle(x => x.FileNameWithExtension.Equals(coverImageUrl));
         }
 
         public void AddCoverImage(params CoverImage[] coverimage)
         {
-            foreach (var b in coverimage)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
             _coverImageRepository.Add(coverimage);
-            throw new NotImplementedException();
         }
 
         public void UpdateCoverImage(params CoverImage[] coverimage)
@@ -52,29 +45,29 @@
 
         public CoverImage GenerateCoverImageFromPdf(Book book)
         {
-            var savedImageUrl = GetPdfImage.SaveImage(book, 1);
-            if (book.CoverImage == null)
+            // If Book not found then return null;
+            if (!File.Exists(book.BookFile.FullPathAndFileNameWithExtension))
             {
-                book.CoverImage = new CoverImage();
+                return CoverImageFactory.CreateEmpty();
+            }
+
+            var coverImage = CoverImageFactory.CreateNew();
+            using (var img = MuPdfWrapper.ExtractPage(new FileSource(book.BookFile.FullPathAndFileNameWithExtension), 1)
+                )
+            {
+                img.Save(coverImage.FullPathAndFileNameWithExtension);
             }
 
             if (book.Id == 0)
             {
-                book.CoverImage.EntityState = EntityState.Added;
+                coverImage.EntityState = EntityState.Added;
             }
             else
             {
-                book.CoverImage.Id = book.CoverImage.Id;
-                book.CoverImage.EntityState = EntityState.Modified;
-
+                coverImage.Id = book.CoverImage.Id;
+                coverImage.EntityState = EntityState.Modified;
             }
-
-            book.CoverImage.FileNameWithExtension = Path.GetFileName(savedImageUrl);
-            book.CoverImage.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
-                                                                   + Path.GetFileNameWithoutExtension(
-                                                                       savedImageUrl) + ".jpg";
-            book.CoverImage.FileExtension = ".jpg";
-            return book.CoverImage;
+            return coverImage;
         }
 
         CoverImage ICoverImageDomain.EmptyCoverImage()
@@ -84,12 +77,10 @@
 
         public static CoverImage EmptyCoverImage()
         {
-            var cover = new CoverImage();
-            cover.FileNameWithExtension = Path.GetFileName(String.Empty);
-            cover.FullPathAndFileNameWithExtension = Globals.CoverImageFolder
-                                                                   + Path.GetFileNameWithoutExtension(
-                                                                       String.Empty) + ".jpg";
-            cover.FileExtension = ".jpg";
+            var cover = new CoverImage
+            {
+                FileNameWithExtension = Path.GetFileName(string.Empty)
+            };
             return cover;
         }
     }

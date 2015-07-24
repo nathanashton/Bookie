@@ -1,16 +1,14 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
     using System;
     using System.Collections.Generic;
-
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
 
     public class NoteDomain : INoteDomain
     {
-
         private readonly INoteRepository _noteRepository;
 
         public NoteDomain()

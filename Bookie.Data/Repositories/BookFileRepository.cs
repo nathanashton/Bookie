@@ -1,7 +1,7 @@
 ﻿namespace Bookie.Data.Repositories
 {
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
+    using Common.Model;
+    using Interfaces;
 
     public class BookFileRepository : GenericDataRepository<BookFile>, IBookFileRepository
     {

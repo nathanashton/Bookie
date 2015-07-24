@@ -4,18 +4,18 @@
     using System.Globalization;
     using System.Windows.Data;
 
-    [ValueConversion(typeof(bool), typeof(bool))]
+    [ValueConversion(typeof (bool), typeof (bool))]
     public class InvertBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool booleanValue = (bool)value;
+            var booleanValue = (bool) value;
             return !booleanValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool booleanValue = (bool)value;
+            var booleanValue = (bool) value;
             return !booleanValue;
         }
     }

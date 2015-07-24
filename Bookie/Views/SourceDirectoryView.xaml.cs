@@ -1,15 +1,14 @@
 ﻿namespace Bookie.Views
 {
-    using Bookie.ViewModels;
-
     using MahApps.Metro.Controls;
+    using ViewModels;
 
     /// <summary>
-    /// Interaction logic for SourceDirectoryView.xaml
+    ///     Interaction logic for SourceDirectoryView.xaml
     /// </summary>
     public partial class SourceDirectoryView : MetroWindow
     {
-        private SourceDirectoryViewModel _viewModel;
+        private readonly SourceDirectoryViewModel _viewModel;
 
         public SourceDirectoryView(MainViewModel mainWindowViewModel)
         {

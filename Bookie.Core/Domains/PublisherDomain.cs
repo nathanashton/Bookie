@@ -1,13 +1,10 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using iTextSharp.text;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
 
     public class PublisherDomain : IPublisherDomain
     {
@@ -21,36 +18,6 @@
         public IList<Publisher> GetAllPublishers()
         {
             return _publisherRepository.GetAll();
-        }
-
-        public List<PublisherTreeView> GetPublisherTree()
-        {
-            var allBooks = new BookDomain().GetAllBooks().ToList();
-
-            List<PublisherTreeView> Publishers = new List<PublisherTreeView>();
-
-            var allPublishers = _publisherRepository.GetAll(x => x.Book).ToList();
-
-            HashSet<string> elements = new HashSet<string>(); // Type of property
-            allPublishers.RemoveAll(i => !elements.Add(i.Name));
-
-            foreach (var publisher in allPublishers)
-            {
-                PublisherTreeView tree = new PublisherTreeView();
-                tree.Publisher = publisher;
-                foreach (var book in allBooks)
-                {
-                    foreach (var pub in book.Publishers)
-                    {
-                        if (pub.Name == publisher.Name)
-                        {
-                            tree.Books.Add(book);
-                        }
-                    }
-                }
-                Publishers.Add(tree);
-            }
-            return Publishers;
         }
 
         public Publisher GetPublisherByName(string publisherName)
@@ -68,8 +35,6 @@
                 {
                     // Exists
                 }
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
             }
             _publisherRepository.Add(publisher);
         }

@@ -3,43 +3,97 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Bookie.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="1200"
              BorderThickness="0" HorizontalAlignment="Stretch"
 
              xmlns:converters1="clr-namespace:Bookie.Converters"
              xmlns:entities="clr-namespace:Bookie.Common.Model;assembly=Bookie.Common"
-             xmlns:userControls="clr-namespace:Bookie.UserControls">
-
+             xmlns:userControls="clr-namespace:Bookie.UserControls"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <UserControl.Resources>
+        <converters:BoolVisibilityConverter x:Key="BoolConverter" />
+        <Style x:Key="SimpleListBoxItem" TargetType="ListBoxItem">
 
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border
+                            Name="Border"
+                            Padding="2"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#ACCDDB" />
+                                <Setter TargetName="Border" Property="BorderBrush"
+                                        Value="{DynamicResourceExtension AccentColorBrush}" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0" />
+
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <converters1:MouseOverToScrollBarVisibility x:Key="MouseOverToScrollBarVisibility" />
 
         <converters1:CoverImageConverter x:Key="CoverImageConverter" />
-        <converters1:EnumBooleanConverter x:Key="EnumBooleanConverter" TrueValue="Visible" FalseValue="Hidden" />
-        <converters1:EnumBooleanConverter x:Key="InverseEnumBooleanConverter" TrueValue="Hidden" FalseValue="Visible" />
 
         <DataTemplate DataType="{x:Type entities:Book}">
-            
             <Grid Margin="8">
                 <DockPanel Margin="10" LastChildFill="True" Background="Transparent">
                     <StackPanel DockPanel.Dock="Bottom">
-                        <Label Padding="0" Margin="0,5,0,0" Height="20" HorizontalAlignment="Center">
-                            <TextBlock FontWeight="Bold" TextAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
-                        </Label>
+                        <StackPanel Margin="0,5,0,0" Height="20" Orientation="Horizontal">
+                            <Rectangle Visibility="{Binding Favourite, Converter={StaticResource BoolConverter}}"
+                                       VerticalAlignment="Center" Width="10" Height="10" Margin="0,0,5,0" Fill="{DynamicResource AccentColorBrush}">
+                                <Rectangle.OpacityMask>
+                                    <VisualBrush Stretch="Fill"
+                                                 Visual="{DynamicResource appbar_check}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <Label VerticalAlignment="Center" Padding="0" HorizontalAlignment="Center">
+                                <TextBlock FontSize="12" FontFamily="Calibri" FontWeight="SemiBold"
+                                           TextAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" />
+                            </Label>
 
-                        <TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Center"
-                                   Foreground="Black" TextTrimming="CharacterEllipsis"
-                                   Text="{Binding Path=DatePublished, StringFormat=yyyy}" />
+
+                        </StackPanel>
+
+
+                        <syncfusion:SfRating ShowToolTip="False" Value="{Binding Rating}" ItemsCount="5"
+                                             HorizontalAlignment="Center" Precision="Standard" IsReadOnly="True">
+                            <syncfusion:SfRating.ItemContainerStyle>
+
+                                <Style TargetType="syncfusion:SfRatingItem">
+                                    <Setter Property="Width" Value="12" />
+                                    <Setter Property="UnratedStrokeThickness" Value="0" />
+                                    <Setter Property="RatedStrokeThickness" Value="0" />
+                                    <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}" />
+                                    <Setter Property="Height" Value="10" />
+                                </Style>
+                            </syncfusion:SfRating.ItemContainerStyle>
+                        </syncfusion:SfRating>
                     </StackPanel>
+
+
+                    <!--<TextBlock Padding="0" Height="20" HorizontalAlignment="Stretch" TextAlignment="Left"
+                                   Foreground="Black" TextTrimming="CharacterEllipsis"
+                                   FontFamily="Calibri" FontSize="12"
+                                   Text="{Binding Path=DatePublished, StringFormat=yyyy}" />-->
+
 
                     <Grid ToolTip="{Binding Path=Title}">
                         <Border BorderBrush="#FF00AADE" BorderThickness="1">
-                            <Image UseLayoutRounding="True" RenderOptions.BitmapScalingMode="Fant"  Stretch="Fill" StretchDirection="Both"
+                            <Image UseLayoutRounding="True" RenderOptions.BitmapScalingMode="Fant" Stretch="Fill"
+                                   StretchDirection="Both"
                                    Height="Auto" Width="Auto"
-                                   Source="{Binding Path=CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}">
-                            </Image>
+                                   Source="{Binding Path=CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}" />
                         </Border>
                     </Grid>
                 </DockPanel>
@@ -49,32 +103,33 @@
 
     <Grid Name="MainGrid" VerticalAlignment="Stretch">
 
-        <DockPanel  LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
+        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" Width="Auto">
 
-            <ListBox Margin="5" ScrollViewer.VerticalScrollBarVisibility=
-          "{Binding IsMouseOver,
+            <ListBox Margin="5" ItemContainerStyle="{StaticResource SimpleListBoxItem}"
+                     ScrollViewer.VerticalScrollBarVisibility="{Binding IsMouseOver,
                     RelativeSource={RelativeSource Self},
-                    Converter={StaticResource MouseOverToScrollBarVisibility}}" SelectionMode="Extended" ScrollViewer.CanContentScroll="True" BorderThickness="0" Name="Lb" Background="Transparent"
+                    Converter={StaticResource MouseOverToScrollBarVisibility}}"
+                     SelectionMode="Extended" ScrollViewer.CanContentScroll="True" BorderThickness="0" Name="Lb"
+                     Background="Transparent"
                      VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
                      SelectedItem="{Binding Path=SelectedBook, Mode=TwoWay}"
-VirtualizingPanel.ScrollUnit="Pixel"
+                     VirtualizingPanel.ScrollUnit="Pixel"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch"
                      HorizontalAlignment="Center" VerticalAlignment="Stretch"
                      ItemsSource="{Binding Path=Books, Mode=OneWay}" IsSynchronizedWithCurrentItem="True">
 
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Edit Details"></MenuItem>
-                        <MenuItem Header="Scrape"></MenuItem>
-                        <MenuItem Header="Remove"></MenuItem>
+                        <MenuItem Header="Edit Details" Command="{Binding EditDetailsCommand}" />
+                        <MenuItem Header="Remove" Command="{Binding RemoveBookCommand}" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
+
                 <ListBox.ItemsPanel>
 
                     <ItemsPanelTemplate>
                         <userControls:VirtualizingWrapPanel ItemHeight="{Binding TileHeight}"
                                                             ItemWidth="{Binding TileWidth}" />
-                        
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>

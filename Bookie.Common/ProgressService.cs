@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Bookie.Common
+﻿namespace Bookie.Common
 {
+    using System;
+
     public static class ProgressService
     {
         private static IProgressSubscriber subscriber;

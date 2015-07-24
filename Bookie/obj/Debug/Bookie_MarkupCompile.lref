@@ -1,10 +1,19 @@
-﻿C:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\obj\Debug\GeneratedInternalTypeHelper.g.cs
-
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\UserControls\BookDetails.xaml;;
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\UserControls\BookTiles.xaml;;
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\UserControls\PDFViewer.xaml;;
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\Views\ExceptionView.xaml;;
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\Views\MainView.xaml;;
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\Views\ReportView.xaml;;
-FC:\Users\nathan.ashton1\Documents\Visual Studio 2013\Projects\Bookie\Bookie\Views\SourceDirectoryView.xaml;;
+﻿C:\Git Repos\Bookie\Bookie\obj\Debug\GeneratedInternalTypeHelper.g.cs
+FC:\Git Repos\Bookie\Bookie\App.xaml;;
+FC:\Git Repos\Bookie\Bookie\SampleData\SampleDataSource\SampleDataSource.xaml;;
+FC:\Git Repos\Bookie\Bookie\UserControls\AuthorsPublishersControl.xaml;;
+FC:\Git Repos\Bookie\Bookie\UserControls\BookDetails.xaml;;
+FC:\Git Repos\Bookie\Bookie\UserControls\BookSummaryControl.xaml;;
+FC:\Git Repos\Bookie\Bookie\UserControls\BookTiles.xaml;;
+FC:\Git Repos\Bookie\Bookie\UserControls\PdfViewer.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\EditBookView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\ExceptionView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\LogWindow.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\MainView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\NickNameView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\NoteView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\ProgressView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\RemoveBookView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\SettingsView.xaml;;
+FC:\Git Repos\Bookie\Bookie\Views\SourceDirectoryView.xaml;;
 

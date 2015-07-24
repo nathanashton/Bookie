@@ -1,0 +1,23 @@
+﻿<Controls:MetroWindow x:Class="Bookie.Views.ConfirmImportView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      SizeToContent="WidthAndHeight"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="1"
+                      EnableDWMDropShadow="True"
+                      WindowTransitionsEnabled="False"
+                      Title="Confirm" Height="300" Width="300" ResizeMode="NoResize"
+                      WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Grid>
+        <StackPanel Margin="10" Orientation="Vertical">
+            <CheckBox IsChecked="{Binding GenerateCovers}" Margin="5" Content="Generate Covers" />
+            <CheckBox IsChecked="{Binding SubDirectories}" Margin="5" Content="Scan all sub-directories" />
+
+            <StackPanel Margin="10" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Margin="5" Content="Go" Click="Button_Click_1" />
+                <Button Click="Button_Click" Margin="5" Content="Cancel" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>

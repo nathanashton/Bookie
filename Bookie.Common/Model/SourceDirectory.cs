@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class SourceDirectory : ITrackableEntity, IEntity
+    public class SourceDirectory : IEntity
     {
         public SourceDirectory()
         {
@@ -12,40 +12,24 @@
         }
 
         public int Id { get; set; }
-
         public string SourceDirectoryUrl { get; set; }
-
         public DateTime? DateLastImported { get; set; }
-
-        public DateTime? DateLastScanned { get; set; }
-
+        public DateTime? DateLastScraped { get; set; }
+        public string NickName { get; set; }
         public virtual ICollection<Book> Books { get; set; }
 
-        public DateTime? CreatedDateTime { get; set; }
-
-        public int? CreatedUserId { get; set; }
-
-        public DateTime? ModifiedDateTime { get; set; }
-
-        public int? ModifiedUserId { get; set; }
+        [NotMapped]
+        public int BookCount => Books?.Count ?? 0;
 
         [NotMapped]
         public EntityState EntityState { get; set; }
 
-        [NotMapped]
-        public int BookCount
+        public DateTime? CreatedDateTime { get; set; }
+        public DateTime? ModifiedDateTime { get; set; }
+
+        public override string ToString()
         {
-            get
-            {
-                if (Books != null)
-                {
-                    return Books.Count;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
+            return SourceDirectoryUrl;
         }
     }
 }

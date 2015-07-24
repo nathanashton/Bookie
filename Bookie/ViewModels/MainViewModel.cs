@@ -1,109 +1,275 @@
 ﻿namespace Bookie.ViewModels
 {
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core;
-    using Bookie.Core.Domains;
-    using Bookie.UserControls;
-    using Bookie.Views;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Linq;
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Input;
+    using System.Windows.Media;
+    using Common;
+    using Common.Model;
+    using Core.Domains;
+    using Properties;
+    using UserControls;
+    using Views;
 
     public class MainViewModel : NotifyBase, IProgressSubscriber
     {
-        private bool _toggleScraped;
+        public delegate void CancelDelegate();
 
-        public bool ToggleScraped
+        private readonly BookDomain _bookDomain;
+        private readonly SourceDirectoryDomain _sourceDomain = new SourceDirectoryDomain();
+        private List<Publisher> _allPublishers;
+        private Author _authorFilter;
+        private ObservableCollection<Author> _authorsTv;
+        private ICollectionView _books;
+        public UIElement _bookView;
+        private bool _cancelled;
+        private ICommand _cancelProgressCommand;
+        private ICommand _editDetailsCommand;
+        private string _filter;
+        private Visibility _filterBoxVisibility;
+        private bool _filterOnDescription;
+        private bool _filterOnTitle;
+        private Visibility _leftPane;
+        private ICommand _leftPaneCommand;
+        private ICommand _listViewCommand;
+        private ICommand _openPdfCommand;
+        private string _operationName;
+        private string _progressBarText;
+        private int _progressPercentage;
+        private bool _progressReportingActive;
+        private string _progressText;
+        private ProgressView _progressView;
+        private Publisher _publisherFilter;
+        private ObservableCollection<Publisher> _publishersTv;
+        private ICommand _refreshCommand;
+        private ICommand _removeBookCommand;
+        private Visibility _rightPane;
+        private ICommand _rightPaneCommand;
+        private Brush _scrapedColor;
+        private Book _selectedBook;
+        private string _selectedSort;
+        private ICommand _settingsViewCommand;
+        private bool _showProgress;
+        private ObservableCollection<string> _sortList;
+        private ObservableCollection<SourceDirectory> _sourceDirectories;
+        private SourceDirectory _sourceDirectoryFilter;
+        private ICommand _sourceViewCommand;
+        private Brush _starColor;
+        private int _tileHeight;
+        private ICommand _tileViewCommand;
+        private int _tileWidth;
+        private bool _toggleFavourite;
+        private Brush _toggleFavouriteColor;
+        private bool _toggleScraped;
+        private ICommand _viewLog;
+        public ObservableCollection<Book> AllBooks;
+        public BookDetails BookDetails;
+        public BookTiles BookTiles;
+        public PdfViewer PdfViewer;
+        public Window Window;
+
+        public MainViewModel()
+        {
+            SourceDirectories = new ObservableCollection<SourceDirectory>();
+            StarColor = new SolidColorBrush(Colors.White);
+            ScrapedColor = new SolidColorBrush(Colors.White);
+            ToggleFavouriteColor = new SolidColorBrush(Colors.Black);
+
+            _bookDomain = new BookDomain();
+            BookTiles = new BookTiles();
+            BookDetails = new BookDetails();
+            PdfViewer = new PdfViewer();
+            FilterOnTitle = true;
+            //  var savedView = AppConfig.LoadSetting("SavedView");
+            //switch (savedView)
+            //{
+            //    case "Tiles":
+            //        BookView = BookTiles;
+            //        break;
+
+            //    case "Details":
+            //        BookView = BookDetails;
+            //        break;
+
+            //    default:
+            //        BookView = new BookTiles();
+            //        break;
+            //}
+            BookView = BookTiles;
+            ProgressService.RegisterSubscriber(this);
+
+            var sortt = new List<string>
+            {
+                "Title [A-Z]",
+                "Title [Z-A]",
+                "Date Published [Newest]",
+                "Date Published [Oldest]",
+                "Date Added [Newest]",
+                "Date Added [Oldest]"
+            };
+
+            SortList = new ObservableCollection<string>(sortt);
+            RefreshAllBooks();
+            RefreshPublishersAndAuthors();
+            SelectedSort = "Title [A-Z]";
+        }
+
+        public string Title
         {
             get
             {
-                return _toggleScraped;
+                if (Globals.DebugMode)
+                {
+                    return "Bookie - DEBUG";
+                }
+                return "Bookie";
             }
+        }
+
+        public Brush TitleBrush
+        {
+            get
+            {
+                if (Globals.InDebugMode())
+                {
+                    return new SolidColorBrush(Colors.Red);
+                }
+                var s = (SolidColorBrush) new BrushConverter().ConvertFromString("#09506E");
+                return s;
+            }
+        }
+
+        public bool FilterOnTitle
+        {
+            get { return _filterOnTitle; }
+            set
+            {
+                _filterOnTitle = value;
+                NotifyPropertyChanged("FilterOnTitle");
+            }
+        }
+
+        public bool FilterOnDescription
+        {
+            get { return _filterOnDescription; }
+            set
+            {
+                _filterOnDescription = value;
+                NotifyPropertyChanged("FilterOnDescription");
+            }
+        }
+
+        public bool ToggleScraped
+        {
+            get { return _toggleScraped; }
             set
             {
                 _toggleScraped = value;
                 NotifyPropertyChanged("ToggleScraped");
+                if (value)
+                {
+                    ScrapedColor = new SolidColorBrush(Colors.Yellow);
+                }
+                else
+                {
+                    ScrapedColor = new SolidColorBrush(Colors.White);
+                }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
+                NotifyPropertyChanged("BooksCount");
             }
         }
 
-        private bool _toggleFavourite;
-
-        public bool ToggleFavourite
+        public bool ToggleFavouriteBook
         {
             get
             {
-                return _toggleFavourite;
+                if (SelectedBook != null)
+                {
+                    ToggleFavouriteColor = SelectedBook.Favourite
+                        ? new SolidColorBrush(Colors.Yellow)
+                        : new SolidColorBrush(Colors.Black);
+                    return SelectedBook.Favourite;
+                }
+                return false;
             }
+            set
+            {
+                SelectedBook.Favourite = value;
+                ToggleFavouriteColor = value ? new SolidColorBrush(Colors.Yellow) : new SolidColorBrush(Colors.Black);
+                NotifyPropertyChanged("ToggleFavouriteBook");
+                BookDomain.SetUnchanged(SelectedBook);
+                SelectedBook.EntityState = EntityState.Modified;
+                _bookDomain.UpdateBook(SelectedBook);
+
+                if (ToggleFavourite)
+                {
+                    ApplyToggleFilter();
+                    NotifyPropertyChanged("Books");
+                }
+            }
+        }
+
+        public Brush ToggleFavouriteColor
+        {
+            get { return _toggleFavouriteColor; }
+            set
+            {
+                _toggleFavouriteColor = value;
+                NotifyPropertyChanged("ToggleFavouriteColor");
+            }
+        }
+
+        public Brush StarColor
+        {
+            get { return _starColor; }
+            set
+            {
+                _starColor = value;
+                NotifyPropertyChanged("StarColor");
+            }
+        }
+
+        public Brush ScrapedColor
+        {
+            get { return _scrapedColor; }
+            set
+            {
+                _scrapedColor = value;
+                NotifyPropertyChanged("ScrapedColor");
+            }
+        }
+
+        public bool ToggleFavourite
+        {
+            get { return _toggleFavourite; }
             set
             {
                 _toggleFavourite = value;
                 NotifyPropertyChanged("ToggleFavourite");
+                if (value)
+                {
+                    StarColor = new SolidColorBrush(Colors.Yellow);
+                }
+                else
+                {
+                    StarColor = new SolidColorBrush(Colors.White);
+                }
                 ApplyToggleFilter();
                 NotifyPropertyChanged("Books");
-
+                NotifyPropertyChanged("BooksCount");
             }
         }
 
-
-        private ICommand _viewLog;
-        private bool _showProgress;
-        private bool _progressReportingActive;
-        private string _progressText;
-        private bool _cancelled;
-
-        private int _progressPercentage;
-        private string _filter;
-
-        private int _tileWidth;
-
-        private int _tileHeight;
-        private string _operationName;
-
-        private string _progressBarText;
-        private Book _selectedBook;
-
-        private Visibility _leftPane;
-
-        private Visibility _filterBoxVisibility;
-        private Visibility _rightPane;
-        private ICollectionView _books;
-        private ICommand _openPDFCommand;
-        private ICommand _leftPaneCommand;
-        private ICommand _refreshCommand;
-        private ICommand _listViewCommand;
-
-        private ICommand _rightPaneCommand;
-
-        private ICommand _cancelProgressCommand;
-
-        private ICommand _settingsViewCommand;
-
-        private ICommand _tileViewCommand;
-
-        private ICommand _sourceViewCommand;
-        private List<Publisher> _allPublishers;
-        private readonly BookDomain _bookDomain;
-
-        private string _selectedSort;
-        private ObservableCollection<AuthorTreeView> _authorsTV;
-        private ObservableCollection<PublisherTreeView> _publishersTV;
-
-        private ObservableCollection<string> _sortList;
-
         public Visibility FilterBoxVisibility
         {
-            get
-            {
-                return _filterBoxVisibility;
-            }
+            get { return _filterBoxVisibility; }
             set
             {
                 _filterBoxVisibility = value;
@@ -113,10 +279,7 @@
 
         public ObservableCollection<string> SortList
         {
-            get
-            {
-                return _sortList;
-            }
+            get { return _sortList; }
             set
             {
                 _sortList = value;
@@ -126,10 +289,7 @@
 
         public string SelectedSort
         {
-            get
-            {
-                return _selectedSort;
-            }
+            get { return _selectedSort; }
             set
             {
                 _selectedSort = value;
@@ -137,29 +297,14 @@
 
                 if (_selectedSort != null)
                 {
-                    FilterBooks();
+                    SortBooks();
                 }
             }
         }
 
-        public Window Window;
-
-        public UIElement _bookView;
-
-        public ObservableCollection<Book> AllBooks;
-
-        public BookTiles BookTiles;
-
-        public BookDetails BookDetails;
-
-        public PDFViewer PdfViewer;
-
         public bool ShowProgress
         {
-            get
-            {
-                return _showProgress;
-            }
+            get { return _showProgress; }
             set
             {
                 _showProgress = value;
@@ -169,10 +314,7 @@
 
         public bool ProgressReportingActive
         {
-            get
-            {
-                return _progressReportingActive;
-            }
+            get { return _progressReportingActive; }
             set
             {
                 _progressReportingActive = value;
@@ -182,10 +324,7 @@
 
         public string ProgressBarText
         {
-            get
-            {
-                return _progressBarText;
-            }
+            get { return _progressBarText; }
             set
             {
                 _progressBarText = value;
@@ -195,10 +334,7 @@
 
         public string ProgressText
         {
-            get
-            {
-                return _progressText;
-            }
+            get { return _progressText; }
             set
             {
                 _progressText = value;
@@ -208,10 +344,7 @@
 
         public int ProgressPercentage
         {
-            get
-            {
-                return _progressPercentage;
-            }
+            get { return _progressPercentage; }
             set
             {
                 _progressPercentage = value;
@@ -221,10 +354,7 @@
 
         public string OperationName
         {
-            get
-            {
-                return _operationName;
-            }
+            get { return _operationName; }
             set
             {
                 _operationName = value;
@@ -234,10 +364,7 @@
 
         public Visibility LeftPane
         {
-            get
-            {
-                return _leftPane;
-            }
+            get { return _leftPane; }
             set
             {
                 _leftPane = value;
@@ -247,10 +374,7 @@
 
         public Visibility RightPane
         {
-            get
-            {
-                return _rightPane;
-            }
+            get { return _rightPane; }
             set
             {
                 _rightPane = value;
@@ -260,10 +384,7 @@
 
         public ICollectionView Books
         {
-            get
-            {
-                return _books;
-            }
+            get { return _books; }
             set
             {
                 _books = value;
@@ -271,38 +392,29 @@
             }
         }
 
-        public ObservableCollection<PublisherTreeView> PublishersTV
+        public ObservableCollection<Publisher> PublishersList
         {
-            get
-            {
-                return _publishersTV;
-            }
+            get { return _publishersTv; }
             set
             {
-                _publishersTV = value;
-                NotifyPropertyChanged("PublishersTV");
+                _publishersTv = value;
+                NotifyPropertyChanged("PublishersList");
             }
         }
 
-        public ObservableCollection<AuthorTreeView> AuthorsTV
+        public ObservableCollection<Author> AuthorsList
         {
-            get
-            {
-                return _authorsTV;
-            }
+            get { return _authorsTv; }
             set
             {
-                _authorsTV = value;
-                NotifyPropertyChanged("AuthorsTV");
+                _authorsTv = value;
+                NotifyPropertyChanged("AuthorsList");
             }
         }
 
         public string Filter
         {
-            get
-            {
-                return String.IsNullOrEmpty(_filter) ? "" : _filter;
-            }
+            get { return string.IsNullOrEmpty(_filter) ? "" : _filter; }
             set
             {
                 _filter = value;
@@ -312,51 +424,72 @@
             }
         }
 
+        public Publisher PublisherFilter
+        {
+            get { return _publisherFilter; }
+            set
+            {
+                _publisherFilter = value;
+                NotifyPropertyChanged("PublisherFilter");
+                Books.Filter = ApplyPublisherFilter;
+                Books.Refresh();
+            }
+        }
+
+        public SourceDirectory SourceDirectoryFilter
+        {
+            get { return _sourceDirectoryFilter; }
+            set
+            {
+                _sourceDirectoryFilter = value;
+                NotifyPropertyChanged("SourceDirectoryFilter");
+                Books.Filter = ApplySourceDirectoryFilter;
+                Books.Refresh();
+            }
+        }
+
+        public Author AuthorFilter
+        {
+            get { return _authorFilter; }
+            set
+            {
+                _authorFilter = value;
+                NotifyPropertyChanged("AuthorFilter");
+                Books.Filter = ApplyAuthorFilter;
+                Books.Refresh();
+            }
+        }
+
         public UIElement BookView
         {
-            get
-            {
-                return _bookView;
-            }
+            get { return _bookView; }
             set
             {
                 _bookView = value;
                 NotifyPropertyChanged("BookView");
-                if (_bookView == PdfViewer)
-                {
-                    FilterBoxVisibility = Visibility.Hidden;
-                }
-                else
-                {
-                    FilterBoxVisibility = Visibility.Visible;
-                }
+                FilterBoxVisibility = Equals(_bookView, PdfViewer) ? Visibility.Hidden : Visibility.Visible;
             }
         }
 
         public Book SelectedBook
         {
-            get
-            {
-                return _selectedBook;
-            }
+            get { return _selectedBook; }
             set
             {
                 _selectedBook = value;
                 if (value != null)
                 {
-                    PdfViewer.PDFUrl = SelectedBook;
+                    PdfViewer.ViewModel.Book = SelectedBook;
                 }
                 NotifyPropertyChanged("SelectedBook");
                 NotifyPropertyChanged("SelectedBookEmpty");
+                NotifyPropertyChanged("ToggleFavouriteBook");
             }
         }
 
         public int TileHeight
         {
-            get
-            {
-                return _tileHeight;
-            }
+            get { return _tileHeight; }
             set
             {
                 _tileHeight = value;
@@ -366,51 +499,37 @@
 
         public bool SelectedBookEmpty
         {
-            get
-            {
-                return SelectedBook != null;
-            }
+            get { return SelectedBook != null; }
         }
 
         public string BooksCount
         {
-            get
-            {
-                return "Found " + Books.Cast<Book>().Count() + " results";
-            }
+            get { return "Found " + Books.Cast<Book>().Count() + " results"; }
         }
 
         public int TileWidth
         {
-            get
-            {
-                return _tileWidth;
-            }
+            get { return _tileWidth; }
             set
             {
                 _tileWidth = value;
-                _tileHeight = Convert.ToInt32(value * 1.4);
+                _tileHeight = Convert.ToInt32(value*1.4);
                 NotifyPropertyChanged("TileWidth");
                 NotifyPropertyChanged("TileHeight");
                 NotifyPropertyChanged("StarSize");
-              //  AppConfig.AddSetting("TileWidth", value.ToString());
+                Settings.Default.TileWidth = value;
             }
         }
 
         public bool Cancelled
         {
-            get
-            {
-                return _cancelled;
-            }
+            get { return _cancelled; }
             set
             {
                 _cancelled = value;
                 NotifyPropertyChanged("Cancelled");
             }
         }
-
-        public delegate void CancelDelegate();
 
         public CancelDelegate Cancel { get; set; }
 
@@ -423,6 +542,24 @@
             }
         }
 
+        public ICommand EditDetailsCommand
+        {
+            get
+            {
+                return _editDetailsCommand
+                       ?? (_editDetailsCommand = new RelayCommand(p => EditBook(), p => SelectedBook != null));
+            }
+        }
+
+        public ICommand RemoveBookCommand
+        {
+            get
+            {
+                return _removeBookCommand
+                       ?? (_removeBookCommand = new RelayCommand(p => RemoveBook(), p => SelectedBook != null));
+            }
+        }
+
         public ICommand ViewLog
         {
             get
@@ -432,12 +569,12 @@
             }
         }
 
-        public ICommand OpenPDFCommand
+        public ICommand OpenPdfCommand
         {
             get
             {
-                return _openPDFCommand
-                       ?? (_openPDFCommand = new RelayCommand(p => ChangeToPdfView(), p => SelectedBook != null));
+                return _openPdfCommand
+                       ?? (_openPdfCommand = new RelayCommand(p => ChangeToPdfView(), p => SelectedBook != null));
             }
         }
 
@@ -504,12 +641,19 @@
             }
         }
 
+        public ObservableCollection<SourceDirectory> SourceDirectories
+        {
+            get { return _sourceDirectories; }
+            set
+            {
+                _sourceDirectories = value;
+                NotifyPropertyChanged("SourceDirectories");
+            }
+        }
+
         public List<Publisher> AllPublishers
         {
-            get
-            {
-                return _allPublishers;
-            }
+            get { return _allPublishers; }
             set
             {
                 _allPublishers = value;
@@ -519,81 +663,42 @@
 
         public List<Book> BooksFromSplash { get; set; }
 
-        public MainViewModel()
-        {
-            _bookDomain = new BookDomain();
-            BookTiles = new BookTiles();
-            BookDetails = new BookDetails();
-            PdfViewer = new PDFViewer();
-
-          //  var savedView = AppConfig.LoadSetting("SavedView");
-            //switch (savedView)
-            //{
-            //    case "Tiles":
-            //        BookView = BookTiles;
-            //        break;
-
-            //    case "Details":
-            //        BookView = BookDetails;
-            //        break;
-
-            //    default:
-            //        BookView = new BookTiles();
-            //        break;
-            //}
-            BookView = BookTiles;
-            ProgressService.RegisterSubscriber(this);
-
-            var sortt = new List<string>
-                            {
-                                "Title [A-Z]",
-                                "Title [Z-A]",
-                                "Date Published [Newest]",
-                                "Date Published [Oldest]",
-                                "Date Added [Newest]",
-                                "Date Added [Oldest]"
-                            };
-
-            SortList = new ObservableCollection<string>(sortt);
-            RefreshAllBooks();
-            RefreshPublishersAndAuthors();
-            SelectedSort = "Title [A-Z]";
-
-        }
-
         public void _progress_ProgressStarted(object sender, EventArgs e)
         {
-            OperationName = "Starting...";
-            ProgressText = "";
-            ProgressPercentage = 0;
-            ProgressBarText = "";
+            _progressView = new ProgressView();
+            _progressView.ViewModel.OperationName = "Starting...";
+            _progressView.ViewModel.ProgressText = "";
+            _progressView.ViewModel.ProgressPercentage = 0;
+            _progressView.ViewModel.ProgressBarText = "";
             ProgressReportingActive = true;
             ShowProgress = true;
+            _progressView.Show();
         }
 
         public void _progress_ProgressCompleted(object sender, EventArgs e)
         {
-            OperationName = "Starting...";
-            ProgressPercentage = 0;
-            ProgressText = "";
-            ProgressBarText = "";
+            _progressView.ViewModel.OperationName = "Starting...";
+            _progressView.ViewModel.ProgressPercentage = 0;
+            _progressView.ViewModel.ProgressText = "";
+            _progressView.ViewModel.ProgressBarText = "";
             ProgressReportingActive = false;
             ShowProgress = false;
+            _progressView.Close();
         }
 
         public void _progress_ProgressChanged(object sender, ProgressWindowEventArgs e)
         {
-            OperationName = e.OperationName;
-            ProgressBarText = e.ProgressBarText;
-            ProgressText = e.ProgressText;
-            ProgressPercentage = e.ProgressPercentage;
+            _progressView.ViewModel.OperationName = e.OperationName;
+            _progressView.ViewModel.ProgressBarText = e.ProgressBarText;
+            _progressView.ViewModel.ProgressText = e.ProgressText;
+            _progressView.ViewModel.ProgressPercentage = e.ProgressPercentage;
         }
 
         private void Books_CollectionChanged(
             object sender,
-            System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+            NotifyCollectionChangedEventArgs e)
         {
-            //   NotifyPropertyChanged("BooksCount");
+            NotifyPropertyChanged("BooksCount");
         }
 
         public void ChangeToPdfView()
@@ -604,10 +709,10 @@
             }
             LeftPane = Visibility.Collapsed;
             RightPane = Visibility.Collapsed;
-            PdfViewer.OpenPDF(SelectedBook.BookFile.FullPathAndFileNameWithExtension);
+            PdfViewer.ViewModel.OpenPdf(SelectedBook.BookFile.FullPathAndFileNameWithExtension);
+
             BookView = PdfViewer;
         }
-
 
         private void CancelProgress()
         {
@@ -616,10 +721,9 @@
 
         private void ViewLogWindow()
         {
-            LogWindow log = new LogWindow();
+            var log = new LogWindow(new LogViewModel());
             log.ShowDialog();
         }
-
 
         public void i_BookChanged(object sender, BookEventArgs e)
         {
@@ -633,8 +737,8 @@
                     var bookExistsAdded =
                         AllBooks.Any(
                             b =>
-                            b.BookFile.FullPathAndFileNameWithExtension
-                            == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.Id
+                                == e.Book.Id);
                     if (!bookExistsAdded)
                     {
                         AllBooks.Add(e.Book);
@@ -646,8 +750,8 @@
                     var bookExistsRemoved =
                         AllBooks.Any(
                             b =>
-                            b.BookFile.FullPathAndFileNameWithExtension
-                            == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.Id
+                                == e.Book.Id);
                     if (bookExistsRemoved)
                     {
                         AllBooks.Remove(e.Book);
@@ -659,8 +763,8 @@
                     var bookExistsUpdated =
                         AllBooks.FirstOrDefault(
                             b =>
-                            b.BookFile.FullPathAndFileNameWithExtension
-                            == e.Book.BookFile.FullPathAndFileNameWithExtension);
+                                b.BookFile.FullPathAndFileNameWithExtension
+                                == e.Book.BookFile.FullPathAndFileNameWithExtension);
                     if (bookExistsUpdated != null)
                     {
                         var index = AllBooks.IndexOf(bookExistsUpdated);
@@ -679,24 +783,81 @@
         private bool ApplyTextFilter(object item)
         {
             var book = item as Book;
-            return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+            if (FilterOnTitle)
+            {
+                if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+                {
+                    return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+                return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                       book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
+            }
+            if (FilterOnDescription)
+            {
+                if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+                {
+                    return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+                }
+                return book != null && book.Abstract.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                       book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
+            }
+
+            if (SourceDirectoryFilter.SourceDirectoryUrl == "All Sources")
+            {
+                return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+            return book != null && book.Title.IndexOf(Filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                   book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
         }
 
+        private bool ApplyPublisherFilter(object item)
+        {
+            var book = item as Book;
+            if (PublisherFilter != null && PublisherFilter.Name == "All Publishers")
+            {
+                return true;
+            }
+            return book != null && book.Publishers.Any(x => x.Name == PublisherFilter.Name);
+        }
 
+        private bool ApplyAuthorFilter(object item)
+        {
+            var book = item as Book;
+            if (AuthorFilter != null && AuthorFilter.FirstName == "All Authors")
+            {
+                return true;
+            }
+
+            return book != null && book.Authors.Any(x => x.FullName == AuthorFilter.FullName);
+        }
+
+        private bool ApplySourceDirectoryFilter(object item)
+        {
+            var book = item as Book;
+            if (SourceDirectoryFilter == null)
+            {
+                SourceDirectoryFilter = new SourceDirectory
+                {
+                    SourceDirectoryUrl = "All Sources",
+                    NickName = "All Source"
+                };
+            }
+            if (SourceDirectoryFilter.NickName == "All Sources")
+            {
+                return true;
+            }
+            return book != null && book.SourceDirectory.NickName == SourceDirectoryFilter.NickName;
+        }
 
         private void SwitchToTilesView()
         {
             if (Equals(BookView, PdfViewer))
             {
                 LeftPane = Visibility.Visible;
-                RightPane = Visibility.Visible;     
+                RightPane = Visibility.Visible;
             }
             BookView = BookTiles;
-       
         }
-
-
-
 
         private void SwitchToDetailsView()
         {
@@ -706,12 +867,7 @@
                 RightPane = Visibility.Visible;
             }
             BookView = BookDetails;
-
         }
-
-
-
-
 
         private void ApplyToggleFilter()
         {
@@ -730,12 +886,7 @@
             Books.Refresh();
         }
 
-
-
-
-
-
-        private void FilterBooks()
+        private void SortBooks()
         {
             switch (SelectedSort)
             {
@@ -770,7 +921,6 @@
                     Books.SortDescriptions.Add(new SortDescription("CreatedDateTime", ListSortDirection.Ascending));
                     break;
             }
-            //    Books.Refresh();
         }
 
         public async void RefreshAllBooks()
@@ -779,35 +929,65 @@
             AllBooks = b != null ? new ObservableCollection<Book>(b) : new ObservableCollection<Book>();
             Books = CollectionViewSource.GetDefaultView(AllBooks);
             Books.CollectionChanged += Books_CollectionChanged;
+
+            SourceDirectories.Clear();
+            SourceDirectories =
+                new ObservableCollection<SourceDirectory>(_sourceDomain.GetAllSourceDirectories().ToList());
+            SourceDirectories.Insert(0,
+                new SourceDirectory {SourceDirectoryUrl = "All Sources", NickName = "All Sources"});
+            SourceDirectoryFilter = SourceDirectories[0];
         }
 
         public void RefreshPublishersAndAuthors()
         {
             var p = new PublisherDomain();
-            var all = p.GetPublisherTree();
+            var all = p.GetAllPublishers();
             if (all != null)
             {
+                all = all.GroupBy(r => r.Name).Select(y => y.First()).ToList();
+                all.Insert(0, new Publisher {Name = "All Publishers"});
                 if (Books != null)
                 {
-                    PublishersTV = new ObservableCollection<PublisherTreeView>(all);
+                    PublishersList = new ObservableCollection<Publisher>(all);
                 }
             }
 
             var a = new AuthorDomain();
-            var allAuthors = a.GetAuthorTreeView();
-            if (allAuthors != null)
+            var allAuthors = a.GetAllAuthors();
+            if (allAuthors == null)
             {
-                if (Books != null)
-                {
-                    AuthorsTV = new ObservableCollection<AuthorTreeView>(allAuthors);
-                }
+                return;
             }
+
+            allAuthors = allAuthors.GroupBy(o => o.FullName).Select(g => g.First()).ToList();
+            allAuthors.Insert(0, new Author {FirstName = "All Authors"});
+
+            if (Books != null)
+            {
+                AuthorsList = new ObservableCollection<Author>(allAuthors);
+            }
+        }
+
+        private void EditBook()
+        {
+            var view = new EditBookView();
+            view.ViewModel.SelectedBook = _bookDomain.GetBookById(SelectedBook.Id);
+            view.ViewModel.BookChanged += i_BookChanged;
+            view.ShowDialog();
+        }
+
+        private void RemoveBook()
+        {
+            var view = new RemoveBookView();
+            view.ViewModel.SelectedBook = SelectedBook;
+            view.ViewModel.BookChanged += i_BookChanged;
+            view.ShowDialog();
         }
 
         private void SourceDirectoryView()
         {
             var sourceDirectoryView = new SourceDirectoryView(this);
-            sourceDirectoryView.Show();
+            sourceDirectoryView.ShowDialog();
         }
 
         public void ShowSettingsView()

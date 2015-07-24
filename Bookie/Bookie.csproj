@@ -13,7 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AssemblyVersion>15188.1515.0.0</AssemblyVersion>
+    <AssemblyVersion>15196.2017.0.0</AssemblyVersion>
+    <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -69,15 +70,21 @@
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="Syncfusion.SfInput.WPF, Version=13.2450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
+    <Reference Include="Syncfusion.SfShared.Wpf, Version=13.2450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
+    <Reference Include="Syncfusion.Shared.WPF, Version=13.2450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -91,6 +98,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -102,28 +111,51 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviours.cs" />
+    <Compile Include="Converters\BoolVisibilityConverter.cs" />
     <Compile Include="Converters\MouseToScrollBarVisibility.cs" />
     <Compile Include="Helpers\TreeViewHelper.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="SampleData\SampleDataSource\SampleDataSource.xaml.cs">
+      <DependentUpon>SampleDataSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AuthorsPublishersControl.xaml.cs">
+      <DependentUpon>AuthorsPublishersControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\BookDetails.xaml.cs">
       <DependentUpon>BookDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\BookSummaryControl.xaml.cs">
+      <DependentUpon>BookSummaryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\BookTiles.xaml.cs">
       <DependentUpon>BookTiles.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PDFViewer.xaml.cs">
-      <DependentUpon>PDFViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\ReportViewer.xaml.cs">
-      <DependentUpon>ReportViewer.xaml</DependentUpon>
+    <Compile Include="UserControls\PdfViewer.xaml.cs">
+      <DependentUpon>PdfViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\VirtualizingWrapPanel.cs" />
+    <Compile Include="ViewModels\ConfirmImportViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmScrapeViewModel.cs" />
+    <Compile Include="ViewModels\EditBookViewModel.cs" />
     <Compile Include="ViewModels\ExceptionViewModel.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NickNameViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />
+    <Compile Include="ViewModels\PdfViewerViewModel.cs" />
     <Compile Include="ViewModels\ProgressViewModel.cs" />
+    <Compile Include="ViewModels\RemoveBookViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SourceDirectoryViewModel.cs" />
+    <Compile Include="Views\ConfirmImportView.xaml.cs">
+      <DependentUpon>ConfirmImportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfirmScrapeView.xaml.cs">
+      <DependentUpon>ConfirmScrapeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditBookView.xaml.cs">
+      <DependentUpon>EditBookView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExceptionView.xaml.cs">
       <DependentUpon>ExceptionView.xaml</DependentUpon>
     </Compile>
@@ -133,11 +165,17 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NickNameView.xaml.cs">
+      <DependentUpon>NickNameView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NoteView.xaml.cs">
       <DependentUpon>NoteView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ReportView.xaml.cs">
-      <DependentUpon>ReportView.xaml</DependentUpon>
+    <Compile Include="Views\ProgressView.xaml.cs">
+      <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RemoveBookView.xaml.cs">
+      <DependentUpon>RemoveBookView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -158,6 +196,14 @@
     <Compile Include="Views\SplashView.xaml.cs">
       <DependentUpon>SplashView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SampleData\SampleDataSource\SampleDataSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\FlyoutOverride.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -170,19 +216,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControls\AuthorsPublishersControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\BookDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\BookSummaryControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\BookTiles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\PDFViewer.xaml">
+    <Page Include="UserControls\PdfViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\ReportViewer.xaml">
+    <Page Include="Views\ConfirmImportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConfirmScrapeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditBookView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,11 +260,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\NickNameView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NoteView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ReportView.xaml">
+    <Page Include="Views\ProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RemoveBookView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -233,6 +303,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\Entypo.ttf" />
+    <Resource Include="Resources\Entypo-license.txt" />
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+    <Resource Include="Resources\Icons\star.png" />
     <Resource Include="Resources\Images\bookie.png" />
     <Resource Include="Resources\Icons\bookie.ico" />
     <Resource Include="bookie.ico" />
@@ -257,6 +331,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <DesignTimeOnly Include="SampleData\SampleDataSource\SampleDataSource.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bookie.Core\Bookie.Core.csproj">
@@ -266,10 +341,6 @@
     <ProjectReference Include="..\Bookie.Common\Bookie.Common.csproj">
       <Project>{e2e98231-07da-47d4-b41f-60f6c4b87dd6}</Project>
       <Name>Bookie.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bookie.Reporting\Bookie.Reporting.csproj">
-      <Project>{b2ca261a-f166-44e2-8131-f910fceac75a}</Project>
-      <Name>Bookie.Reporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\MoonPdfLib\MoonPdfLib.csproj">
       <Project>{e5c5a57c-e464-4402-ad62-d6119ea92a8d}</Project>

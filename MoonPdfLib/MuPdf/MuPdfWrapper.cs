@@ -15,36 +15,46 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
-using MoonPdfLib.Helper;
-
 /*
  * 2013 - Modified and extended version of W. Jordan's code (see AUTHORS file)
  */
 
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-
 namespace MoonPdfLib.MuPdf
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Runtime.InteropServices;
+    using Bookie.Common;
+    using Helper;
+    using Size = System.Windows.Size;
+
     public static class MuPdfWrapper
     {
         /// <summary>
-        /// Extracts a PDF page as a Bitmap for a given pdf filename and a page number.
+        ///     Extracts a PDF page as a Bitmap for a given pdf filename and a page number.
         /// </summary>
         /// <param name="pageNumber">Page number, starting at 1</param>
         /// <param name="zoomFactor">Used to get a smaller or bigger Bitmap, depending on the specified value</param>
         /// <param name="password">The password for the pdf file (if required)</param>
-        public static Bitmap ExtractPage(IPdfSource source, int pageNumber, float zoomFactor = 1.0f, string password = null)
+        public static Bitmap ExtractPage(IPdfSource source, int pageNumber, float zoomFactor = 1.0f,
+            string password = null)
         {
             var pageNumberIndex = Math.Max(0, pageNumber - 1); // pages start at index 0
 
             using (var stream = new PdfFileStream(source))
             {
                 ValidatePassword(stream.Document, password);
-
-                IntPtr p = NativeMethods.LoadPage(stream.Document, pageNumberIndex); // loads the page
+                //TODO below method fails sometimes
+                var p = new IntPtr();
+                try
+                {
+                    p = NativeMethods.LoadPage(stream.Document, pageNumberIndex); // loads the page
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log.Error("Error extracting cover image with MuPDF", ex);
+                }
                 var bmp = RenderPage(stream.Context, stream.Document, p, zoomFactor);
                 NativeMethods.FreePage(stream.Document, p); // releases the resources consumed by the page
 
@@ -53,30 +63,31 @@ namespace MoonPdfLib.MuPdf
         }
 
         /// <summary>
-        /// Gets the page bounds for all pages of the given PDF. If a relevant rotation is supplied, the bounds will
-        /// be rotated accordingly before returning.
+        ///     Gets the page bounds for all pages of the given PDF. If a relevant rotation is supplied, the bounds will
+        ///     be rotated accordingly before returning.
         /// </summary>
         /// <param name="rotation">The rotation that should be applied</param>
         /// <param name="password">The password for the pdf file (if required)</param>
         /// <returns></returns>
-        public static System.Windows.Size[] GetPageBounds(IPdfSource source, ImageRotation rotation = ImageRotation.None, string password = null)
+        public static Size[] GetPageBounds(IPdfSource source, ImageRotation rotation = ImageRotation.None,
+            string password = null)
         {
-            Func<double, double, System.Windows.Size> sizeCallback = (width, height) => new System.Windows.Size(width, height);
+            Func<double, double, Size> sizeCallback = (width, height) => new Size(width, height);
 
             if (rotation == ImageRotation.Rotate90 || rotation == ImageRotation.Rotate270)
-                sizeCallback = (width, height) => new System.Windows.Size(height, width); // switch width and height
+                sizeCallback = (width, height) => new Size(height, width); // switch width and height
 
             using (var stream = new PdfFileStream(source))
             {
                 ValidatePassword(stream.Document, password);
 
                 var pageCount = NativeMethods.CountPages(stream.Document); // gets the number of pages in the document
-                var resultBounds = new System.Windows.Size[pageCount];
+                var resultBounds = new Size[pageCount];
 
-                for (int i = 0; i < pageCount; i++)
+                for (var i = 0; i < pageCount; i++)
                 {
-                    IntPtr p = NativeMethods.LoadPage(stream.Document, i); // loads the page
-                    Rectangle pageBound = NativeMethods.BoundPage(stream.Document, p);
+                    var p = NativeMethods.LoadPage(stream.Document, i); // loads the page
+                    var pageBound = NativeMethods.BoundPage(stream.Document, p);
 
                     resultBounds[i] = sizeCallback(pageBound.Width, pageBound.Height);
 
@@ -88,7 +99,7 @@ namespace MoonPdfLib.MuPdf
         }
 
         /// <summary>
-        /// Return the total number of pages for a give PDF.
+        ///     Return the total number of pages for a give PDF.
         /// </summary>
         public static int CountPages(IPdfSource source, string password = null)
         {
@@ -121,25 +132,26 @@ namespace MoonPdfLib.MuPdf
 
         private static Bitmap RenderPage(IntPtr context, IntPtr document, IntPtr page, float zoomFactor)
         {
-            Rectangle pageBound = NativeMethods.BoundPage(document, page);
-            Matrix ctm = new Matrix();
-            IntPtr pix = IntPtr.Zero;
-            IntPtr dev = IntPtr.Zero;
+            var pageBound = NativeMethods.BoundPage(document, page);
+            var ctm = new Matrix();
+            var pix = IntPtr.Zero;
+            var dev = IntPtr.Zero;
 
             var currentDpi = DpiHelper.GetCurrentDpi();
-            var zoomX = zoomFactor * (currentDpi.HorizontalDpi / DpiHelper.DEFAULT_DPI);
-            var zoomY = zoomFactor * (currentDpi.VerticalDpi / DpiHelper.DEFAULT_DPI);
+            var zoomX = zoomFactor*(currentDpi.HorizontalDpi/DpiHelper.DEFAULT_DPI);
+            var zoomY = zoomFactor*(currentDpi.VerticalDpi/DpiHelper.DEFAULT_DPI);
 
             // gets the size of the page and multiplies it with zoom factors
-            int width = (int)(pageBound.Width * zoomX);
-            int height = (int)(pageBound.Height * zoomY);
+            var width = (int) (pageBound.Width*zoomX);
+            var height = (int) (pageBound.Height*zoomY);
 
             // sets the matrix as a scaling matrix (zoomX,0,0,zoomY,0,0)
             ctm.A = zoomX;
             ctm.D = zoomY;
 
             // creates a pixmap the same size as the width and height of the page
-            pix = NativeMethods.NewPixmap(context, NativeMethods.FindDeviceColorSpace(context, "DeviceRGB"), width, height);
+            pix = NativeMethods.NewPixmap(context, NativeMethods.FindDeviceColorSpace(context, "DeviceRGB"), width,
+                height);
             // sets white color as the background color of the pixmap
             NativeMethods.ClearPixmap(context, pix, 0xFF);
 
@@ -152,17 +164,19 @@ namespace MoonPdfLib.MuPdf
             dev = IntPtr.Zero;
 
             // creates a colorful bitmap of the same size of the pixmap
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            var imageData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bmp.PixelFormat);
+            var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            var imageData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, width, height), ImageLockMode.ReadWrite,
+                bmp.PixelFormat);
             unsafe
-            { // converts the pixmap data to Bitmap data
-                byte* ptrSrc = (byte*)NativeMethods.GetSamples(context, pix); // gets the rendered data from the pixmap
-                byte* ptrDest = (byte*)imageData.Scan0;
-                for (int y = 0; y < height; y++)
+            {
+                // converts the pixmap data to Bitmap data
+                var ptrSrc = (byte*) NativeMethods.GetSamples(context, pix); // gets the rendered data from the pixmap
+                var ptrDest = (byte*) imageData.Scan0;
+                for (var y = 0; y < height; y++)
                 {
-                    byte* pl = ptrDest;
-                    byte* sl = ptrSrc;
-                    for (int x = 0; x < width; x++)
+                    var pl = ptrDest;
+                    var sl = ptrSrc;
+                    for (var x = 0; x < width; x++)
                     {
                         //Swap these here instead of in MuPDF because most pdf images will be rgb or cmyk.
                         //Since we are going through the pixels one by one anyway swap here to save a conversion from rgb to bgr.
@@ -174,7 +188,7 @@ namespace MoonPdfLib.MuPdf
                         sl += 4;
                     }
                     ptrDest += imageData.Stride;
-                    ptrSrc += width * 4;
+                    ptrSrc += width*4;
                 }
             }
             bmp.UnlockBits(imageData);
@@ -186,38 +200,40 @@ namespace MoonPdfLib.MuPdf
         }
 
         /// <summary>
-        /// Helper class for an easier disposing of unmanaged resources
+        ///     Helper class for an easier disposing of unmanaged resources
         /// </summary>
         private sealed class PdfFileStream : IDisposable
         {
             private const uint FZ_STORE_DEFAULT = 256 << 20;
 
-            public IntPtr Context { get; private set; }
-
-            public IntPtr Stream { get; private set; }
-
-            public IntPtr Document { get; private set; }
-
             public PdfFileStream(IPdfSource source)
             {
                 if (source is FileSource)
                 {
-                    var fs = (FileSource)source;
-                    Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT); // Creates the context
+                    var fs = (FileSource) source;
+                    Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT);
+                    // Creates the context
+
+                    //TODO Following fails if file doesnt exist
                     Stream = NativeMethods.OpenFile(Context, fs.Filename); // opens file as a stream
                     Document = NativeMethods.OpenDocumentStream(Context, ".pdf", Stream); // opens the document
                 }
                 else if (source is MemorySource)
                 {
-                    var ms = (MemorySource)source;
-                    Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT); // Creates the context
-                    GCHandle pinnedArray = GCHandle.Alloc(ms.Bytes, GCHandleType.Pinned);
-                    IntPtr pointer = pinnedArray.AddrOfPinnedObject();
+                    var ms = (MemorySource) source;
+                    Context = NativeMethods.NewContext(IntPtr.Zero, IntPtr.Zero, FZ_STORE_DEFAULT);
+                    // Creates the context
+                    var pinnedArray = GCHandle.Alloc(ms.Bytes, GCHandleType.Pinned);
+                    var pointer = pinnedArray.AddrOfPinnedObject();
                     Stream = NativeMethods.OpenStream(Context, pointer, ms.Bytes.Length); // opens file as a stream
                     Document = NativeMethods.OpenDocumentStream(Context, ".pdf", Stream); // opens the document
                     pinnedArray.Free();
                 }
             }
+
+            public IntPtr Context { get; }
+            public IntPtr Stream { get; }
+            public IntPtr Document { get; }
 
             public void Dispose()
             {
@@ -237,7 +253,8 @@ namespace MoonPdfLib.MuPdf
             [DllImport(DLL, EntryPoint = "fz_free_context", CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr FreeContext(IntPtr ctx);
 
-            [DllImport(DLL, EntryPoint = "fz_open_file_w", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(DLL, EntryPoint = "fz_open_file_w", CharSet = CharSet.Unicode,
+                CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr OpenFile(IntPtr ctx, string fileName);
 
             [DllImport(DLL, EntryPoint = "fz_open_document_with_stream", CallingConvention = CallingConvention.Cdecl)]
@@ -291,7 +308,8 @@ namespace MoonPdfLib.MuPdf
             [DllImport(DLL, EntryPoint = "fz_authenticate_password", CallingConvention = CallingConvention.Cdecl)]
             public static extern int AuthenticatePassword(IntPtr doc, string password);
 
-            [DllImport(DLL, EntryPoint = "fz_open_memory", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(DLL, EntryPoint = "fz_open_memory", CharSet = CharSet.Unicode,
+                CallingConvention = CallingConvention.Cdecl)]
             public static extern IntPtr OpenStream(IntPtr ctx, IntPtr data, int len);
         }
     }
@@ -300,9 +318,15 @@ namespace MoonPdfLib.MuPdf
     {
         public float Left, Top, Right, Bottom;
 
-        public float Width { get { return this.Right - this.Left; } }
+        public float Width
+        {
+            get { return Right - Left; }
+        }
 
-        public float Height { get { return this.Bottom - this.Top; } }
+        public float Height
+        {
+            get { return Bottom - Top; }
+        }
     }
 
 #pragma warning disable 0649
@@ -323,29 +347,31 @@ namespace MoonPdfLib.MuPdf
     {
         public MissingOrInvalidPdfPasswordException()
             : base("A password for the pdf document was either not provided or is invalid.")
-        { }
+        {
+        }
     }
 
     public interface IPdfSource
-    { }
+    {
+    }
 
     public class FileSource : IPdfSource
     {
-        public string Filename { get; private set; }
-
         public FileSource(string filename)
         {
-            this.Filename = filename;
+            Filename = filename;
         }
+
+        public string Filename { get; set; }
     }
 
     public class MemorySource : IPdfSource
     {
-        public byte[] Bytes { get; private set; }
-
         public MemorySource(byte[] bytes)
         {
-            this.Bytes = bytes;
+            Bytes = bytes;
         }
+
+        public byte[] Bytes { get; }
     }
 }

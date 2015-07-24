@@ -11,7 +11,7 @@
     <AssemblyName>Bookie.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>15188.259.0.0</AssemblyVersion>
+    <AssemblyVersion>15195.301.0.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,6 +62,9 @@
     <Compile Include="BookEventArgs.cs" />
     <Compile Include="BookieException.cs" />
     <Compile Include="BookieMessageEventArgs.cs" />
+    <Compile Include="Factories\BookFactory.cs" />
+    <Compile Include="Factories\BookFileFactory.cs" />
+    <Compile Include="Factories\CoverImageFactory.cs" />
     <Compile Include="FileTypes.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="IProgressPublisher.cs" />
@@ -75,8 +78,8 @@
     <Compile Include="Model\BookHistory.cs" />
     <Compile Include="Model\BookMark.cs" />
     <Compile Include="Model\CoverImage.cs" />
+    <Compile Include="Model\Excluded.cs" />
     <Compile Include="Model\IEntity.cs" />
-    <Compile Include="Model\ITrackableEntity.cs" />
     <Compile Include="Model\LogEntity.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Model\Publisher.cs" />

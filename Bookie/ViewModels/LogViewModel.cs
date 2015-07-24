@@ -1,19 +1,38 @@
-﻿using System;
-
-namespace Bookie.ViewModels
+﻿namespace Bookie.ViewModels
 {
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
+    using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Windows.Data;
     using System.Windows.Forms;
     using System.Windows.Input;
+    using Common;
+    using Common.Model;
+    using Core.Domains;
 
     public class LogViewModel : NotifyBase
     {
+        private readonly LogDomain _logDomain;
+        private ObservableCollection<LogEntity> _allLogEntries;
+        private bool _debugMode;
         private ICommand _deleteLogsCommand;
+        private DateTime? _filterDate;
+        private bool _filterDebug;
+        private bool _filterError;
+        private bool _filterFatal;
+        private bool _filterInfo;
+        private bool _filterNone;
+        private ICollectionView _log;
+
+        public LogViewModel()
+        {
+            _logDomain = new LogDomain();
+        }
+
+        public bool DebugMode
+        {
+            get { return Globals.DebugMode; }
+        }
 
         public ICommand DeleteLogsCommand
         {
@@ -21,22 +40,16 @@ namespace Bookie.ViewModels
             {
                 if (_deleteLogsCommand == null)
                 {
-                    _deleteLogsCommand = new RelayCommand(p => DeleteAllLogs(), p => _allLogEntries.Count > 0);
+                    _deleteLogsCommand = new RelayCommand(p => DeleteAllLogs(),
+                        p => _allLogEntries != null && _allLogEntries.Count > 0);
                 }
                 return _deleteLogsCommand;
             }
         }
 
-        private readonly LogDomain _logDomain;
-
-        private bool _filterError;
-
         public bool FilterError
         {
-            get
-            {
-                return _filterError;
-            }
+            get { return _filterError; }
             set
             {
                 _filterError = value;
@@ -46,14 +59,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private DateTime? _filterDate;
-
         public DateTime? FilterDate
         {
-            get
-            {
-                return _filterDate;
-            }
+            get { return _filterDate; }
             set
             {
                 _filterDate = value;
@@ -63,14 +71,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private bool _filterNone;
-
         public bool FilterNone
         {
-            get
-            {
-                return _filterNone;
-            }
+            get { return _filterNone; }
             set
             {
                 _filterNone = value;
@@ -80,14 +83,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private bool _filterDebug;
-
         public bool FilterDebug
         {
-            get
-            {
-                return _filterDebug;
-            }
+            get { return _filterDebug; }
             set
             {
                 _filterDebug = value;
@@ -97,14 +95,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private bool _filterFatal;
-
         public bool FilterFatal
         {
-            get
-            {
-                return _filterFatal;
-            }
+            get { return _filterFatal; }
             set
             {
                 _filterFatal = value;
@@ -114,14 +107,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private bool _filterInfo;
-
         public bool FilterInfo
         {
-            get
-            {
-                return _filterInfo;
-            }
+            get { return _filterInfo; }
             set
             {
                 _filterInfo = value;
@@ -131,16 +119,9 @@ namespace Bookie.ViewModels
             }
         }
 
-        private ObservableCollection<LogEntity> _allLogEntries;
-
-        private ICollectionView _log;
-
         public ICollectionView Log
         {
-            get
-            {
-                return _log;
-            }
+            get { return _log; }
             set
             {
                 _log = value;
@@ -148,16 +129,11 @@ namespace Bookie.ViewModels
             }
         }
 
-        public LogViewModel()
+        public async void RefreshLog()
         {
-            _logDomain = new LogDomain();
-            RefreshLog();
-        }
+            var le = await _logDomain.GetAllAsync();
 
-        public void RefreshLog()
-        {
-            _allLogEntries = new ObservableCollection<LogEntity>(
-                _logDomain.GetAll());
+            _allLogEntries = new ObservableCollection<LogEntity>(le);
             Log = CollectionViewSource.GetDefaultView(_allLogEntries);
             FilterDate = null;
             FilterNone = true;
@@ -183,7 +159,7 @@ namespace Bookie.ViewModels
                     return log != null && log.Level.IndexOf("INFO", StringComparison.OrdinalIgnoreCase) >= 0;
                 }
                 return log != null && log.Level.IndexOf("INFO", StringComparison.OrdinalIgnoreCase) >= 0 &&
-                log.Date.Date == FilterDate;
+                       log.Date.Date == FilterDate;
             }
             if (FilterDebug)
             {
@@ -217,7 +193,8 @@ namespace Bookie.ViewModels
 
         public void DeleteAllLogs()
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to delete the log file?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show("Are you sure you wish to delete the log file?", "Confirm",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
                 _logDomain.RemoveAllEntrys();

@@ -1,24 +1,23 @@
 ﻿<Window x:Class="Bookie.Views.SplashView"
+        Background="#09506E"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-        Icon="pack://application:,,,/Resources/Icons/bookie.ico"
-        Background="{DynamicResource AccentColorBrush2}"
-            WindowStartupLocation="CenterScreen"  Topmost="True" WindowStyle="None"
-        Title="SplashView" ResizeMode="NoResize" Height="216" Width="394" SizeToContent="WidthAndHeight" >
-    <Grid Background="Transparent"  Margin="10">
-        <StackPanel Background="Transparent" Orientation="Horizontal">
-            <Image  VerticalAlignment="Center" Width="70" Source="pack://application:,,,/Resources/Images/bookie.png" />
+        Icon="pack://application:,,,/Resources/Icons/bookie.ico" ShowInTaskbar="False"
+        WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None"
+        Title="SplashView" ResizeMode="NoResize" Height="216" Width="394" SizeToContent="WidthAndHeight">
+    <Grid>
+        <StackPanel Margin="10" Orientation="Horizontal">
+            <Image VerticalAlignment="Center" Width="70" Source="pack://application:,,,/Resources/Images/bookie.png" />
 
-            <StackPanel Background="Transparent"  Width="250" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Stretch" >
+            <StackPanel Width="250" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Stretch">
                 <Label FontSize="28" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Content="Bookie" />
-                <DockPanel  Background="Transparent"  Margin="0,-5,0,0" >
-                    <Label  HorizontalAlignment="Left" Name="Message" Foreground="White" />
-                    <Label  HorizontalAlignment="Right" Name="VersionNumber" Foreground="White" />
+                <DockPanel Background="Transparent" Margin="0,-5,0,0">
+                    <Label HorizontalAlignment="Left" Name="Message" Foreground="White" />
+                    <Label HorizontalAlignment="Right" Name="VersionNumber" Foreground="White" />
                 </DockPanel>
-                <controls:MetroProgressBar Foreground="White" IsIndeterminate="True"/>
+                <controls:MetroProgressBar Foreground="White" IsIndeterminate="True" />
             </StackPanel>
-
         </StackPanel>
     </Grid>
 </Window>

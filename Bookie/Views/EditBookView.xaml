@@ -1,0 +1,93 @@
+﻿<controls:MetroWindow x:Class="Bookie.Views.EditBookView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:viewModels="clr-namespace:Bookie.ViewModels"
+                      xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+                      xmlns:converters="clr-namespace:Bookie.Converters"
+                      mc:Ignorable="d"
+                      BorderBrush="{DynamicResource AccentColorBrush}"
+                      BorderThickness="1"
+                      EnableDWMDropShadow="True"
+                      WindowTransitionsEnabled="False"
+                      Title="Edit" Height="460.964" Width="344.864" ResizeMode="NoResize"
+                      WindowStartupLocation="CenterScreen" SizeToContent="Height" WindowStyle="ToolWindow"
+                      FontFamily="Calibri">
+    <Window.Resources>
+        <viewModels:EditBookViewModel x:Key="ViewModel" />
+        <converters:CoverImageConverter x:Key="CoverImageConverter" />
+    </Window.Resources>
+
+
+    <Grid DataContext="{StaticResource ViewModel}" Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="2" LastChildFill="True">
+
+            <Border Margin="20,0,0,0" BorderBrush="#FF00AADE" BorderThickness="1" Width="100" Height="130">
+                <Image RenderOptions.BitmapScalingMode="Fant"
+                       Source="{Binding SelectedBook.CoverImage.FullPathAndFileNameWithExtension, Converter={StaticResource CoverImageConverter}}"
+                       Stretch="Fill" />
+            </Border>
+            <StackPanel Margin="10" Orientation="Vertical">
+                <Button Margin="5" Width="100" Content="Scrape" />
+                <Button Margin="5" Width="100" Content="Change Cover" />
+            </StackPanel>
+        </DockPanel>
+
+        <Label Grid.Row="1" Margin="15,0,0,0" Grid.Column="0" VerticalContentAlignment="Center" Content="Title" />
+        <TextBox Grid.Row="1" Grid.Column="1" Height="25" FontFamily="Calibri" HorizontalAlignment="Stretch"
+                 Text="{Binding SelectedBook.Title}" />
+        <Label Grid.Row="2" Margin="15,0,0,0" Grid.Column="0" VerticalContentAlignment="Center" Content="Abstract" />
+        <TextBox VerticalScrollBarVisibility="Auto" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"
+                 AcceptsReturn="True" VerticalAlignment="Stretch" FontFamily="Calibri"
+                 HorizontalAlignment="Stretch" Text="{Binding SelectedBook.Abstract}" Height="90" />
+        <Label Margin="15,0,0,0" VerticalContentAlignment="Center" Grid.Row="3" Grid.Column="0" Content="Date" />
+        <TextBox Grid.Row="3" Grid.Column="1" Height="25" FontFamily="Calibri" HorizontalAlignment="Stretch"
+                 Text="{Binding SelectedBook.DatePublished}" />
+        <Label Margin="15,0,0,0" VerticalContentAlignment="Center" Grid.Row="4" Grid.Column="0" Content="ISBN" />
+        <TextBox Grid.Row="4" Grid.Column="1" Height="25" FontFamily="Calibri" HorizontalAlignment="Stretch"
+                 Text="{Binding SelectedBook.Isbn}" />
+
+        <syncfusion:SfRating Grid.Row="5" Grid.Column="1" Value="{Binding SelectedBook.Rating, Mode=TwoWay}"
+                             Width="150"
+                             ItemsCount="5" HorizontalAlignment="Left" Precision="Standard">
+            <syncfusion:SfRating.ItemContainerStyle>
+
+                <Style TargetType="syncfusion:SfRatingItem">
+                    <Setter Property="RatedStroke" Value="Black" />
+                    <Setter Property="PointerOverFill" Value="{DynamicResource AccentColorBrush}" />
+                    <Setter Property="RatedFill" Value="{DynamicResource AccentColorBrush}" />
+                    <Setter Property="Height" Value="20" />
+
+                </Style>
+
+            </syncfusion:SfRating.ItemContainerStyle>
+
+        </syncfusion:SfRating>
+        <CheckBox HorizontalAlignment="Right" Grid.Row="5" Grid.Column="1"
+                  IsChecked="{Binding SelectedBook.Favourite, Mode=TwoWay}" Content="Favourite" />
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Height="25" Margin="5" Content="Save" Command="{Binding SaveCommand}" />
+            <Button Height="25" Margin="5" Content="Cancel" Command="{Binding CancelCommand}" />
+        </StackPanel>
+    </Grid>
+
+
+</controls:MetroWindow>

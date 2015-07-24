@@ -1,20 +1,22 @@
 ﻿namespace Bookie.Views
 {
-    using Bookie.Common;
-    using Bookie.Core.Domains;
-    using Bookie.ViewModels;
-    using MahApps.Metro;
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
+    using Common;
+    using Core.Domains;
+    using MahApps.Metro;
+    using Properties;
+    using ViewModels;
+    using static System.String;
 
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    ///     Interaction logic for MainView.xaml
     /// </summary>
     public partial class MainView
     {
@@ -22,11 +24,13 @@
 
         public MainView()
         {
+            ViewModel = new MainViewModel();
             Load();
             InitializeComponent();
+            DataContext = ViewModel;
+
             VersionNumber.Content = Globals.VersionNumber;
         }
-
 
         private void Load()
         {
@@ -39,12 +43,10 @@
             ApplySettings();
             App.SplashScreen.AddMessage("Loading Books...");
 
-
             ViewModel = new MainViewModel();
-            DataContext = ViewModel;
-          
-            //var savedTileWidth = AppConfig.LoadSetting("TileWidth");
-           // ViewModel.TileWidth = String.IsNullOrEmpty(savedTileWidth) ? 130 : Int32.Parse(savedTileWidth);
+
+            var savedTileWidth = Settings.Default.TileWidth;
+            ViewModel.TileWidth = savedTileWidth == 0 ? 130 : savedTileWidth;
 
             ViewModel.TileWidth = 130;
 
@@ -53,13 +55,10 @@
 
         private void ApplySettings()
         {
-            //AppConfig.AddSetting("CoverImageFolder", Globals.ApplicationPath + @"\Covers\");
-            //Globals.CoverImageFolder = AppConfig.LoadSetting("CoverImageFolder");
-
             if (!File.Exists(Globals.ApplicationDatabaseFullPath))
             {
                 App.SplashScreen.AddMessage("Creating Database...");
-                Db d = new Db();
+                var d = new Db();
                 d.ReCreateDB();
                 Logger.Log.Info("Database doesn't exist so created it");
             }
@@ -67,6 +66,26 @@
             if (!Directory.Exists(Globals.CoverImageFolder))
             {
                 Directory.CreateDirectory(Globals.CoverImageFolder);
+            }
+        }
+
+        private void CheckSources()
+        {
+            var notexist = new List<string>();
+            var sources = new SourceDirectoryDomain().GetAllSourceDirectories();
+            foreach (var source in sources)
+            {
+                if (!Directory.Exists(source.SourceDirectoryUrl))
+                {
+                    notexist.Add(source.SourceDirectoryUrl);
+                }
+            }
+            if (notexist.Count > 0)
+            {
+                Logger.Log.Error("Missing source directories " + Join(",", notexist));
+                MessageBox.Show(
+                    "The following source directories cannot be found:" + Environment.NewLine +
+                    Join(Environment.NewLine, notexist), "Error");
             }
         }
 
@@ -94,7 +113,6 @@
                     MoreDetails = e.MoreDetails,
                     Fatal = e.Fatal
                 }
-          
             };
             exceptionView.ShowDialog();
         }
@@ -105,7 +123,7 @@
             {
                 return;
             }
-            var tBox = (TextBox)sender;
+            var tBox = (TextBox) sender;
             var prop = TextBox.TextProperty;
 
             var binding = BindingOperations.GetBindingExpression(tBox, prop);
@@ -115,32 +133,9 @@
             }
         }
 
-        private void PublisherTree_MouseUp(object sender, MouseButtonEventArgs e)
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            var title = sender as TextBlock;
-            if (title == null)
-            {
-                return;
-            }
-            var book = ViewModel.AllBooks.FirstOrDefault(x => x.Title.Equals(title.Text));
-            if (book != null)
-            {
-                ViewModel.SelectedBook = book;
-            }
-        }
-
-        private void AuthorTree_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            var title = sender as TextBlock;
-            if (title == null)
-            {
-                return;
-            }
-            var book = ViewModel.AllBooks.FirstOrDefault(x => x.Title.Equals(title.Text));
-            if (book != null)
-            {
-                ViewModel.SelectedBook = book;
-            }
+            CheckSources();
         }
     }
 }

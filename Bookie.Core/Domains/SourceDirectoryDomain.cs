@@ -1,13 +1,12 @@
 ﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Common.Model;
-    using Bookie.Core.Interfaces;
-    using Bookie.Data.Interfaces;
-    using Bookie.Data.Repositories;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Common.Model;
+    using Data.Interfaces;
+    using Data.Repositories;
+    using Interfaces;
 
     public class SourceDirectoryDomain : ISourceDirectoryDomain
     {
@@ -30,7 +29,8 @@
 
         public SourceDirectory GetSourceByUrlWithBooks(string sourceUrl)
         {
-            var p = _sourceRepository.GetSingle(d => d.SourceDirectoryUrl.Equals(sourceUrl), d => d.Books.Select(r => r.BookFile));
+            var p = _sourceRepository.GetSingle(d => d.SourceDirectoryUrl.Equals(sourceUrl),
+                d => d.Books.Select(r => r.BookFile));
             return p;
         }
 
@@ -40,11 +40,7 @@
             {
                 return;
             }
-            foreach (var b in sourceDirectory)
-            {
-                b.CreatedDateTime = DateTime.Now;
-                b.ModifiedDateTime = DateTime.Now;
-            }
+
             _sourceRepository.Add(sourceDirectory);
         }
 

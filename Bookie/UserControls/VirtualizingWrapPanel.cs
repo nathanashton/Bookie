@@ -14,42 +14,205 @@
     {
         private const double ScrollLineAmount = 16.0;
 
-        private Size _extentSize;
-
-        private Size _viewportSize;
-
-        private Point _offset;
-
-        private ItemsControl _itemsControl;
-
-        private readonly Dictionary<UIElement, Rect> _childLayouts = new Dictionary<UIElement, Rect>();
-
         public static readonly DependencyProperty ItemWidthProperty = DependencyProperty.Register(
             "ItemWidth",
-            typeof(double),
-            typeof(VirtualizingWrapPanel),
+            typeof (double),
+            typeof (VirtualizingWrapPanel),
             new PropertyMetadata(1.0, HandleItemDimensionChanged));
 
         public static readonly DependencyProperty ItemHeightProperty = DependencyProperty.Register(
             "ItemHeight",
-            typeof(double),
-            typeof(VirtualizingWrapPanel),
+            typeof (double),
+            typeof (VirtualizingWrapPanel),
             new PropertyMetadata(1.0, HandleItemDimensionChanged));
 
         private static readonly DependencyProperty VirtualItemIndexProperty =
             DependencyProperty.RegisterAttached(
                 "VirtualItemIndex",
-                typeof(int),
-                typeof(VirtualizingWrapPanel),
+                typeof (int),
+                typeof (VirtualizingWrapPanel),
                 new PropertyMetadata(-1));
 
-        private IRecyclingItemContainerGenerator _itemsGenerator;
-
+        private readonly Dictionary<UIElement, Rect> _childLayouts = new Dictionary<UIElement, Rect>();
+        private Size _extentSize;
         private bool _isInMeasure;
+        private ItemsControl _itemsControl;
+        private IRecyclingItemContainerGenerator _itemsGenerator;
+        private Point _offset;
+        private Size _viewportSize;
+
+        public VirtualizingWrapPanel()
+        {
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                Dispatcher.BeginInvoke((Action) Initialize);
+            }
+        }
+
+        public double ItemHeight
+        {
+            get { return (double) GetValue(ItemHeightProperty); }
+            set { SetValue(ItemHeightProperty, value); }
+        }
+
+        public double ItemWidth
+        {
+            get { return (double) GetValue(ItemWidthProperty); }
+            set { SetValue(ItemWidthProperty, value); }
+        }
+
+        public void LineUp()
+        {
+            SetVerticalOffset(VerticalOffset - ScrollLineAmount);
+        }
+
+        public void LineDown()
+        {
+            SetVerticalOffset(VerticalOffset + ScrollLineAmount);
+        }
+
+        public void LineLeft()
+        {
+            SetHorizontalOffset(HorizontalOffset + ScrollLineAmount);
+        }
+
+        public void LineRight()
+        {
+            SetHorizontalOffset(HorizontalOffset - ScrollLineAmount);
+        }
+
+        public void PageUp()
+        {
+            SetVerticalOffset(VerticalOffset - ViewportHeight);
+        }
+
+        public void PageDown()
+        {
+            SetVerticalOffset(VerticalOffset + ViewportHeight);
+        }
+
+        public void PageLeft()
+        {
+            SetHorizontalOffset(HorizontalOffset + ItemWidth);
+        }
+
+        public void PageRight()
+        {
+            SetHorizontalOffset(HorizontalOffset - ItemWidth);
+        }
+
+        public void MouseWheelUp()
+        {
+            SetVerticalOffset(VerticalOffset - ScrollLineAmount*SystemParameters.WheelScrollLines);
+        }
+
+        public void MouseWheelDown()
+        {
+            SetVerticalOffset(VerticalOffset + ScrollLineAmount*SystemParameters.WheelScrollLines);
+        }
+
+        public void MouseWheelLeft()
+        {
+            SetHorizontalOffset(HorizontalOffset - ScrollLineAmount*SystemParameters.WheelScrollLines);
+        }
+
+        public void MouseWheelRight()
+        {
+            SetHorizontalOffset(HorizontalOffset + ScrollLineAmount*SystemParameters.WheelScrollLines);
+        }
+
+        public void SetHorizontalOffset(double offset)
+        {
+            if (_isInMeasure)
+            {
+                return;
+            }
+
+            offset = Clamp(offset, 0, ExtentWidth - ViewportWidth);
+            _offset = new Point(offset, _offset.Y);
+
+            InvalidateScrollInfo();
+            InvalidateMeasure();
+        }
+
+        public void SetVerticalOffset(double offset)
+        {
+            if (_isInMeasure)
+            {
+                return;
+            }
+
+            offset = Clamp(offset, 0, ExtentHeight - ViewportHeight);
+            _offset = new Point(_offset.X, offset);
+
+            InvalidateScrollInfo();
+            InvalidateMeasure();
+        }
+
+        public Rect MakeVisible(Visual visual, Rect rectangle)
+        {
+            if (rectangle.IsEmpty || visual == null || visual == this || !IsAncestorOf(visual))
+            {
+                return Rect.Empty;
+            }
+
+            rectangle = visual.TransformToAncestor(this).TransformBounds(rectangle);
+
+            var viewRect = new Rect(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
+            rectangle.X += viewRect.X;
+            rectangle.Y += viewRect.Y;
+
+            viewRect.X = CalculateNewScrollOffset(viewRect.Left, viewRect.Right, rectangle.Left, rectangle.Right);
+            viewRect.Y = CalculateNewScrollOffset(viewRect.Top, viewRect.Bottom, rectangle.Top, rectangle.Bottom);
+
+            SetHorizontalOffset(viewRect.X);
+            SetVerticalOffset(viewRect.Y);
+            rectangle.Intersect(viewRect);
+
+            rectangle.X -= viewRect.X;
+            rectangle.Y -= viewRect.Y;
+
+            return rectangle;
+        }
+
+        public bool CanVerticallyScroll { get; set; }
+        public bool CanHorizontallyScroll { get; set; }
+
+        public double ExtentWidth
+        {
+            get { return _extentSize.Width; }
+        }
+
+        public double ExtentHeight
+        {
+            get { return _extentSize.Height; }
+        }
+
+        public double ViewportWidth
+        {
+            get { return _viewportSize.Width; }
+        }
+
+        public double ViewportHeight
+        {
+            get { return _viewportSize.Height; }
+        }
+
+        public double HorizontalOffset
+        {
+            get { return _offset.X; }
+        }
+
+        public double VerticalOffset
+        {
+            get { return _offset.Y; }
+        }
+
+        public ScrollViewer ScrollOwner { get; set; }
 
         private static int GetVirtualItemIndex(DependencyObject obj)
         {
-            return (int)obj.GetValue(VirtualItemIndexProperty);
+            return (int) obj.GetValue(VirtualItemIndexProperty);
         }
 
         private static void SetVirtualItemIndex(DependencyObject obj, int value)
@@ -57,42 +220,10 @@
             obj.SetValue(VirtualItemIndexProperty, value);
         }
 
-        public double ItemHeight
-        {
-            get
-            {
-                return (double)GetValue(ItemHeightProperty);
-            }
-            set
-            {
-                SetValue(ItemHeightProperty, value);
-            }
-        }
-
-        public double ItemWidth
-        {
-            get
-            {
-                return (double)GetValue(ItemWidthProperty);
-            }
-            set
-            {
-                SetValue(ItemWidthProperty, value);
-            }
-        }
-
-        public VirtualizingWrapPanel()
-        {
-            if (!DesignerProperties.GetIsInDesignMode(this))
-            {
-                Dispatcher.BeginInvoke((Action)Initialize);
-            }
-        }
-
         private void Initialize()
         {
             _itemsControl = ItemsControl.GetItemsOwner(this);
-            _itemsGenerator = (IRecyclingItemContainerGenerator)ItemContainerGenerator;
+            _itemsGenerator = (IRecyclingItemContainerGenerator) ItemContainerGenerator;
 
             InvalidateMeasure();
         }
@@ -138,12 +269,12 @@
             using (_itemsGenerator.StartAt(generatorStartPosition, GeneratorDirection.Forward, true))
             {
                 for (var itemIndex = layoutInfo.FirstRealizedItemIndex;
-                     itemIndex <= layoutInfo.LastRealizedItemIndex;
-                     itemIndex++, visualIndex++)
+                    itemIndex <= layoutInfo.LastRealizedItemIndex;
+                    itemIndex++, visualIndex++)
                 {
                     bool newlyRealized;
 
-                    var child = (UIElement)_itemsGenerator.GenerateNext(out newlyRealized);
+                    var child = (UIElement) _itemsGenerator.GenerateNext(out newlyRealized);
                     SetVirtualItemIndex(child, itemIndex);
 
                     if (newlyRealized)
@@ -183,7 +314,7 @@
 
                     _childLayouts.Add(child, new Rect(currentX, currentY, ItemWidth, ItemHeight));
 
-                    if (currentX + ItemWidth * 2 >= availableSize.Width)
+                    if (currentX + ItemWidth*2 >= availableSize.Width)
                     {
                         // wrap to a new line
                         currentY += ItemHeight;
@@ -280,26 +411,26 @@
             // navigates up, the ListBox selects the previous item, and the scrolls that into view - and this triggers the loading of the rest of the items
             // in that row
 
-            var firstVisibleLine = (int)Math.Floor(VerticalOffset / itemHeight);
+            var firstVisibleLine = (int) Math.Floor(VerticalOffset/itemHeight);
 
-            var firstRealizedIndex = Math.Max(extentInfo.ItemsPerLine * firstVisibleLine - 1, 0);
-            var firstRealizedItemLeft = firstRealizedIndex % extentInfo.ItemsPerLine * ItemWidth - HorizontalOffset;
-            var firstRealizedItemTop = (firstRealizedIndex / extentInfo.ItemsPerLine) * itemHeight - VerticalOffset;
+            var firstRealizedIndex = Math.Max(extentInfo.ItemsPerLine*firstVisibleLine - 1, 0);
+            var firstRealizedItemLeft = firstRealizedIndex%extentInfo.ItemsPerLine*ItemWidth - HorizontalOffset;
+            var firstRealizedItemTop = (firstRealizedIndex/extentInfo.ItemsPerLine)*itemHeight - VerticalOffset;
 
             var firstCompleteLineTop = (firstVisibleLine == 0 ? firstRealizedItemTop : firstRealizedItemTop + ItemHeight);
-            var completeRealizedLines = (int)Math.Ceiling((availableSize.Height - firstCompleteLineTop) / itemHeight);
+            var completeRealizedLines = (int) Math.Ceiling((availableSize.Height - firstCompleteLineTop)/itemHeight);
 
             var lastRealizedIndex = Math.Min(
-                firstRealizedIndex + completeRealizedLines * extentInfo.ItemsPerLine + 2,
+                firstRealizedIndex + completeRealizedLines*extentInfo.ItemsPerLine + 2,
                 _itemsControl.Items.Count - 1);
 
             return new ItemLayoutInfo
-                       {
-                           FirstRealizedItemIndex = firstRealizedIndex,
-                           FirstRealizedItemLeft = firstRealizedItemLeft,
-                           FirstRealizedLineTop = firstRealizedItemTop,
-                           LastRealizedItemIndex = lastRealizedIndex,
-                       };
+            {
+                FirstRealizedItemIndex = firstRealizedIndex,
+                FirstRealizedItemLeft = firstRealizedItemLeft,
+                FirstRealizedLineTop = firstRealizedItemTop,
+                LastRealizedItemIndex = lastRealizedIndex
+            };
         }
 
         private ExtentInfo GetExtentInfo(Size viewPortSize, double itemHeight)
@@ -309,131 +440,17 @@
                 return new ExtentInfo();
             }
 
-            var itemsPerLine = Math.Max((int)Math.Floor(viewPortSize.Width / ItemWidth), 1);
-            var totalLines = (int)Math.Ceiling((double)_itemsControl.Items.Count / itemsPerLine);
-            var extentHeight = Math.Max(totalLines * ItemHeight, viewPortSize.Height);
+            var itemsPerLine = Math.Max((int) Math.Floor(viewPortSize.Width/ItemWidth), 1);
+            var totalLines = (int) Math.Ceiling((double) _itemsControl.Items.Count/itemsPerLine);
+            var extentHeight = Math.Max(totalLines*ItemHeight, viewPortSize.Height);
 
             return new ExtentInfo
-                       {
-                           ItemsPerLine = itemsPerLine,
-                           TotalLines = totalLines,
-                           ExtentHeight = extentHeight,
-                           MaxVerticalOffset = extentHeight - viewPortSize.Height,
-                       };
-        }
-
-        public void LineUp()
-        {
-            SetVerticalOffset(VerticalOffset - ScrollLineAmount);
-        }
-
-        public void LineDown()
-        {
-            SetVerticalOffset(VerticalOffset + ScrollLineAmount);
-        }
-
-        public void LineLeft()
-        {
-            SetHorizontalOffset(HorizontalOffset + ScrollLineAmount);
-        }
-
-        public void LineRight()
-        {
-            SetHorizontalOffset(HorizontalOffset - ScrollLineAmount);
-        }
-
-        public void PageUp()
-        {
-            SetVerticalOffset(VerticalOffset - ViewportHeight);
-        }
-
-        public void PageDown()
-        {
-            SetVerticalOffset(VerticalOffset + ViewportHeight);
-        }
-
-        public void PageLeft()
-        {
-            SetHorizontalOffset(HorizontalOffset + ItemWidth);
-        }
-
-        public void PageRight()
-        {
-            SetHorizontalOffset(HorizontalOffset - ItemWidth);
-        }
-
-        public void MouseWheelUp()
-        {
-            SetVerticalOffset(VerticalOffset - ScrollLineAmount * SystemParameters.WheelScrollLines);
-        }
-
-        public void MouseWheelDown()
-        {
-            SetVerticalOffset(VerticalOffset + ScrollLineAmount * SystemParameters.WheelScrollLines);
-        }
-
-        public void MouseWheelLeft()
-        {
-            SetHorizontalOffset(HorizontalOffset - ScrollLineAmount * SystemParameters.WheelScrollLines);
-        }
-
-        public void MouseWheelRight()
-        {
-            SetHorizontalOffset(HorizontalOffset + ScrollLineAmount * SystemParameters.WheelScrollLines);
-        }
-
-        public void SetHorizontalOffset(double offset)
-        {
-            if (_isInMeasure)
             {
-                return;
-            }
-
-            offset = Clamp(offset, 0, ExtentWidth - ViewportWidth);
-            _offset = new Point(offset, _offset.Y);
-
-            InvalidateScrollInfo();
-            InvalidateMeasure();
-        }
-
-        public void SetVerticalOffset(double offset)
-        {
-            if (_isInMeasure)
-            {
-                return;
-            }
-
-            offset = Clamp(offset, 0, ExtentHeight - ViewportHeight);
-            _offset = new Point(_offset.X, offset);
-
-            InvalidateScrollInfo();
-            InvalidateMeasure();
-        }
-
-        public Rect MakeVisible(Visual visual, Rect rectangle)
-        {
-            if (rectangle.IsEmpty || visual == null || visual == this || !IsAncestorOf(visual))
-            {
-                return Rect.Empty;
-            }
-
-            rectangle = visual.TransformToAncestor(this).TransformBounds(rectangle);
-
-            var viewRect = new Rect(HorizontalOffset, VerticalOffset, ViewportWidth, ViewportHeight);
-            rectangle.X += viewRect.X;
-            rectangle.Y += viewRect.Y;
-
-            viewRect.X = CalculateNewScrollOffset(viewRect.Left, viewRect.Right, rectangle.Left, rectangle.Right);
-            viewRect.Y = CalculateNewScrollOffset(viewRect.Top, viewRect.Bottom, rectangle.Top, rectangle.Bottom);
-
-            SetHorizontalOffset(viewRect.X);
-            SetVerticalOffset(viewRect.Y);
-            rectangle.Intersect(viewRect);
-
-            rectangle.X -= viewRect.X;
-            rectangle.Y -= viewRect.Y;
-
-            return rectangle;
+                ItemsPerLine = itemsPerLine,
+                TotalLines = totalLines,
+                ExtentHeight = extentHeight,
+                MaxVerticalOffset = extentHeight - viewPortSize.Height
+            };
         }
 
         private static double CalculateNewScrollOffset(
@@ -464,60 +481,6 @@
             return GetLayoutInfo(_viewportSize, ItemHeight, GetExtentInfo(_viewportSize, ItemHeight));
         }
 
-        public bool CanVerticallyScroll { get; set; }
-
-        public bool CanHorizontallyScroll { get; set; }
-
-        public double ExtentWidth
-        {
-            get
-            {
-                return _extentSize.Width;
-            }
-        }
-
-        public double ExtentHeight
-        {
-            get
-            {
-                return _extentSize.Height;
-            }
-        }
-
-        public double ViewportWidth
-        {
-            get
-            {
-                return _viewportSize.Width;
-            }
-        }
-
-        public double ViewportHeight
-        {
-            get
-            {
-                return _viewportSize.Height;
-            }
-        }
-
-        public double HorizontalOffset
-        {
-            get
-            {
-                return _offset.X;
-            }
-        }
-
-        public double VerticalOffset
-        {
-            get
-            {
-                return _offset.Y;
-            }
-        }
-
-        public ScrollViewer ScrollOwner { get; set; }
-
         private void InvalidateScrollInfo()
         {
             if (ScrollOwner != null)
@@ -543,23 +506,17 @@
 
         internal class ExtentInfo
         {
-            public int ItemsPerLine;
-
-            public int TotalLines;
-
             public double ExtentHeight;
-
+            public int ItemsPerLine;
             public double MaxVerticalOffset;
+            public int TotalLines;
         }
 
         public class ItemLayoutInfo
         {
             public int FirstRealizedItemIndex;
-
-            public double FirstRealizedLineTop;
-
             public double FirstRealizedItemLeft;
-
+            public double FirstRealizedLineTop;
             public int LastRealizedItemIndex;
         }
     }

@@ -1,8 +1,6 @@
 ﻿namespace Bookie.Views
 {
-    using System;
-
-    using Bookie.Common;
+    using Common;
 
     public partial class SplashView : ISplashScreen
     {
@@ -14,10 +12,7 @@
 
         public void AddMessage(string message)
         {
-            Dispatcher.Invoke(delegate()
-                {
-                    this.Message.Content = message;
-                });
+            Dispatcher.Invoke(delegate { this.Message.Content = message; });
         }
 
         public void LoadComplete()

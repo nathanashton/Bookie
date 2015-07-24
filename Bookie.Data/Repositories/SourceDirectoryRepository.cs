@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
-
-    using Bookie.Common.Model;
-    using Bookie.Data.Interfaces;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
+    using Common.Model;
+    using Interfaces;
 
     public class SourceDirectoryRepository : GenericDataRepository<SourceDirectory>, ISourceDirectoryRepository
     {
@@ -25,7 +24,8 @@
             }
         }
 
-        public async virtual Task<IList<SourceDirectory>> GetAllAsync(params Expression<Func<SourceDirectory, object>>[] navigationProperties)
+        public virtual async Task<IList<SourceDirectory>> GetAllAsync(
+            params Expression<Func<SourceDirectory, object>>[] navigationProperties)
         {
             List<SourceDirectory> list;
 

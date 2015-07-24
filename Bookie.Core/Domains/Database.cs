@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bookie.Core.Domains
+﻿namespace Bookie.Core.Domains
 {
-    using Bookie.Data;
+    using Data;
 
     public class Db
     {

@@ -11,7 +11,7 @@
     <AssemblyName>Bookie.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyVersion>15188.586.0.0</AssemblyVersion>
+    <AssemblyVersion>15196.675.0.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,10 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Ghostscript.NET, Version=1.2.0.0, Culture=neutral, PublicKeyToken=f85051de34525b59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ghostscript.NET.1.2.0\lib\net40\Ghostscript.NET.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="itextsharp, Version=5.5.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.6\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -59,6 +55,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,7 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorTreeView.cs" />
     <Compile Include="Domains\AuthorDomain.cs" />
     <Compile Include="Domains\BookDomain.cs" />
     <Compile Include="Domains\BookFileDomain.cs" />
@@ -75,10 +71,10 @@
     <Compile Include="Domains\BookMarkDomain.cs" />
     <Compile Include="Domains\CoverImageDomain.cs" />
     <Compile Include="Domains\Database.cs" />
+    <Compile Include="Domains\ExcludedDomain.cs" />
     <Compile Include="Domains\LogDomain.cs" />
     <Compile Include="Domains\NoteDomain.cs" />
     <Compile Include="Domains\PublisherDomain.cs" />
-    <Compile Include="GetPDFImage.cs" />
     <Compile Include="Importer\Importer.cs" />
     <Compile Include="Interfaces\IAuthorDomain.cs" />
     <Compile Include="Interfaces\IBookDomain.cs" />
@@ -86,18 +82,20 @@
     <Compile Include="Interfaces\IBookHistoryDomain.cs" />
     <Compile Include="Interfaces\IBookMarkDomain.cs" />
     <Compile Include="Interfaces\ICoverImageDomain.cs" />
+    <Compile Include="Interfaces\IExcludedDomain.cs" />
     <Compile Include="Interfaces\ILogDomain.cs" />
     <Compile Include="Interfaces\INoteDomain.cs" />
     <Compile Include="Interfaces\IPublisherDomain.cs" />
     <Compile Include="Interfaces\ISourceDirectoryDomain.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domains\SourceDirectoryDomain.cs" />
-    <Compile Include="PublisherTreeView.cs" />
     <Compile Include="Scraper\GoogleScraper.cs" />
     <Compile Include="Scraper\IBookScraper.cs" />
     <Compile Include="Scraper\IsbnGuesser.cs" />
     <Compile Include="Scraper\PDFIsbnParser.cs" />
     <Compile Include="Scraper\Scraper.cs" />
+    <Compile Include="Tagger.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bookie.Common\Bookie.Common.csproj">
@@ -107,6 +105,10 @@
     <ProjectReference Include="..\Bookie.Data\Bookie.Data.csproj">
       <Project>{dc36851c-c46b-44ea-a5d3-4318c387a683}</Project>
       <Name>Bookie.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MoonPdfLib\MoonPdfLib.csproj">
+      <Project>{E5C5A57C-E464-4402-AD62-D6119EA92A8D}</Project>
+      <Name>MoonPdfLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

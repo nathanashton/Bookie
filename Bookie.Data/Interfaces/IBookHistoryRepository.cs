@@ -1,6 +1,6 @@
 ﻿namespace Bookie.Data.Interfaces
 {
-    using Bookie.Common.Model;
+    using Common.Model;
 
     public interface IBookHistoryRepository : IGenericDataRepository<BookHistory>
     {

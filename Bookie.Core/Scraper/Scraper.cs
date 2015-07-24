@@ -1,49 +1,28 @@
 ﻿namespace Bookie.Core.Scraper
 {
-    using Bookie.Common;
-    using Bookie.Common.Model;
-    using Bookie.Core.Domains;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.IO;
     using System.Linq;
-
-    using Bookie.Core.Interfaces;
+    using Common;
+    using Common.Model;
+    using Domains;
+    using Interfaces;
 
     public class Scraper : IProgressPublisher
     {
-        private readonly IsbnGuesser _guesser = new IsbnGuesser();
         private readonly BookDomain _bookDomain = new BookDomain();
-
-        private SourceDirectory _sourceDirectory;
-        public ProgressWindowEventArgs ProgressArgs { get; set; }
-
-        private List<Book> _booksToScrape;
-
-        private ICoverImageDomain coverImageDomain = new CoverImageDomain();
-
-        public readonly BackgroundWorker Worker = new BackgroundWorker();
+        private readonly ICoverImageDomain _coverImageDomain = new CoverImageDomain();
+        private readonly IsbnGuesser _guesser = new IsbnGuesser();
         private readonly IBookScraper _scraper = new GoogleScraper();
-
-        public event EventHandler<BookEventArgs> BookChanged;
-
-        private ObservableCollection<SearchResult> _results;
-
-        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
-
-        public event EventHandler<EventArgs> ProgressComplete;
-
-        public event EventHandler<EventArgs> ProgressStarted;
-
-        public void OnBookChanged(Book book, BookEventArgs.BookState bookState, int? progress)
-        {
-            if (BookChanged != null)
-            {
-                BookChanged(this, new BookEventArgs { Book = book, State = bookState, Progress = progress });
-            }
-        }
+        public readonly BackgroundWorker Worker = new BackgroundWorker();
+        private List<Book> _booksToScrape;
+        private bool _generateCovers;
+        private bool _noInternet;
+        private bool _rescrape;
+        private ObservableCollection<SearchResult> _scrapeResults;
+        private SourceDirectory _sourceDirectory;
 
         public Scraper()
         {
@@ -56,10 +35,34 @@
             ProgressArgs = new ProgressWindowEventArgs();
         }
 
+        public ProgressWindowEventArgs ProgressArgs { get; set; }
+        public event EventHandler<ProgressWindowEventArgs> ProgressChanged;
+        public event EventHandler<EventArgs> ProgressComplete;
+        public event EventHandler<EventArgs> ProgressStarted;
+
+        public void ProgressCancel()
+        {
+            if (Worker.IsBusy)
+            {
+                Worker.CancelAsync();
+            }
+        }
+
+        public event EventHandler<BookEventArgs> BookChanged;
+
+        public void OnBookChanged(Book book, BookEventArgs.BookState bookState, int? progress)
+        {
+            BookChanged?.Invoke(this, new BookEventArgs {Book = book, State = bookState, Progress = progress});
+        }
+
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
-            _sourceDirectory.DateLastScanned = DateTime.Now;
+            if (_noInternet)
+            {
+                MessagingService.ShowErrorMessage("No internet connection was found. The scrape was cancelled.", false);
+            }
+            _noInternet = false;
+            _sourceDirectory.DateLastScraped = DateTime.Now;
             _sourceDirectory.EntityState = EntityState.Modified;
             new SourceDirectoryDomain().UpdateSourceDirectory(_sourceDirectory);
             OnProgressComplete();
@@ -67,7 +70,7 @@
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var book = (Book)e.UserState;
+            var book = (Book) e.UserState;
             OnBookChanged(book, BookEventArgs.BookState.Updated, e.ProgressPercentage);
             ProgressArgs.OperationName = "Scraping Books";
             ProgressArgs.ProgressBarText = e.ProgressPercentage + "%";
@@ -85,90 +88,105 @@
                     e.Cancel = true;
                     return;
                 }
+
                 var book = _booksToScrape[index];
-                if (book.Scraped)
+                //Generate cover image
+                if (_generateCovers)
                 {
-                    continue;
-                }
-
-                book.Isbn = _guesser.GuessBookIsbn(book.BookFile.FullPathAndFileNameWithExtension);
-                if (String.IsNullOrEmpty(book.Isbn))
-                {
-                    //Couldnt find valid isbn
-                    continue;
-                }
-                SearchResult b;
-                try
-                {
-                    _results = _scraper.SearchBooks(book.Isbn);
-
-                }
-                catch (BookieException)
-                {
-                    Logger.Log.Error("No internet connection while scraping. Terminated");
-                    e.Cancel = true;
-                    return;
-                }
-
-                if (_results != null && _results.Count > 0)
-                {
-                    b = _results.FirstOrDefault(x => x.Book != null);
-                    if (b == null)
-                    {
-                        continue;
-                    }
-                    book.Isbn = book.Isbn;
-                    book.Title = b.Book.Title;
-                    book.Abstract = b.Book.Abstract;
-                    book.Pages = b.Book.Pages;
-                    book.DatePublished = b.Book.DatePublished;
-                    book.Scraped = true;
-
-                    if (b.Book.Authors != null)
-                    {
-                        book.Authors = b.Book.Authors;
-                    }
-                    if (b.Book.Publishers != null)
-                    {
-                        book.Publishers = b.Book.Publishers;
-                    }
-                }
-                else
-                {
-                    book.Isbn = IsbnGuesser.Isbn13to10(book.Isbn);
-                    if (String.IsNullOrEmpty(book.Isbn))
-                    {
-                        book.Scraped = false;
-                        continue;
-                    }
-                    _results = _scraper.SearchBooks(book.Isbn);
-                    if (_results == null || _results.Count <= 0)
-                    {
-                        continue;
-                    }
-                    b = _results.FirstOrDefault(x => x.Book != null);
-                    if (b == null)
-                    {
-                        continue;
-                    }
-                    book.Isbn = book.Isbn;
-                    book.Title = b.Book.Title;
-                    book.Abstract = b.Book.Abstract;
-                    book.Pages = b.Book.Pages;
-                    book.DatePublished = b.Book.DatePublished;
-                }
-
-                if (!File.Exists(book.CoverImage.FullPathAndFileNameWithExtension))
-                {
-                    book.CoverImage = coverImageDomain.GenerateCoverImageFromPdf(book);
+                    book.CoverImage = _coverImageDomain.GenerateCoverImageFromPdf(book);
                 }
                 else
                 {
                     book.CoverImage.EntityState = EntityState.Unchanged;
                 }
 
-                var publishers = b.Publishers.ToList();
-                var authors = b.Authors.ToList();
+
+                if (_rescrape == false && book.Scraped)
+                {
+                    //Book has already been scraped so skip
+                    continue;
+                }
+
+                //Try and guess 10 digit ISBN
+                book.Isbn = _guesser.GuessBookIsbn(book.BookFile.FullPathAndFileNameWithExtension);
+                if (string.IsNullOrEmpty(book.Isbn))
+                {
+                    //Couldnt find any valid isbn so skip to next book
+                    book.Scraped = false;
+                    book.BookFile.EntityState = EntityState.Unchanged;
+                    book.BookHistory.EntityState = EntityState.Unchanged;
+                    book.SourceDirectory.EntityState = EntityState.Unchanged;
+                    book.EntityState = EntityState.Modified;
+                    _bookDomain.UpdateBook(book);
+                    continue;
+                }
+                SearchResult scrapedResult;
+                try
+                {
+                    _scrapeResults = _scraper.SearchBooks(book.Isbn);
+                }
+                catch (BookieException)
+                {
+                    Logger.Log.Error("No internet connection while scraping. Terminated");
+                    e.Cancel = true;
+                    _noInternet = true;
+                    return;
+                }
+
+                // If search results are found
+                if (_scrapeResults != null && _scrapeResults.Count > 0)
+                {
+                    scrapedResult = _scrapeResults.FirstOrDefault(x => x.Book != null);
+                    if (scrapedResult == null)
+                    {
+                        continue;
+                    }
+                    book.Isbn = book.Isbn;
+                    book.Title = scrapedResult.Book.Title;
+                    book.Abstract = scrapedResult.Book.Abstract ?? "";
+                    book.Pages = scrapedResult.Book.Pages;
+                    book.DatePublished = scrapedResult.Book.DatePublished;
+                    book.Scraped = true;
+
+                    if (scrapedResult.Book.Authors != null)
+                    {
+                        book.Authors = scrapedResult.Book.Authors;
+                    }
+                    if (scrapedResult.Book.Publishers != null)
+                    {
+                        book.Publishers = scrapedResult.Book.Publishers;
+                    }
+                }
+                else
+                {
+                    // No results found with an 10 digit ISBN so try with a 13 digit ISBN
+                    book.Isbn = IsbnGuesser.Isbn13to10(book.Isbn);
+                    if (string.IsNullOrEmpty(book.Isbn))
+                    {
+                        book.Scraped = false;
+                        continue;
+                    }
+                    _scrapeResults = _scraper.SearchBooks(book.Isbn);
+                    if (_scrapeResults == null || _scrapeResults.Count <= 0)
+                    {
+                        continue;
+                    }
+                    scrapedResult = _scrapeResults.FirstOrDefault(x => x.Book != null);
+                    if (scrapedResult == null)
+                    {
+                        continue;
+                    }
+                    book.Isbn = book.Isbn;
+                    book.Title = scrapedResult.Book.Title;
+                    book.Abstract = scrapedResult.Book.Abstract ?? "";
+                    book.Pages = scrapedResult.Book.Pages;
+                    book.DatePublished = scrapedResult.Book.DatePublished;
+                    book.Scraped = true;
+                }
+
+
+                var publishers = scrapedResult.Publishers.ToList();
+                var authors = scrapedResult.Authors.ToList();
 
                 foreach (var publisher in publishers)
                 {
@@ -194,7 +212,7 @@
             }
         }
 
-        public void Scrape(SourceDirectory source, List<Book> books)
+        public void Scrape(SourceDirectory source, List<Book> books, bool generateCovers, bool reScrape)
         {
             _sourceDirectory = source;
             _booksToScrape = books;
@@ -202,41 +220,26 @@
             {
                 return;
             }
-
+            _generateCovers = generateCovers;
+            _rescrape = reScrape;
+            _noInternet = false;
             OnProgressStarted();
             Worker.RunWorkerAsync();
         }
 
         private void OnProgressComplete()
         {
-            if (ProgressComplete != null)
-            {
-                ProgressComplete(this, null);
-            }
+            ProgressComplete?.Invoke(this, null);
         }
 
         private void OnProgressStarted()
         {
-            if (ProgressStarted != null)
-            {
-                ProgressStarted(this, null);
-            }
+            ProgressStarted?.Invoke(this, null);
         }
 
         private void OnProgressChange(ProgressWindowEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
-        }
-
-        public void ProgressCancel()
-        {
-            if (Worker.IsBusy)
-            {
-                Worker.CancelAsync();
-            }
+            ProgressChanged?.Invoke(this, e);
         }
     }
 }
