@@ -25,7 +25,7 @@
 
         public static string CoverImageFolder = ApplicationPath + @"\Covers\";
         public static string DbConnectionString = @"Data Source = " + ApplicationDatabaseFullPath;
-        public static string VersionNumber = "ALPHA";
+        public static string VersionNumber = "BETA";
         public static Languages Language;
         public static string BookFolder { get; set; }
         public static bool DebugMode { get; set; }
